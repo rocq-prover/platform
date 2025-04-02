@@ -1,0 +1,32 @@
+From 1639f5f14edaf4850fa4f306af38699d982e0621 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ga=C3=ABtan=20Gilbert?= <gaetan.gilbert@skyskimmer.net>
+Date: Wed, 2 Apr 2025 13:53:27 +0200
+Subject: [PATCH 1/2] Use correct types for custom operations
+
+Fix #188 (hopefully)
+---
+ src/ml_gdkpixbuf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/ml_gdkpixbuf.c b/src/ml_gdkpixbuf.c
+index 51ff2850..64855aa5 100644
+--- a/src/ml_gdkpixbuf.c
++++ b/src/ml_gdkpixbuf.c
+@@ -59,7 +59,7 @@ CAMLprim value ml_gdk_pixbuf_set_marshal_use_rle (value v)
+   return Val_unit;
+ }
+ 
+-static void ml_GdkPixbuf_serialize (value v, unsigned long *wsize_32, unsigned long *wsize_64)
++static void ml_GdkPixbuf_serialize (value v, uintnat *wsize_32, uintnat *wsize_64)
+ {
+   GdkPixbuf *pb = GdkPixbuf_val(v);
+   GdkPixdata pixdata;
+@@ -75,7 +75,7 @@ static void ml_GdkPixbuf_serialize (value v, unsigned long *wsize_32, unsigned l
+   *wsize_64 = 8;
+ }
+ 
+-static unsigned long ml_GdkPixbuf_deserialize (void *dst)
++static uintnat ml_GdkPixbuf_deserialize (void *dst)
+ {
+   GError *error = NULL;
+   GdkPixdata pixdata;
