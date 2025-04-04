@@ -12,7 +12,7 @@ name: Macos
 on:
   push:
     branches:
-      - main
+      - coq-ci
   pull_request:
     branches:
       - '**'

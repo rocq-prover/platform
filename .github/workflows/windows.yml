@@ -12,7 +12,7 @@ name: Windows
 on:
   push:
     branches:
-      - main
+      - coq-ci
   pull_request:
     branches:
       - '**'
