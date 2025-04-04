@@ -49,7 +49,7 @@ PACKAGES="${PACKAGES} PIN.ocamlfind.1.9.5~relocatable"  # TODO port patch to 1.9
 PACKAGES="${PACKAGES} PIN.dune.3.15.3"
 PACKAGES="${PACKAGES} PIN.dune-configurator.3.15.3"
 # The Coq compiler coqc and the Coq standard library
-PACKAGES="${PACKAGES} coq.dev"
+PACKAGES="${PACKAGES} rocq-prover.dev"
 
 ########## IDE PACKAGES ##########
 
