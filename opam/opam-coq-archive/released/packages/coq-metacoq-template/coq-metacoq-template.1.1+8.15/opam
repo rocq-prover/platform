@@ -52,12 +52,8 @@ Template Coq includes:
   MetaCoq/MTac.
 """
 url {
-  src:
-    "https://github.com/MetaCoq/metacoq/archive/refs/tags/v1.1-8.15.tar.gz"
-  checksum: [
-    "sha512=e75c1171fb6a41b21fc5c3f8f788698939dfa8abe950f16afaee2425426236e61be464f4eb69a2d36430fe6b51e980e83b97e88e58a1aa78ae253e249a49d49b"
-    "sha256=0a305d179c3ffb7e01560c2e83d8d511dd90ca202b5c6409710ded92a86e0021"
-  ]
+  src: "https://github.com/MetaRocq/metarocq/releases/download/v1.1-8.15/metacoq-1.1-8.15.tar.gz"
+  checksum: "sha512=12ea0aff460c7eee07b5341ebcbf231c0f8aed9346842ad53c2244ab5ed865a0ecf6764116fbb26ecd3558f3de29c6054b8769d0c084b6d291a6b0e9a751c69a"
 }
 extra-files: [
   "0001-Fix-line-ending-issues-with-generated-code-on-Window.patch"
