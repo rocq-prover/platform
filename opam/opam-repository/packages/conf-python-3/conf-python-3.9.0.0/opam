@@ -2,7 +2,7 @@ opam-version: "2.0"
 maintainer: "unixjunkie@sdf.org"
 homepage: "https://www.python.org/downloads/release/python-3910/"
 authors: "Python Software Foundation"
-license: "PSF"
+license: "PSF-2.0"
 bug-reports: "https://github.com/ocaml/opam-repository/issues"
 build: ["python3" "test.py"]
 depexts: [
@@ -29,5 +29,12 @@ on the system.
 If a minor version needs to be specified for your operating system, then
 python-3.9 will be used.
 """
-extra-files: ["test.py" "sha512=c392de4af374fb41705d8ff8510c1f770666a1386021f89f309848e6bfbb29fabc19f34091206c32691522698a973d447da7a82a937a9d707a79e4caae6ec30c"]
 flags: conf
+extra-source "test.py" {
+  src:
+    "https://raw.githubusercontent.com/ocaml/opam-source-archives/main/patches/conf-python-3/test.py"
+  checksum: [
+    "sha256=50738b59f747bf6464ec69a083c7f21e768f0a77df6520a091636c74bb1b7b77"
+    "md5=db8829ab1f4aa1fc15f380afba9d01f5"
+  ]
+}

@@ -49,8 +49,8 @@ Template Coq includes:
   MetaCoq/MTac.
 """
 url {
-  src: "https://github.com/MetaCoq/metacoq/archive/refs/tags/v1.2-8.17.tar.gz"
-  checksum: "sha512=a5ce2f5d94120a00703331a3cfdb7d51653fb44adeba89fa84b5f76e711ee9f582a22551f81fd144dc974e3f05e58d85cd716f8fcf69ec89923bc64774d82668"
+  src: "https://github.com/MetaRocq/metarocq/releases/download/v1.2-8.17/metacoq-1.2-8.17.tar.gz"
+  checksum: "sha512=17add66108aadc1f8d9d513c92c94e94265cd10ad73d7999dd0ee2e53666094af7ec8aa9d93f089389576f2efc5fb4b23faad663319f814fbbc73aaf8e2bf999"
 }
 extra-files: [
   "Fix make issues Coq Platform CI.patch"
