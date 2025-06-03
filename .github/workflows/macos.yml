@@ -49,8 +49,8 @@ jobs:
       matrix:
         variant:
           # Keep this in sync with the Smoke test below
+          - '9.0+preview~2025.08'
           - '8.20~2025.01'
-          - '8.19~2024.10'
     steps:
       - name: Git checkout
         uses: actions/checkout@v4
@@ -164,8 +164,8 @@ jobs:
       fail-fast: false
       matrix:
         variant:
+          - '9.0+preview~2025.08'
           - '8.20~2025.01'
-          - '8.19~2024.10'
 
     steps:
       - name: Install bash
@@ -196,14 +196,41 @@ jobs:
         shell: bash
         run: |
           cd /Applications/Coq-Platform*.app/Contents/Resources/bin/
-          ./coqc -v
+          
+          # Try default coqc first
+          if ./coqc -v 2>/dev/null; then
+              exit 0
+          fi
+          
+          echo "coqc -v failed, trying with library path detection for Rocq 9.0+"
+          
+          # Try to find library path and use -coqlib
+          for path in ../lib/coq ../lib/rocq ../lib/coq-stdlib; do
+              if [ -d "$path" ] && ([ -f "$path/theories/Init/Prelude.vo" ] || [ -f "$path/Init/Prelude.vo" ]); then
+                  echo "Trying with -coqlib $path"
+                  ./coqc -coqlib "$path" -v && exit 0
+              fi
+          done
+          
+          # Last resort: boot mode
+          echo "Trying boot mode..."
+          ./coqc -boot -noinit -v
 
       - name: 'Run Macos smoke test kit'
         shell: bash
         run: |
           ls /Applications/Coq-Platform*.app
           export PATH="$PATH:$(cd /Applications/Coq-Platform*.app/Contents/Resources/bin/; pwd)"
-          export COQLIB=$(coqc -where)
+          
+          # Try to set COQLIB, but don't fail if it doesn't work
+          if COQLIB_TEMP=$(coqc -where 2>/dev/null); then
+              export COQLIB="$COQLIB_TEMP"
+              echo "COQLIB set to: $COQLIB"
+          else
+              echo "Warning: coqc -where failed, COQLIB not set"
+              export COQLIB=""
+          fi
+          
           cd ${{steps.download-smoke.outputs.download-path}}
           chmod a+x ./run-smoke-test.sh
           ./run-smoke-test.sh

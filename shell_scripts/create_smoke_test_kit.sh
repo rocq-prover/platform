@@ -85,6 +85,7 @@ TEST_FILES[coq-extructures]='../../test_files/coq-extructures/tutorial.v'
 TEST_FILES[coq-extructures~8.18~mc2]='tests/tutorial.v'
 TEST_FILES[coq-extructures~8.19~2024.10]='tests/tutorial.v'
 TEST_FILES[coq-extructures~8.20~2025.01]='tests/tutorial.v'
+TEST_FILES[coq-extructures~9.0+preview~2025.08]='tests/tutorial.v'
 TEST_FILES[coq-fiat-crypto]='src/Demo.v'
 TEST_FILES[coq-flocq]='examples/Average.v' # In fixing: examples/Cody_Waite.v
 TEST_FILES[coq-flocq3]='examples/Average.v' # In fixing: examples/Cody_Waite.v
@@ -104,6 +105,7 @@ PATCH_CMDS[coq-hierarchy-builder~8.13~2021.02]='/^From HB.demo2 / {sub("From HB.
 TEST_FILES[coq-hott]='theories/Analysis/Locator.v'
 COQ_OPTION[coq-hott]='-noinit -indices-matter'
 PATCH_CMDS[coq-hott~8.20~2025.01]='/^Require Import$/ {print "From HoTT "$0; next}'
+PATCH_CMDS[coq-hott~9.0+preview~2025.08]='/^Require Import$/ {print "From HoTT "$0; next}'
 TEST_FILES[coq-interval]='testsuite/example-20071016.v testsuite/example-20120205.v testsuite/example-20140221.v'
 TEST_FILES[coq-interval-flocq3]='testsuite/example-20071016.v testsuite/example-20120205.v testsuite/example-20140221.v'
 PATCH_CMDS[coq-interval-flocq3]='/Interval/ {sub("Interval", "IntervalFlocq3", $0); print $0; next}'
@@ -115,18 +117,24 @@ TEST_FILES[coq-math-classes]=''
 TEST_FILES[coq-mathcomp-algebra-tactics]='examples/field_examples.v examples/ring_examples.v'
 PATCH_CMDS[coq-mathcomp-algebra-tactics]='/From mathcomp/ {sub("[(][*]", "", $0); sub("[*][)]", "", $0); print $0; next}'
 TEST_FILES[coq-mathcomp-algebra]='mathcomp/algebra/finalg.v'
+# Overrides pour Coq 9.0 pick (chemins sans préfixe "mathcomp/")
+TEST_FILES[coq-mathcomp-algebra~9.0+preview~2025.08]='algebra/finalg.v'
 TEST_FILES[coq-mathcomp-analysis]=''
 TEST_FILES[coq-mathcomp-bigenough]='bigenough.v'
 TEST_FILES[coq-mathcomp-character]='mathcomp/character/all_character.v'
+TEST_FILES[coq-mathcomp-character~9.0+preview~2025.08]='character/all_character.v'
 TEST_FILES[coq-mathcomp-field]='mathcomp/field/finfield.v'
+TEST_FILES[coq-mathcomp-field~9.0+preview~2025.08]='field/finfield.v'
 TEST_FILES[coq-mathcomp-fingroup]='mathcomp/fingroup/quotient.v'
+TEST_FILES[coq-mathcomp-fingroup~9.0+preview~2025.08]='fingroup/quotient.v'
 TEST_FILES[coq-mathcomp-finmap]='finmap.v'
 PATCH_CMDS[coq-mathcomp-finmap]='/^From mathcomp Require/ {sub("mathcomp", "mathcomp.ssreflect", $0); print $0; next}'
 TEST_FILES[coq-mathcomp-multinomials]=''
 TEST_FILES[coq-mathcomp-real-closed]='theories/complex.v'
 TEST_FILES[coq-mathcomp-solvable]='mathcomp/solvable/abelian.v'
-PATCH_CMDS[coq-mathcomp-solvable]='/^From mathcomp Require Import ssreflect/ {sub("mathcomp", "mathcomp.ssreflect", $0); print $0; next}'
+TEST_FILES[coq-mathcomp-solvable~9.0+preview~2025.08]='solvable/abelian.v'
 TEST_FILES[coq-mathcomp-ssreflect]='mathcomp/ssreflect/ssrbool.v'
+TEST_FILES[coq-mathcomp-ssreflect~9.0+preview~2025.08]='ssreflect/ssrbool.v'
 TEST_FILES[coq-mathcomp-word]='../../test_files/coq-mathcomp-word/test_upto_8_16.v'
 TEST_FILES[coq-mathcomp-word~8.16~2023.08]='../../test_files/coq-mathcomp-word/test.v'
 TEST_FILES[coq-mathcomp-word~8.17~2023.08]='../../test_files/coq-mathcomp-word/test.v'
@@ -134,6 +142,7 @@ TEST_FILES[coq-mathcomp-word~8.18~2023.11]='../../test_files/coq-mathcomp-word/t
 TEST_FILES[coq-mathcomp-word~8.18~mc2]='../../test_files/coq-mathcomp-word/test.v'
 TEST_FILES[coq-mathcomp-word~8.19~2024.10]='../../test_files/coq-mathcomp-word/test.v'
 TEST_FILES[coq-mathcomp-word~8.20~2025.01]='../../test_files/coq-mathcomp-word/test.v'
+TEST_FILES[coq-mathcomp-word~9.0+preview~2025.08]='../../test_files/coq-mathcomp-word/test.v'
 TEST_FILES[coq-mathcomp-zify]='examples/divmod.v examples/boolean.v'
 PATCH_CMDS[coq-mathcomp-zify]='/^From mathcomp Require Import ssreflect/ {sub("mathcomp", "mathcomp.ssreflect", $0); print $0; next}'
 TEST_FILES[coq-menhirlib]='coq-menhirlib/src/Alphabet.v'
@@ -157,12 +166,14 @@ TEST_FILES[coq-rewriter]='src/Rewriter/Demo.v '
 TEST_FILES[coq-riscv]='src/riscv/Examples/MulTrapHandler.v'
 TEST_FILES[coq-riscv~8.19~2024.10]='src/riscv/Examples/Fib.v'
 TEST_FILES[coq-riscv~8.20~2025.01]='src/riscv/Examples/Fib.v'
+TEST_FILES[coq-riscv~9.0+preview~2025.08]='src/riscv/Examples/Fib.v'
 TEST_FILES[coq-rupicola]='src/Rupicola/Examples/Uppercase.v'
 TEST_FILES[coq-serapi]='../../test_files/coq-serapi/serapi_example'
 TEST_CMDS[coq-serapi]="sertop < serapi_example"
 TEST_FILES[coq-simple-io]='test/Example.v test/TestExtraction.v'
 TEST_FILES[coq-simple-io~8.19~2024.10]='test/example/main.v test/extraction/main.v'
 TEST_FILES[coq-simple-io~8.20~2025.01]='test/example/main.v test/extraction/main.v'
+TEST_FILES[coq-simple-io~9.0+preview~2025.08]='test/example/main.v test/extraction/main.v'
 TEST_FILES[coq-stdpp]='tests/sets.v'
 TEST_FILES[coq-unicoq]='test-suite/microtests.v'
 TEST_FILES[coq-unimath]='UniMath/Foundations/Tests.v'
@@ -176,10 +187,6 @@ TEST_FILES[coq-vst~8.12]='progs/reverse.v progs/verif_reverse2.v'
 PATCH_CMDS[coq-vst~8.12]='/^Require Import VST.progs.reverse.$/ {print "Require Import reverse. "; next}'
 
 ##### Hacks for files #####
-
-# Patch a file using AWK
-# $1 = file name to patch
-# $2 = awk patch command
 
 function patch_file() {
   if [ -n "$2" ]
@@ -206,26 +213,29 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 	# The scripts supports a regexp package name pattern as $1
 	pattern="${1:-.*}"
 
-	# Check if coqc is available
-	if ! command -v coqc &> /dev/null
-	then
-	  if ! [ -f /Applications/PRODUCTNAME.app/Contents/Resources/bin/coqc ]
-	  then
-	    if ! [ -f /snap/coq-prover/current/coq-platform/bin/coqc ]
-	    then
-	      echo "This script expects that coqc is in the PATH"
-	      echo "or on macOS installed under /Applications/PRODUCTNAME.app/"
-	      echo "or on Linux with Snap installed under /snap/coq-prover/current/"
-	      exit 1
-	    else
-	      echo "Using coqc from '/snap/coq-prover/current/coq-platform/bin'"
-	      echo "ATTENTION: coq-hammer requires LD_LIBRARY_PATH to be set to lib/stublibs!"
-	      export PATH='/snap/coq-prover/current/coq-platform/bin':"$PATH"
-	      export LD_LIBRARY_PATH='/snap/coq-prover/current/coq-platform/lib/stublibs':"${LD_LIBRARY_PATH:-}"
-	    fi
-	  else
+	# Locate coqc and source env if needed
+	if ! command -v coqc &> /dev/null; then
+	  if [ -f /Applications/PRODUCTNAME.app/Contents/Resources/bin/coqc ]; then
 	    echo "Using coqc from '/Applications/PRODUCTNAME.app/Contents/Resources/bin'"
-	    export PATH='/Applications/PRODUCTNAME.app/Contents/Resources/bin':"$PATH"
+	    # Initialize PATH, DYLD_LIBRARY_PATH, etc.
+	    eval $(/Applications/PRODUCTNAME.app/Contents/Resources/bin/coq-env.sh)
+	  elif [ -f /snap/coq-prover/current/coq-platform/bin/coqc ]; then
+	    echo "Using coqc from '/snap/coq-prover/current/coq-platform/bin'"
+	    echo "ATTENTION: coq-hammer requires LD_LIBRARY_PATH to be set to lib/stublibs!"
+	    export PATH='/snap/coq-prover/current/coq-platform/bin':"$PATH"
+	    export LD_LIBRARY_PATH='/snap/coq-prover/current/coq-platform/lib/stublibs':"${LD_LIBRARY_PATH:-}"
+	  else
+	    echo "This script expects that coqc is in the PATH"
+	    echo "or on macOS installed under /Applications/PRODUCTNAME.app/"
+	    echo "or on Linux with Snap installed under /snap/coq-prover/current/"
+	    exit 1
+	  fi
+	else
+	  # coqc is already in PATH; if a coq-env.sh sits next to it (mac app), source it for DYLD/etc.
+	  COQ_BINDIR="$(dirname "$(command -v coqc)")"
+	  if [ -x "$COQ_BINDIR/coq-env.sh" ]; then
+	    echo "Sourcing environment from '$COQ_BINDIR/coq-env.sh'"
+	    eval "$("$COQ_BINDIR/coq-env.sh")"
 	  fi
 	fi
 
@@ -296,11 +306,11 @@ cat <<-'EOH' | sed -e 's/$/\r/' -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PAC
 	            EXIT /B 1
 	        ) ELSE (
 	            ECHO "Using coqc from C:\bin\PRODUCTNAME\bin"
-	            SET "PATH=C:\bin\PRODUCTNAME\bin;%PATH%"
+	            SET "PATH=C:\bin\PRODUCTNAME\bin;C:\bin\PRODUCTNAME\lib\stublibs;%PATH%"
 	        )
 	    ) ELSE (
 	        ECHO "Using coqc from C:\PRODUCTNAME\bin"
-	        SET "PATH=C:\PRODUCTNAME\bin;%PATH%"
+	        SET "PATH=C:\PRODUCTNAME\bin;C:\PRODUCTNAME\lib\stublibs;%PATH%"
 	    )
 	)
 	
@@ -496,4 +506,3 @@ echo "On macOS, Linux or unix you can now run $smoke_script"
 
 chmod u+x $smoke_batch
 echo "On windows you can now run $smoke_batch"
-

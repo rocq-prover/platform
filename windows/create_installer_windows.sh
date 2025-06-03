@@ -51,8 +51,6 @@ MODDIR_WIN="$(cygpath -aw "${MODDIR}")"
 
 echo "##### Coq Platform release = ${COQ_PLATFORM_RELEASE} version = ${COQ_PLATFORM_PACKAGE_PICK_POSTFIX} #####" 
 
-
-
 ###################### Handle system packages ######################
 
 ##### Add files from a system package using package name and grep filter #####
@@ -168,17 +166,7 @@ function add_single_file {
 
 ###################### Callback functions for package analyzer ######################
 
-# callback_package_primary
-# callback_package_secondary
-#   $1 = package name
-#   $2 = dependency level
-#   $3 = file inclusion list RE
-#   $4 = file exclusion list RE
-#   Create the installer information for a primary (user visible) or secondary (not user visible) package.
-#   For installers which produce plain images, this is usually empty.
-
 function callback_package_primary {
-  # This is a user visible package which can be explicitly selected or deselected
   echo "Section \"$1\" Sec_${1//-/_}" >> "$FILE_SEC_VISIBLE"
   echo 'SetOutPath "$INSTDIR\"' >> "$FILE_SEC_VISIBLE"
   reldir_win_prev=''
@@ -194,7 +182,6 @@ function callback_package_primary {
 }
 
 function callback_package_secondary {
-  # This is a hidden section which is selected automatically by dependency
   echo "Section \"-$1\" Sec_${1//-/_}" >> "$FILE_SEC_HIDDEN"
   echo 'SetOutPath "$INSTDIR\"' >> "$FILE_SEC_HIDDEN"
   reldir_win_prev=''
@@ -204,30 +191,8 @@ function callback_package_secondary {
   echo "# File list for $1 including $3 and excluding $4" > "$DIR_TARGET"/files_$1.nsh
 }
 
-# callback_dependency_primary
-# callback_dependency_secondary
-#   $1 = package which depends on $2
-#   $2 = package on which $1 depends
-#   Create the installer information for a primary (user visible) or secondary (not user visible) package dependency.
-#   For installers which produce plain images, this is usually empty.
-
-function callback_dependency_primary {
-  # This is a user visible package which can be explicitly selected or deselected
-  echo "${1//-/_}" "${2//-/_}" >> "$FILE_DEP_VISIBLE.in"
-}
-
-function callback_dependency_secondary {
-  # This is a hidden dependency package
-  echo "${1//-/_}" "${2//-/_}" >> "$FILE_DEP_HIDDEN.in"
-}
-
-# callback_file
-#   $1 = package name
-#   $2 = absolute path to source file (in .opam)
-#   $3 = relative path (without name)
-#   $4 = file name
-#   Create the installer information for a single file.
-#   This either copies the file or creates a file reference in an installer description file
+function callback_dependency_primary { echo "${1//-/_}" "${2//-/_}" >> "$FILE_DEP_VISIBLE.in"; }
+function callback_dependency_secondary { echo "${1//-/_}" "${2//-/_}" >> "$FILE_DEP_HIDDEN.in"; }
 
 function callback_file {
   file_win="${2//\//\\}"
@@ -240,7 +205,6 @@ function callback_file {
   fi
   if [ "$4" == "META" ]
   then
-    # Copy a patched version to $MODDIR and use this copy
     mkdir -p "$MODDIR/$3"
     sed 's/^ *exists_if.*//' "$2" > "$MODDIR/$3/$4"
     echo FILE "$MODDIR_WIN\\$reldir_win\\$4" >> "$DIR_TARGET"/files_$1.nsh
@@ -251,45 +215,30 @@ function callback_file {
 
 ###################### Create installer folder structure ######################
 
-# The architecture
 COQ_ARCH=$(uname -m)
 
-# The folder for the windows installer stuff
-
-# The NSIS include file for the visible installer sections
-FILE_SEC_VISIBLE="$DIR_TARGET"/sections_visible.nsh
-> "$FILE_SEC_VISIBLE"
-
-# The NSIS include file for the hidden installer sections
-FILE_SEC_HIDDEN="$DIR_TARGET"/sections_hidden.nsh
-> "$FILE_SEC_HIDDEN"
-
-# The NSIS include file for dependencies between user visible packages
-FILE_DEP_VISIBLE="$DIR_TARGET"/dependencies_visible.nsh
-> "$FILE_DEP_VISIBLE"
-
-# The NSIS include file for dependencies between hidden packages
-FILE_DEP_HIDDEN="$DIR_TARGET"/dependencies_hidden.nsh
-> "$FILE_DEP_HIDDEN"
-
-# a NSIS include file, which resets all hidden dependency selections
-FILE_RES_HIDDEN="$DIR_TARGET"/reset_hidden.nsh
-> $FILE_RES_HIDDEN
-
-# a NSIS include file which selects dependents of visible sections
+FILE_SEC_VISIBLE="$DIR_TARGET"/sections_visible.nsh;        > "$FILE_SEC_VISIBLE"
+FILE_SEC_HIDDEN="$DIR_TARGET"/sections_hidden.nsh;          > "$FILE_SEC_HIDDEN"
+FILE_DEP_VISIBLE="$DIR_TARGET"/dependencies_visible.nsh;    > "$FILE_DEP_VISIBLE"
+FILE_DEP_HIDDEN="$DIR_TARGET"/dependencies_hidden.nsh;      > "$FILE_DEP_HIDDEN"
+FILE_RES_HIDDEN="$DIR_TARGET"/reset_hidden.nsh;             > $FILE_RES_HIDDEN
 FILE_VISIBLE_SEL="$DIR_TARGET"/dependencies_visible_selection.nsh
-
-# a NSIS include file which deselects dependents of visible sections
 FILE_VISIBLE_DESEL="$DIR_TARGET"/dependencies_visible_deselection.nsh
+FILE_STRINGS="$DIR_TARGET"/strings.nsh;                     > "$FILE_STRINGS"
+FILE_SEC_DESCRIPTIONS="$DIR_TARGET"/section_descriptions.nsh; > "$FILE_SEC_DESCRIPTIONS"
 
-# The NSIS include file for strings, e.g. section descriptions
-FILE_STRINGS="$DIR_TARGET"/strings.nsh
-> "$FILE_STRINGS"
+SCRIPT_DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
+REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+CLEANED_POSTFIX="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX/#\~}"
+PICK_FILE="$REPO_ROOT/package_picks/package-pick-$CLEANED_POSTFIX.sh"
+COQ_PLATFORM_COQ_TAG=$(grep '^COQ_PLATFORM_COQ_TAG=' "$PICK_FILE" | cut -d'"' -f2)
+echo "COQ_PLATFORM_COQ_TAG found: $COQ_PLATFORM_COQ_TAG"
 
-# The NSIS include file for section descriptions
-FILE_SEC_DESCRIPTIONS="$DIR_TARGET"/section_descriptions.nsh
-> "$FILE_SEC_DESCRIPTIONS"
-
+ide_name="coqide"
+if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
+  echo "➡️ Version > 8 use Rocq"
+  ide_name="rocqide"
+fi
 
 ###################### TOP LEVEL FILE GATHERING ######################
 
@@ -304,7 +253,6 @@ echo '##### Copy system shared libraries #####'
 
 ##### Create empty GDK pixbuf loaders cache file #####
 
-# Note: CoqIDE does not need pixbuf loaders (PNG is integratd) - but we need an empty loaders.cache file in the right (GDK version dependent) place
 PIXBUF_LOADER_CACHE_RELPATH="$(cygcheck -l mingw64-${COQ_ARCH}-gdk-pixbuf2.0 | grep loaders.cache | sed 's|.*/mingw/||')"
 mkdir -p "${MODDIR}/${PIXBUF_LOADER_CACHE_RELPATH%/*}" 
 touch "${MODDIR}/${PIXBUF_LOADER_CACHE_RELPATH}"
@@ -313,7 +261,7 @@ add_single_file "${MODDIR}/" "${PIXBUF_LOADER_CACHE_RELPATH}" "files_conf-gtk3"
 ###### Add system DLLs to some packages #####
 
 add_shared_library_dependencies "coqc" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_coq"
-add_shared_library_dependencies "coqide" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_coqide"
+add_shared_library_dependencies "${ide_name}" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_${ide_name}"
 add_shared_library_dependencies "gappa" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_gappa"
 
 ###### Add GTK resources #####
@@ -329,22 +277,11 @@ add_files_of_system_package "mingw64-${COQ_ARCH}-adwaita-icon-theme"  \
 "legacy/document\|legacy/go\|legacy/process\|legacy/window\|legacy/system\)" \
 "files_conf-adwaita-icon-theme"
 
-#"${MODDIR}/share/icons/Adwaita/"
-# make_theme_index "${MODDIR}/share/icons/Adwaita/"
-
 ### GTK compiled schemas
 
 add_single_file "/usr/${COQ_ARCH}-w64-mingw32/sys-root/mingw/" "share/glib-2.0/schemas/gschemas.compiled" "files_dep-glib-compiled-schemas"
 
 ### GTK sourceview languag specs and styles (except coq itself)
-
-# Not really everything is needed from this. These might suffice:
-# language-specs/dev.lang
-# language-specs/language.dtd
-# language-specs/language.rng
-# language-specs/language2.rng
-# styles/classic.xml
-# But since the complete set is compressed not that large, we add the complete set
 
 add_folder_recursively "/usr/${COQ_ARCH}-w64-mingw32/sys-root/mingw/" "share/gtksourceview-3.0" "files_dep-gtksourceview3"
 
@@ -352,18 +289,11 @@ add_folder_recursively "/usr/${COQ_ARCH}-w64-mingw32/sys-root/mingw/" "share/gtk
 
 add_single_file "windows/" "coq-shell.bat" "files_coq"
 add_single_file "windows/" "coq-shell.ico" "files_coq"
-add_single_file "$DIR_TARGET/files/" "bin/coq.ico" "files_coqide"
+add_single_file "$DIR_TARGET/files/" "bin/coq.ico" "files_${ide_name}"
 
 ###################### Create installer ######################
 
 ###### Function for sorting a dependency list by level #####
-
-# Sort a dependecy file by dependency level (leaves last)
-# $1 input file name
-# $2 check macro output file name
-# $3 NSIS Check macro name
-# $4 reset macro output file name
-# $5 sort options (e.g. -r for reverse)
 
 function sort_dependencies
 {
@@ -414,13 +344,7 @@ cd $DIR_TARGET
 
 wget --no-clobber --progress=dot:giga https://github.com/coq/prerequisites/releases/download/2021.02.2/nsis-3.06.1.zip
 unzip -o nsis-3.06.1
-# Unzipping this results in very strange permissions - fix this
 chmod -R 700 nsis-3.06.1
-
-# Enable the below lines to enable logging
-# wget --no-clobber --progress=dot:giga http://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1-log.zip
-# unzip -o nsis-3.06.1-log.zip -d nsis-3.06.1-log
-# cp -rf nsis-3.06.1-log/* nsis-3.06.1
 
 NSIS=$(pwd)/nsis-3.06.1/makensis.exe
 
@@ -429,14 +353,29 @@ cp ../windows/*.ns* .
 
 # Extract some data from sources
 mkdir source
-for package in coq coqide coq-compcert coq-vst coq-vst-32
-do
-  if opam list --installed --silent ${package}
-  then
-  packagefull=$(opam list --installed-roots --short --columns=name,version ${package} | sed 's/ /./')
-    opam source --dir=source/${package} ${packagefull}
-  fi
-done
+
+COQ_MAJOR="$(opam show -f version coq | cut -d. -f1 || echo 0)"
+if [ "${COQ_MAJOR:-0}" -ge 9 ]; then
+  echo "Coq >= 9 detected — sourcing split packages"
+  for pkg in coq-core coq-stdlib coqide-server "${ide_name}" coq-compcert coq-vst coq-vst-32; do
+    if opam list --installed --silent "${pkg}"; then
+      packagefull=$(opam list --installed --short --columns=name,version "${pkg}" | sed 's/ /./')
+      echo "→ opam source ${packagefull}"
+      opam source --dir="source/${pkg}" "${packagefull}"
+    fi
+  done
+  LICENSE_SRC="source/coq-core/LICENSE"
+else
+  echo "Coq < 9 detected — sourcing monolithic packages"
+  for pkg in coq coqide coq-compcert coq-vst coq-vst-32; do
+    if opam list --installed --silent "${pkg}"; then
+      packagefull=$(opam list --installed --short --columns=name,version "${pkg}" | sed 's/ /./')
+      echo "→ opam source ${packagefull}"
+      opam source --dir="source/${pkg}" "${packagefull}"
+    fi
+  done
+  LICENSE_SRC="source/coq/LICENSE"
+fi
 
 # Get VST variant
 if opam list --installed --silent coq-vst
@@ -467,14 +406,19 @@ else
 fi
 
 # Copy some files from source
-cp source/coq/LICENSE .
-cp source/coqide/ide/coqide/coq.ico .
+cp "${LICENSE_SRC}" .
+# icône depuis l’IDE (coqide ou rocqide)
+cp "source/${ide_name}/ide/${ide_name}/coq.ico" .
 mkdir -p files/bin
-cp source/coqide/ide/coqide/coq.ico files/bin/
-cp source/coq-compcert/LICENSE coq-compcert-license.txt
+cp "source/${ide_name}/ide/${ide_name}/coq.ico" files/bin/
+# compcert LICENSE si présent
+if [ -f "source/coq-compcert/LICENSE" ]; then
+  cp source/coq-compcert/LICENSE coq-compcert-license.txt
+fi
+# VST LICENSE si nécessaire
 if [ -n "$NSIS_VST_CHECK" ]
 then
-  cp source/$vst_pkg/LICENSE coq-vst-license.txt
+  cp "source/$vst_pkg/LICENSE" coq-vst-license.txt
 fi
 rm -rf source
 
@@ -483,7 +427,7 @@ echo "NOTE: The creation of the installer can take 10 minutes"
 echo "(cause of the CPU heavy but effective LZMA compression used)"
 echo "==============================================================================="
 
-"$NSIS" -DRELEASE="${COQ_PLATFORM_RELEASE}" -DVERSION="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}" -DARCH="$COQ_ARCH" $NSIS_VST_CHECK Coq.nsi
+"$NSIS" -DRELEASE="${COQ_PLATFORM_RELEASE}" -DVERSION="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}" -DARCH="$COQ_ARCH" -DIDE_NAME="${ide_name}" $NSIS_VST_CHECK Coq.nsi
 
 echo "==============================================================================="
 echo "Created installer:"

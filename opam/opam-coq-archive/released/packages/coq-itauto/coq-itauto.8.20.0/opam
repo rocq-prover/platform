@@ -24,7 +24,7 @@ build: [
 install: [make "install"]
 depends: [
   "ocaml" {>= "4.9~"}
-  "coq" {>= "8.20" & < "8.21"}
+  "coq" {>= "8.20" & < "9.1.0"}
   "dune" {>= "2.9"}
 ]
 depopts: [ "ocamlformat" {build} ]
