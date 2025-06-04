@@ -378,16 +378,16 @@ find "${LIB_ABSDIR}" -name "META.bak" -delete
 
 ###################### Create installer ######################
 
-# Find CoqIDE folder
+# Find rocqide folder
 
-if [ -d coq/ide/coqide ]
+if [ -d coq/ide/rocqide ]
 then 
-  coqidefolder=coq/ide/coqide
+  rocqidefolder=coq/ide/rocqide
 elif [ -d coq/ide  ]
 then
-  coqidefolder=coq/ide
+  rocqidefolder=coq/ide
 else
-  echo "ERROR: cannot find CoqIDE folder"
+  echo "ERROR: cannot find rocqide folder"
 fi
 
 # Create Info.plist file
@@ -395,24 +395,24 @@ fi
 sed -e "s/VERSION/${COQ_VERSION_MACOS}/g" ../macos/Info.plist.template > \
     ${APP_ABSDIR}/Contents/Info.plist
 
-# Rename coqide to coqide.exe
+# Rename rocqide to rocqide.exe
 
-mv ${BIN_ABSDIR}/coqide ${BIN_ABSDIR}/coqide.exe
+mv ${BIN_ABSDIR}/rocqide ${BIN_ABSDIR}/rocqide.exe
 
-# Create a wrapper executable to start CoqIDE with correct environmant
+# Create a wrapper executable to start rocqide with correct environmant
 # Note: a shell script does not work - users can't access the documents folder then
 
-cc ../macos/wrapper_bin_folder.c -o ${BIN_ABSDIR}/coqide
-chmod a+x ${BIN_ABSDIR}/coqide
+cc ../macos/wrapper_bin_folder.c -o ${BIN_ABSDIR}/rocqide
+chmod a+x ${BIN_ABSDIR}/rocqide
 
 # Create a similar (but not identical!) wrapper in Contents/MacOS
 
-cc ../macos/wrapper_macos_folder.c -o ${APP_ABSDIR}/Contents/MacOS/coqide
-chmod a+x ${APP_ABSDIR}/Contents/MacOS/coqide
+cc ../macos/wrapper_macos_folder.c -o ${APP_ABSDIR}/Contents/MacOS/rocqide
+chmod a+x ${APP_ABSDIR}/Contents/MacOS/rocqide
 
 # Icons
 
-cp ${coqidefolder}/MacOS/*.icns ${RSRC_ABSDIR}
+cp ${rocqidefolder}/MacOS/*.icns ${RSRC_ABSDIR}
 
 
 ###################### Create contents of the top level DMG folder  ######################
