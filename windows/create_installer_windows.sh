@@ -304,7 +304,7 @@ echo '##### Copy system shared libraries #####'
 
 ##### Create empty GDK pixbuf loaders cache file #####
 
-# Note: CoqIDE does not need pixbuf loaders (PNG is integratd) - but we need an empty loaders.cache file in the right (GDK version dependent) place
+# Note: rocqide does not need pixbuf loaders (PNG is integratd) - but we need an empty loaders.cache file in the right (GDK version dependent) place
 PIXBUF_LOADER_CACHE_RELPATH="$(cygcheck -l mingw64-${COQ_ARCH}-gdk-pixbuf2.0 | grep loaders.cache | sed 's|.*/mingw/||')"
 mkdir -p "${MODDIR}/${PIXBUF_LOADER_CACHE_RELPATH%/*}" 
 touch "${MODDIR}/${PIXBUF_LOADER_CACHE_RELPATH}"
@@ -313,7 +313,7 @@ add_single_file "${MODDIR}/" "${PIXBUF_LOADER_CACHE_RELPATH}" "files_conf-gtk3"
 ###### Add system DLLs to some packages #####
 
 add_shared_library_dependencies "coqc" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_coq"
-add_shared_library_dependencies "coqide" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_coqide"
+add_shared_library_dependencies "rocqide" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_rocqide"
 add_shared_library_dependencies "gappa" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_gappa"
 
 ###### Add GTK resources #####
@@ -352,7 +352,7 @@ add_folder_recursively "/usr/${COQ_ARCH}-w64-mingw32/sys-root/mingw/" "share/gtk
 
 add_single_file "windows/" "coq-shell.bat" "files_coq"
 add_single_file "windows/" "coq-shell.ico" "files_coq"
-add_single_file "$DIR_TARGET/files/" "bin/coq.ico" "files_coqide"
+add_single_file "$DIR_TARGET/files/" "bin/coq.ico" "files_rocqide"
 
 ###################### Create installer ######################
 
@@ -429,7 +429,7 @@ cp ../windows/*.ns* .
 
 # Extract some data from sources
 mkdir source
-for package in coq coqide coq-compcert coq-vst coq-vst-32
+for package in coq rocqide coq-compcert coq-vst coq-vst-32
 do
   if opam list --installed --silent ${package}
   then
@@ -468,9 +468,9 @@ fi
 
 # Copy some files from source
 cp source/coq/LICENSE .
-cp source/coqide/ide/coqide/coq.ico .
+cp source/rocqide/ide/rocqide/coq.ico .
 mkdir -p files/bin
-cp source/coqide/ide/coqide/coq.ico files/bin/
+cp source/rocqide/ide/rocqide/coq.ico files/bin/
 cp source/coq-compcert/LICENSE coq-compcert-license.txt
 if [ -n "$NSIS_VST_CHECK" ]
 then
