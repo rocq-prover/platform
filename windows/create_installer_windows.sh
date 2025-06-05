@@ -290,6 +290,12 @@ FILE_STRINGS="$DIR_TARGET"/strings.nsh
 FILE_SEC_DESCRIPTIONS="$DIR_TARGET"/section_descriptions.nsh
 > "$FILE_SEC_DESCRIPTIONS"
 
+#### INIT VARIABLE DEPENDS TO THE MAJOR VERSION ####
+ide_name="coqide"
+if [ "$COQ_PLATFORM_VERSION_MAJOR" -gt 8 ]; then
+  echo "➡️ Version >_8 → use Rocq"
+  ide_name="rocqide"  
+fi
 
 ###################### TOP LEVEL FILE GATHERING ######################
 
@@ -304,7 +310,7 @@ echo '##### Copy system shared libraries #####'
 
 ##### Create empty GDK pixbuf loaders cache file #####
 
-# Note: rocqide does not need pixbuf loaders (PNG is integratd) - but we need an empty loaders.cache file in the right (GDK version dependent) place
+# Note: rocqide/coq does not need pixbuf loaders (PNG is integratd) - but we need an empty loaders.cache file in the right (GDK version dependent) place
 PIXBUF_LOADER_CACHE_RELPATH="$(cygcheck -l mingw64-${COQ_ARCH}-gdk-pixbuf2.0 | grep loaders.cache | sed 's|.*/mingw/||')"
 mkdir -p "${MODDIR}/${PIXBUF_LOADER_CACHE_RELPATH%/*}" 
 touch "${MODDIR}/${PIXBUF_LOADER_CACHE_RELPATH}"
@@ -313,7 +319,7 @@ add_single_file "${MODDIR}/" "${PIXBUF_LOADER_CACHE_RELPATH}" "files_conf-gtk3"
 ###### Add system DLLs to some packages #####
 
 add_shared_library_dependencies "coqc" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_coq"
-add_shared_library_dependencies "rocqide" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_rocqide"
+add_shared_library_dependencies "${ide_name}" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_${ide_name}"
 add_shared_library_dependencies "gappa" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_gappa"
 
 ###### Add GTK resources #####
@@ -352,7 +358,7 @@ add_folder_recursively "/usr/${COQ_ARCH}-w64-mingw32/sys-root/mingw/" "share/gtk
 
 add_single_file "windows/" "coq-shell.bat" "files_coq"
 add_single_file "windows/" "coq-shell.ico" "files_coq"
-add_single_file "$DIR_TARGET/files/" "bin/coq.ico" "files_rocqide"
+add_single_file "$DIR_TARGET/files/" "bin/coq.ico" "files_${ide_name}"
 
 ###################### Create installer ######################
 
@@ -429,7 +435,7 @@ cp ../windows/*.ns* .
 
 # Extract some data from sources
 mkdir source
-for package in coq rocqide coq-compcert coq-vst coq-vst-32
+for package in coq "${ide_name}" coq-compcert coq-vst coq-vst-32
 do
   if opam list --installed --silent ${package}
   then
@@ -468,9 +474,9 @@ fi
 
 # Copy some files from source
 cp source/coq/LICENSE .
-cp source/rocqide/ide/rocqide/coq.ico .
+cp source/${ide_name}/ide/${ide_name}/coq.ico .
 mkdir -p files/bin
-cp source/rocqide/ide/rocqide/coq.ico files/bin/
+cp source/${ide_name}/ide/${ide_name}/coq.ico files/bin/
 cp source/coq-compcert/LICENSE coq-compcert-license.txt
 if [ -n "$NSIS_VST_CHECK" ]
 then
@@ -483,7 +489,7 @@ echo "NOTE: The creation of the installer can take 10 minutes"
 echo "(cause of the CPU heavy but effective LZMA compression used)"
 echo "==============================================================================="
 
-"$NSIS" -DRELEASE="${COQ_PLATFORM_RELEASE}" -DVERSION="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}" -DARCH="$COQ_ARCH" $NSIS_VST_CHECK Coq.nsi
+"$NSIS" -DRELEASE="${COQ_PLATFORM_RELEASE}" -DVERSION="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}" -DARCH="$COQ_ARCH" -DIDE_NAME="${ide_name}" $NSIS_VST_CHECK Coq.nsi
 
 echo "==============================================================================="
 echo "Created installer:"
