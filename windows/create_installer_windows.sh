@@ -18,9 +18,11 @@ set -o nounset
 set -o errexit
 HERE="$(pwd)"
 
+
 ###### Common utilities ######
 
 source shell_scripts/installer_utilities.sh
+source shell_scripts/platform_env.sh
 
 ##### Check if hard links for external use have been created #####
 

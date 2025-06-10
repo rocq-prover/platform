@@ -56,7 +56,6 @@ source shell_scripts/ask_fiat-crypto.sh
 
 source ${COQ_PLATFORM_PACKAGE_PICK_FILE}
 source package_picks/coq_platform_switch_name.sh
-source shell_scripts/platform_env.sh
 
 ###################### INSTALL/INIT OPAM #####################
 

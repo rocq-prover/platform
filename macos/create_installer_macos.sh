@@ -58,6 +58,7 @@ source shell_scripts/init_macos_set_depolyment_target.sh
 ##### Get the release and package pick of the Coq Platform #####
 
 source shell_scripts/get_names_from_switch.sh
+source shell_scripts/platform_env.sh
 
 ###### Check if required system utilities are installed #####
 
