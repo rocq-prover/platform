@@ -387,9 +387,9 @@ if [ "$COQ_PLATFORM_VERSION_MAJOR" -gt 8 ]; then
 fi
 
 # Find rocqide folder
-if [ -d "coq/ide/${ide_name}" ]
+if [ -d "rocq/ide/${ide_name}" ]
 then 
-  idefolder="coq/ide/${ide_name}"
+  idefolder="rocq/ide/${ide_name}"
 elif [ -d coq/ide  ]
 then
   idefolder=coq/ide
