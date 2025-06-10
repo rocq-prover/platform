@@ -72,6 +72,9 @@ jobs:
         shell: cmd
         run: coq_platform_make_windows.bat -destcyg=C:\cygwin_coq_platform -arch=${{matrix.architecture}} -packages=${{matrix.variant}} %PLATFORM_ARGS% -dumplogs
 
+      - name: Set COQ_PLATFORM_PACKAGE_PICK_FILE
+        run: echo "COQ_PLATFORM_PACKAGE_PICK_FILE=package_picks/package-pick-${{ matrix.variant }}.sh" >> $GITHUB_ENV
+
       - name: Create installer
         shell: cmd
         run: C:\cygwin_coq_platform\bin\bash --login -c "cd /platform/ && windows/create_installer_windows.sh && mkdir /cygdrive/c/installer && cp windows_installer/*exe /cygdrive/c/installer/"

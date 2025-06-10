@@ -133,6 +133,9 @@ jobs:
           brew install findutils
           brew install coreutils
           pip3 install macpack
+      
+      - name: Set COQ_PLATFORM_PACKAGE_PICK_FILE
+        run: echo "COQ_PLATFORM_PACKAGE_PICK_FILE=package_picks/package-pick-${{matrix.variant}}.sh" >> $GITHUB_ENV
 
       - name: 'Build DMG installer'
         uses: Wandalen/wretry.action@v3
