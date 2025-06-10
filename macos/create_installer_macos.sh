@@ -414,7 +414,7 @@ cc ../macos/wrapper_macos_folder.c -o "${APP_ABSDIR}/Contents/MacOS/${ide_name}"
 chmod a+x "${APP_ABSDIR}/Contents/MacOS/${ide_name}"
 
 # Icons
-cp ${ide_folder}/MacOS/*.icns ${RSRC_ABSDIR}
+cp ${idefolder}/MacOS/*.icns ${RSRC_ABSDIR}
 
 
 ###################### Create contents of the top level DMG folder  ######################
