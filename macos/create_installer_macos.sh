@@ -397,10 +397,11 @@ if [ "$ide_name" = "coqide" ]; then
   else
     echo "ERROR: cannot find ${ide_name} folder"
   fi
-elif
+else
   echo "INFO: Rocq case folder ${ide_name}"
   idefolder="roq/ide/${ide_name}"
 fi
+
 # Create Info.plist file
 sed -e "s/VERSION/${COQ_VERSION_MACOS}/g" ../macos/Info.plist.template > \
     ${APP_ABSDIR}/Contents/Info.plist
