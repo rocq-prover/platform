@@ -386,17 +386,21 @@ if [ "$COQ_PLATFORM_VERSION_MAJOR" -gt 8 ]; then
   ide_name="rocqide"  
 fi
 
-# Find rocqide folder
-if [ -d "rocq/ide/${ide_name}" ]
-then 
-  idefolder="rocq/ide/${ide_name}"
-elif [ -d coq/ide  ]
-then
-  idefolder=coq/ide
-else
-  echo "ERROR: cannot find ${ide_name} folder"
+if [ "$ide_name" = "coqide" ]; then
+   echo "INFO: Coq case folder ${ide_name}"
+  if [ -d "coq/ide/${ide_name}" ]
+  then 
+    idefolder="coq/ide/${ide_name}"
+  elif [ -d coq/ide  ]
+  then
+    idefolder=coq/ide
+  else
+    echo "ERROR: cannot find ${ide_name} folder"
+  fi
+elif
+  echo "INFO: Rocq case folder ${ide_name}"
+  idefolder="roq/ide/${ide_name}"
 fi
-
 # Create Info.plist file
 sed -e "s/VERSION/${COQ_VERSION_MACOS}/g" ../macos/Info.plist.template > \
     ${APP_ABSDIR}/Contents/Info.plist
