@@ -391,9 +391,11 @@ if [ "$ide_name" = "coqide" ]; then
   if [ -d "coq/ide/${ide_name}" ]
   then 
     idefolder="coq/ide/${ide_name}"
+    coqidefolder=coq/ide/coqide
   elif [ -d coq/ide  ]
   then
     idefolder=coq/ide
+    coqidefolder=coq/ide
   else
     echo "ERROR: cannot find ${ide_name} folder"
   fi
