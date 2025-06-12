@@ -400,6 +400,16 @@ if [ "$ide_name" = "coqide" ]; then
 else
   echo "INFO: Rocq case folder ${ide_name}"
   idefolder="roq/ide/${ide_name}"
+  # Case for the icns
+  if [ -d coq/ide/coqide ]
+  then 
+    coqidefolder=coq/ide/coqide
+  elif [ -d coq/ide  ]
+  then
+    coqidefolder=coq/ide
+  else
+    echo "ERROR: cannot find CoqIDE folder"
+  fi
 fi
 
 # Create Info.plist file
@@ -419,7 +429,7 @@ cc ../macos/wrapper_macos_folder.c -o "${APP_ABSDIR}/Contents/MacOS/${ide_name}"
 chmod a+x "${APP_ABSDIR}/Contents/MacOS/${ide_name}"
 
 # Icons
-cp ${idefolder}/MacOS/*.icns ${RSRC_ABSDIR}
+cp ${coqidefolder}/MacOS/*.icns ${RSRC_ABSDIR}
 
 
 ###################### Create contents of the top level DMG folder  ######################
