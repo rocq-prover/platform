@@ -49,6 +49,7 @@ jobs:
       matrix:
         variant:
           # Keep this in sync with the Smoke test below
+          - '9.0+beta~2025.05'
           - '8.20~2025.01'
           - '8.19~2024.10'
     steps:
@@ -132,6 +133,9 @@ jobs:
           brew install findutils
           brew install coreutils
           pip3 install macpack
+      
+      - name: Set COQ_PLATFORM_PACKAGE_PICK_FILE
+        run: echo "COQ_PLATFORM_PACKAGE_PICK_FILE=package_picks/package-pick-${{matrix.variant}}.sh" >> $GITHUB_ENV
 
       - name: 'Build DMG installer'
         uses: Wandalen/wretry.action@v3
@@ -164,6 +168,7 @@ jobs:
       fail-fast: false
       matrix:
         variant:
+          - '9.0+beta~2025.05'
           - '8.20~2025.01'
           - '8.19~2024.10'
 
