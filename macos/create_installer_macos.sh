@@ -101,6 +101,12 @@ echo "##### Coq Platform release = ${COQ_PLATFORM_RELEASE} version = ${COQ_PLATF
 coqpackagefull=$(opam list --installed-roots --short --columns=name,version coq | sed 's/ /./')
 opam source --dir=coq/ ${coqpackagefull}
 
+###### Get the version according to pick and version > 8 so Rocq version
+if [ "$COQ_PLATFORM_VERSION_MAJOR" -gt 8 ]; then
+  coqide_version=$(opam list --installed --short --columns=version coqide-server | head -n 1)
+  opam source --dir=coqide-server/ "coqide-server.${coqide_version}"
+fi
+
 ##### Get the version of Coq #####
 
 COQ_VERSION=$(coqc --print-version | cut -d ' ' -f 1)
@@ -266,9 +272,6 @@ mkdir -p ${RSRC_ABSDIR}             # Most files go here
 mkdir -p ${DYNLIB_ABSDIR}           # System shared libraries
 
 
-
-
-
 ###################### TOP LEVEL FILE GATHERING ######################
 
 ##### System independent opam file copying #####
@@ -379,39 +382,28 @@ find "${LIB_ABSDIR}" -name "META.bak" -delete
 
 ###################### Create installer ######################
 
+
 #### INIT VARIABLE DEPENDS TO THE MAJOR VERSION ####
 ide_name="coqide"
 if [ "$COQ_PLATFORM_VERSION_MAJOR" -gt 8 ]; then
-  echo "➡️ Version >_8 → use Rocq"
-  ide_name="rocqide"  
+  echo " Version  8 use Rocq"
+  ide_name="rocqide" 
 fi
 
 if [ "$ide_name" = "coqide" ]; then
    echo "INFO: Coq case folder ${ide_name}"
   if [ -d "coq/ide/${ide_name}" ]
-  then 
+  then
     idefolder="coq/ide/${ide_name}"
-    coqidefolder=coq/ide/coqide
   elif [ -d coq/ide  ]
   then
     idefolder=coq/ide
-    coqidefolder=coq/ide
-  else
+  else 
     echo "ERROR: cannot find ${ide_name} folder"
   fi
 else
   echo "INFO: Rocq case folder ${ide_name}"
-  idefolder="roq/ide/${ide_name}"
-  # Case for the icns
-  if [ -d coq/ide/coqide ]
-  then 
-    coqidefolder=coq/ide/coqide
-  elif [ -d coq/ide  ]
-  then
-    coqidefolder=coq/ide
-  else
-    echo "ERROR: cannot find CoqIDE folder"
-  fi
+  idefolder=coqide-server/ide/${ide_name}
 fi
 
 # Create Info.plist file
@@ -431,7 +423,7 @@ cc ../macos/wrapper_macos_folder.c -o "${APP_ABSDIR}/Contents/MacOS/${ide_name}"
 chmod a+x "${APP_ABSDIR}/Contents/MacOS/${ide_name}"
 
 # Icons
-cp ${coqidefolder}/MacOS/*.icns ${RSRC_ABSDIR}
+cp ${idefolder}/MacOS/*.icns ${RSRC_ABSDIR}
 
 
 ###################### Create contents of the top level DMG folder  ######################
