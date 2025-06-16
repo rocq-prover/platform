@@ -1,0 +1,25 @@
+# Normalize all text files to use LF line endings
+* text=auto eol=lf
+
+# Shell scripts should always use LF (to avoid issues on Linux/macOS)
+*.sh text eol=lf
+
+# Windows batch files should use CRLF
+*.bat text eol=crlf
+
+# Markdown and plain text files
+*.md text eol=lf
+*.txt text eol=lf
+
+# Coq source files
+*.v text eol=lf
+
+# JSON, YAML, TOML config files
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+
+# GitHub Actions workflows
+*.yml text eol=lf
+.github/** text eol=lf
