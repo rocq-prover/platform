@@ -193,22 +193,26 @@ jobs:
         run: |
           cd ${{steps.download.outputs.download-path}}
           DMG=$(ls Coq-Platform-*.dmg)
-          hdiutil attach $DMG
-          cp -r /Volumes/${DMG%%.dmg}/Coq-Platform*.app /Applications/
-          hdiutil detach /Volumes/${DMG%%.dmg}/
+          hdiutil attach "$DMG"
+          VOLUME_PATH=$(ls -d /Volumes/Coq-Platform* | head -n 1)
+          APP_PATH=$(find "$VOLUME_PATH" -maxdepth 1 -name "*.app" | head -n 1)
+          cp -r "$APP_PATH" /Applications/
+          hdiutil detach "$VOLUME_PATH"
 
       - name: 'Smoke coqc'
         shell: bash
         run: |
-          cd /Applications/Coq-Platform*.app/Contents/Resources/bin/
+          APP_PATH=$(find /Applications -maxdepth 1 -name "Coq-Platform*.app" | head -n 1)
+          cd "$APP_PATH/Contents/Resources/bin/"
           ./coqc -v
 
       - name: 'Run Macos smoke test kit'
         shell: bash
         run: |
-          ls /Applications/Coq-Platform*.app
-          export PATH="$PATH:$(cd /Applications/Coq-Platform*.app/Contents/Resources/bin/; pwd)"
+          APP_PATH=$(find /Applications -maxdepth 1 -name "Coq-Platform*.app" | head -n 1)
+          export PATH="$PATH:$APP_PATH/Contents/Resources/bin"
           export COQLIB=$(coqc -where)
           cd ${{steps.download-smoke.outputs.download-path}}
           chmod a+x ./run-smoke-test.sh
           ./run-smoke-test.sh
+
