@@ -234,25 +234,11 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 	  fi
 	fi
 
-	# Load OPAM environment if available
-	if command -v opam &> /dev/null; then
-	  eval "$(opam env)"
-	fi
+	# Print Coq version
+	echo "Coq Version = $(coqc --version)"
 
-	if command -v rocq &> /dev/null; then
-		COQC_BIN="rocq c"
-	elif command -v coqc &> /dev/null; then
-		COQC_BIN=coqc
-	else
-		echo "ERROR: neither rocq nor coqc found in PATH"
-		exit 1
-	fi
-
-	# Print version
-	echo "Coq Version = $($COQC_BIN --version)"
-
-	# Set COQLIB
-	COQLIB="$($COQC_BIN -where | tr -d '\r')"
+	# set COQLIB variable
+	COQLIB="$(coqc -where | tr -d '\r')"
 
 	# cd to smoke test folder
 	HERE="$(pwd)"
@@ -267,8 +253,8 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 	    echo "====================== Running test file $1 ======================"
 	      here="$(pwd)"
 	      cd "${1%/*}"
-	      echo "$COQC_BIN ${2:-} ${1##*/}"
-		  $COQC_BIN ${2:-} "${1##*/}"
+	      echo "coqc ${2:-} ${1##*/}"
+	      coqc ${2:-} "${1##*/}"
 	      cd "$here"
 	    echo $'\n\n'
 	  fi
@@ -296,6 +282,7 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 	EOH
 
 ##### Write header of DOS batch runner script #####
+
 
 smoke_batch=smoke-test-kit/run-smoke-test.bat
 
