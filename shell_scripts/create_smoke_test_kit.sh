@@ -240,7 +240,7 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 	fi
 
 	if command -v rocq &> /dev/null; then
-		COQC_BIN=rocq
+		COQC_BIN="rocq c"
 	elif command -v coqc &> /dev/null; then
 		COQC_BIN=coqc
 	else
