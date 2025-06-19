@@ -79,7 +79,7 @@ then
 
   # General mathematics
   PACKAGES="${PACKAGES} elpi.2.0.7 rocq-elpi.2.5.2" # This would belong into the "Proof automation" section, but it is required by coq-hierarchy-builder
-  PACKAGES="${PACKAGES} rocq-hierarchy-builder.1.9.1"
+  PACKAGES="${PACKAGES} coq-hierarchy-builder.1.9.1"
   PACKAGES="${PACKAGES} coq-mathcomp-ssreflect.2.3.0"
   PACKAGES="${PACKAGES} coq-mathcomp-fingroup.2.3.0"
   PACKAGES="${PACKAGES} coq-mathcomp-algebra.2.3.0"
