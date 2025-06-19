@@ -283,7 +283,6 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 
 ##### Write header of DOS batch runner script #####
 
-
 smoke_batch=smoke-test-kit/run-smoke-test.bat
 
 cat <<-'EOH' | sed -e 's/$/\r/' -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}/g" > $smoke_batch
