@@ -234,6 +234,11 @@ fi
 # This sets the switch only locally - in case several picks are built in parallel
 eval $(opam env --set-switch --switch ${COQ_PLATFORM_SWITCH_NAME})
 
+if [ "${COQ_PLATFORM_USE_ARCHIVE_REPOSITORY}" == 'Y' ]
+then
+  opam repo add archive git+https://github.com/ocaml/opam-repository-archive || echo "FAILED TO ADD ARCHIVE"
+fi
+
 echo === OPAM SWITCHES ===
 opam switch
 
