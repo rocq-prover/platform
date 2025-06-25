@@ -168,6 +168,7 @@ then
   COQ_PLATFORM_OPAM_MAIN_REPOS="coq-core-dev,coq-extra-dev,${COQ_PLATFORM_OPAM_MAIN_REPOS}"
 fi
 
+
 if ! opam switch list --short | fgrep -qx "${COQ_PLATFORM_SWITCH_NAME}" &> /dev/null
 then
   echo "===== CREATE OPAM SWITCH ====="
@@ -213,6 +214,11 @@ then
   $COQ_PLATFORM_TIME opam repo add --dont-select coq-core-dev "https://coq.inria.fr/opam/core-dev"
   $COQ_PLATFORM_TIME opam repo add --dont-select coq-extra-dev "https://coq.inria.fr/opam/extra-dev"
 
+  if [ "${COQ_PLATFORM_USE_ARCHIVE_REPOSITORY}" == 'Y' ]
+  then
+    $COQ_PLATFORM_TIME opam repo add --set-default archive git+https://github.com/ocaml/opam-repository-archive
+  fi
+
   # Create switch with the patch repo registered right away in case we need to patch OCaml
   $COQ_PLATFORM_TIME opam switch --no-switch create "${COQ_PLATFORM_SWITCH_NAME}" \
     --package="${COQ_PLATFORM_OCAML_VARIANT}" \
@@ -227,6 +233,11 @@ fi
 
 # This sets the switch only locally - in case several picks are built in parallel
 eval $(opam env --set-switch --switch ${COQ_PLATFORM_SWITCH_NAME})
+
+if [ "${COQ_PLATFORM_USE_ARCHIVE_REPOSITORY}" == 'Y' ]
+then
+  opam repo add archive git+https://github.com/ocaml/opam-repository-archive || echo "FAILED TO ADD ARCHIVE"
+fi
 
 echo === OPAM SWITCHES ===
 opam switch
