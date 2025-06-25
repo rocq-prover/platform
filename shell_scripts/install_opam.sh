@@ -168,10 +168,6 @@ then
   COQ_PLATFORM_OPAM_MAIN_REPOS="coq-core-dev,coq-extra-dev,${COQ_PLATFORM_OPAM_MAIN_REPOS}"
 fi
 
-if [ "${COQ_PLATFORM_USE_ARCHIVE_REPOSITORY}" == 'Y' ]
-then
-  $COQ_PLATFORM_TIME opam repo add archive git+https://github.com/ocaml/opam-repository-archive
-fi
 
 if ! opam switch list --short | fgrep -qx "${COQ_PLATFORM_SWITCH_NAME}" &> /dev/null
 then
@@ -217,6 +213,11 @@ then
   $COQ_PLATFORM_TIME opam repo add --dont-select coq-released "https://coq.inria.fr/opam/released"
   $COQ_PLATFORM_TIME opam repo add --dont-select coq-core-dev "https://coq.inria.fr/opam/core-dev"
   $COQ_PLATFORM_TIME opam repo add --dont-select coq-extra-dev "https://coq.inria.fr/opam/extra-dev"
+
+  if [ "${COQ_PLATFORM_USE_ARCHIVE_REPOSITORY}" == 'Y' ]
+  then
+    $COQ_PLATFORM_TIME opam repo add --set-default archive git+https://github.com/ocaml/opam-repository-archive
+  fi
 
   # Create switch with the patch repo registered right away in case we need to patch OCaml
   $COQ_PLATFORM_TIME opam switch --no-switch create "${COQ_PLATFORM_SWITCH_NAME}" \
