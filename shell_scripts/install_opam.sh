@@ -231,7 +231,7 @@ fi
 eval $(opam env --set-switch --switch ${COQ_PLATFORM_SWITCH_NAME})
 
 if [ -z "${COQ_PLATFORM_USE_ARCHIVE_REPOSITORY+x}" ]; then
-  last_priority=$(opam repository list --short | wc -l)
+  last_priority=$(opam repository list --short | wc -l | xargs)
   opam repository priority archive "$last_priority"
 fi
 
