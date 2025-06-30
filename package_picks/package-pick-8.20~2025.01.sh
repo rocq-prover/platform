@@ -27,6 +27,9 @@ COQ_PLATFORM_COQ_TAG='8.20.1'
 # This controls if opam repositories for development packages are selected
 COQ_PLATFORM_USE_DEV_REPOSITORY='N'
 
+# This controls if opam archive repositories packages are selected
+COQ_PLATFORM_USE_ARCHIVE_REPOSITORY='N'
+
 # This extended descriptions is used for readme files
 COQ_PLATFORM_VERSION_DESCRIPTION='This version of Coq Platform 2025.01.0 includes Coq 8.20.1 from Jan 2025. '
 COQ_PLATFORM_VERSION_DESCRIPTION+='This is the **latest release version** of the Coq Platform and recommended for general application. '
@@ -49,8 +52,8 @@ PACKAGES=""
 # Coq needs a patched ocamlfind to be relocatable by installers
 PACKAGES="${PACKAGES} PIN.ocamlfind.1.9.5~relocatable"  # TODO port patch to 1.9.6
 # Since dune does support Coq, it is explicitly selected
-PACKAGES="${PACKAGES} PIN.dune.3.16.1" # 3.17.2 has issues on Windows: cairo doesn't find cairo.h
-PACKAGES="${PACKAGES} PIN.dune-configurator.3.16.1"
+PACKAGES="${PACKAGES} PIN.dune.3.19.1" # 3.17.2 has issues on Windows: cairo doesn't find cairo.h
+PACKAGES="${PACKAGES} PIN.dune-configurator.3.19.1"
 # The Coq compiler coqc and the Coq standard library
 PACKAGES="${PACKAGES} PIN.coq.8.20.1"
 
