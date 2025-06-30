@@ -27,9 +27,6 @@ COQ_PLATFORM_COQ_TAG='8.17.1'
 # This controls if opam repositories for development packages are selected
 COQ_PLATFORM_USE_DEV_REPOSITORY='N'
 
-# This controls if opam archive repositories packages are selected
-COQ_PLATFORM_USE_ARCHIVE_REPOSITORY='Y'
-
 # This extended descriptions is used for readme files
 COQ_PLATFORM_VERSION_DESCRIPTION='This version of Coq Platform 2025.01.0 includes Coq 8.17.1 from Jun 2023. '
 COQ_PLATFORM_VERSION_DESCRIPTION+='This is the original package pick for Coq 8.17.1 from Aug 2023. '

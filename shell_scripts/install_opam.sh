@@ -213,11 +213,7 @@ then
   $COQ_PLATFORM_TIME opam repo add --dont-select coq-released "https://coq.inria.fr/opam/released"
   $COQ_PLATFORM_TIME opam repo add --dont-select coq-core-dev "https://coq.inria.fr/opam/core-dev"
   $COQ_PLATFORM_TIME opam repo add --dont-select coq-extra-dev "https://coq.inria.fr/opam/extra-dev"
-
-  if [ "${COQ_PLATFORM_USE_ARCHIVE_REPOSITORY}" == 'Y' ]
-  then
-    $COQ_PLATFORM_TIME opam repo add --set-default archive git+https://github.com/ocaml/opam-repository-archive
-  fi
+  $COQ_PLATFORM_TIME opam repo add --dont-select archive git+https://github.com/ocaml/opam-repository-archive
 
   # Create switch with the patch repo registered right away in case we need to patch OCaml
   $COQ_PLATFORM_TIME opam switch --no-switch create "${COQ_PLATFORM_SWITCH_NAME}" \
@@ -234,9 +230,9 @@ fi
 # This sets the switch only locally - in case several picks are built in parallel
 eval $(opam env --set-switch --switch ${COQ_PLATFORM_SWITCH_NAME})
 
-if [ "${COQ_PLATFORM_USE_ARCHIVE_REPOSITORY}" == 'Y' ]
-then
-  opam repo add archive git+https://github.com/ocaml/opam-repository-archive || echo "FAILED TO ADD ARCHIVE"
+if [ -z "${COQ_PLATFORM_USE_ARCHIVE_REPOSITORY+x}" ]; then
+  last_priority=$(opam repository list --short | wc -l)
+  opam repository priority archive "$last_priority"
 fi
 
 echo === OPAM SWITCHES ===
