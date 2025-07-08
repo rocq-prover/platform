@@ -258,13 +258,14 @@ function html_multi_ref() {
 function opam_get_installed_opam_repo() {
   case "$1" in
     default)             local url='https://opam.ocaml.org' ;;
+    archive)             local url='https://github.com/ocaml/opam-repository-archive/blob/main' ;;
     coq-core-dev)        local url='https://coq.inria.fr/opam/core-dev' ;;
     coq-extra-dev)       local url='https://coq.inria.fr/opam/extra-dev' ;;
     coq-released)        local url='https://coq.inria.fr/opam/released' ;;
     *patch_coq-dev)      local url='https://github.com/coq/platform/tree/main/opam/opam-coq-archive/extra-dev' ;;
     *patch_coq-released) local url='https://github.com/coq/platform/tree/main/opam/opam-coq-archive/released' ;;
     *patch_ocaml)        local url='https://github.com/coq/platform/tree/main/opam/opam-repository' ;;
-    *)                   return 1 ;;
+    *)                   echo "ERROR: cannot resolve opam archive '$1' => abort"; return 1 ;;
   esac
   local package_main="${2%%.*}"
   echo ${url}/packages/${package_main}/$2/opam
