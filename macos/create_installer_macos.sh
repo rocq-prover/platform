@@ -58,6 +58,7 @@ source shell_scripts/init_macos_set_depolyment_target.sh
 ##### Get the release and package pick of the Coq Platform #####
 
 source shell_scripts/get_names_from_switch.sh
+source shell_scripts/platform_env.sh
 
 ###### Check if required system utilities are installed #####
 
@@ -99,6 +100,12 @@ echo "##### Coq Platform release = ${COQ_PLATFORM_RELEASE} version = ${COQ_PLATF
 # Get installed version of coq (otherwise opam source gives the latest)
 coqpackagefull=$(opam list --installed-roots --short --columns=name,version coq | sed 's/ /./')
 opam source --dir=coq/ ${coqpackagefull}
+
+###### Get the version according to pick and version > 8 so Rocq version
+if [ "$COQ_PLATFORM_VERSION_MAJOR" -gt 8 ]; then
+  coqide_version=$(opam list --installed --short --columns=version coqide-server | head -n 1)
+  opam source --dir=coqide-server/ "coqide-server.${coqide_version}"
+fi
 
 ##### Get the version of Coq #####
 
@@ -265,9 +272,6 @@ mkdir -p ${RSRC_ABSDIR}             # Most files go here
 mkdir -p ${DYNLIB_ABSDIR}           # System shared libraries
 
 
-
-
-
 ###################### TOP LEVEL FILE GATHERING ######################
 
 ##### System independent opam file copying #####
@@ -378,41 +382,48 @@ find "${LIB_ABSDIR}" -name "META.bak" -delete
 
 ###################### Create installer ######################
 
-# Find CoqIDE folder
 
-if [ -d coq/ide/coqide ]
-then 
-  coqidefolder=coq/ide/coqide
-elif [ -d coq/ide  ]
-then
-  coqidefolder=coq/ide
+#### INIT VARIABLE DEPENDS TO THE MAJOR VERSION ####
+ide_name="coqide"
+if [ "$COQ_PLATFORM_VERSION_MAJOR" -gt 8 ]; then
+  echo " Version  8 use Rocq"
+  ide_name="rocqide" 
+fi
+
+if [ "$ide_name" = "coqide" ]; then
+   echo "INFO: Coq case folder ${ide_name}"
+  if [ -d "coq/ide/${ide_name}" ]
+  then
+    idefolder="coq/ide/${ide_name}"
+  elif [ -d coq/ide  ]
+  then
+    idefolder=coq/ide
+  else 
+    echo "ERROR: cannot find ${ide_name} folder"
+  fi
 else
-  echo "ERROR: cannot find CoqIDE folder"
+  echo "INFO: Rocq case folder ${ide_name}"
+  idefolder=coqide-server/ide/${ide_name}
 fi
 
 # Create Info.plist file
-
 sed -e "s/VERSION/${COQ_VERSION_MACOS}/g" ../macos/Info.plist.template > \
     ${APP_ABSDIR}/Contents/Info.plist
 
-# Rename coqide to coqide.exe
+# Rename rocqide to rocqide.exe
+mv "${BIN_ABSDIR}/${ide_name}" "${BIN_ABSDIR}/${ide_name}.exe"
 
-mv ${BIN_ABSDIR}/coqide ${BIN_ABSDIR}/coqide.exe
-
-# Create a wrapper executable to start CoqIDE with correct environmant
+# Create a wrapper executable to start rocqide with correct environmant
 # Note: a shell script does not work - users can't access the documents folder then
-
-cc ../macos/wrapper_bin_folder.c -o ${BIN_ABSDIR}/coqide
-chmod a+x ${BIN_ABSDIR}/coqide
+cc ../macos/wrapper_bin_folder.c -o "${BIN_ABSDIR}/${ide_name}"
+chmod a+x "${BIN_ABSDIR}/${ide_name}"
 
 # Create a similar (but not identical!) wrapper in Contents/MacOS
-
-cc ../macos/wrapper_macos_folder.c -o ${APP_ABSDIR}/Contents/MacOS/coqide
-chmod a+x ${APP_ABSDIR}/Contents/MacOS/coqide
+cc ../macos/wrapper_macos_folder.c -o "${APP_ABSDIR}/Contents/MacOS/${ide_name}"
+chmod a+x "${APP_ABSDIR}/Contents/MacOS/${ide_name}"
 
 # Icons
-
-cp ${coqidefolder}/MacOS/*.icns ${RSRC_ABSDIR}
+cp ${idefolder}/MacOS/*.icns ${RSRC_ABSDIR}
 
 
 ###################### Create contents of the top level DMG folder  ######################

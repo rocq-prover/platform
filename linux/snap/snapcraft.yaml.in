@@ -57,18 +57,18 @@ parts:
 
 apps:
   # For the approved aliases see: https://forum.snapcraft.io/t/aliases-request-for-coq-prover/21925
-  # coqide -> coq-prover.coqide
+  # rocqide -> coq-prover.rocqide
   # coq_makefile -> coq-prover.coq-makefile
   # coqtop -> coq-prover.coqtop
   # coqc -> coq-prover.coqc
   # coqdep -> coq-prover.coqdep
-  # coqidetop.opt -> coq-prover.coqidetop
+  # rocqidetop.opt -> coq-prover.rocqidetop
   # The aliases are auto-handled by the store and not available when installed from a local snap
   # See https://snapcraft.io/docs/deprecation-notice-5
 
-  coqide:
+  rocqide:
     command-chain: [ coq-platform/bin/coq_wrapper ]
-    command: coq-platform/bin/coqide
+    command: coq-platform/bin/rocqide
     plugs:
     - home
     - desktop
@@ -91,10 +91,10 @@ apps:
     plugs: [home]
     command-chain: [ coq-platform/bin/coq_wrapper ]
     command: coq-platform/bin/coq_makefile
-  coqidetop:
+  rocqidetop:
     plugs: [home,network-bind]
     command-chain: [ coq-platform/bin/coq_wrapper ]
-    command: coq-platform/bin/coqidetop.opt
+    command: coq-platform/bin/rocqidetop.opt
   coqdep:
     plugs: [home]
     command-chain: [ coq-platform/bin/coq_wrapper ]
