@@ -58,7 +58,6 @@ source shell_scripts/init_macos_set_depolyment_target.sh
 ##### Get the release and package pick of the Coq Platform #####
 
 source shell_scripts/get_names_from_switch.sh
-source shell_scripts/platform_env.sh
 
 ###### Check if required system utilities are installed #####
 
@@ -102,7 +101,7 @@ coqpackagefull=$(opam list --installed-roots --short --columns=name,version coq 
 opam source --dir=coq/ ${coqpackagefull}
 
 ###### Get the version according to pick and version > 8 so Rocq version
-if [ "$COQ_PLATFORM_VERSION_MAJOR" -gt 8 ]; then
+if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
   coqide_version=$(opam list --installed --short --columns=version coqide-server | head -n 1)
   opam source --dir=coqide-server/ "coqide-server.${coqide_version}"
 fi
@@ -385,7 +384,7 @@ find "${LIB_ABSDIR}" -name "META.bak" -delete
 
 #### INIT VARIABLE DEPENDS TO THE MAJOR VERSION ####
 ide_name="coqide"
-if [ "$COQ_PLATFORM_VERSION_MAJOR" -gt 8 ]; then
+if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
   echo " Version  8 use Rocq"
   ide_name="rocqide" 
 fi

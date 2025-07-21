@@ -22,7 +22,6 @@ HERE="$(pwd)"
 ###### Common utilities ######
 
 source shell_scripts/installer_utilities.sh
-source shell_scripts/platform_env.sh
 
 ##### Check if hard links for external use have been created #####
 
@@ -294,7 +293,7 @@ FILE_SEC_DESCRIPTIONS="$DIR_TARGET"/section_descriptions.nsh
 
 #### INIT VARIABLE DEPENDS TO THE MAJOR VERSION ####
 ide_name="coqide"
-if [ "$COQ_PLATFORM_VERSION_MAJOR" -gt 8 ]; then
+if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
   echo "➡️ Version >_8 → use Rocq"
   ide_name="rocqide"  
 fi

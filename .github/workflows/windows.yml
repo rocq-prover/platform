@@ -51,9 +51,8 @@ jobs:
           - '64'
         variant:
           # Keep this in sync with the Smoke test below
-          - '9.0+beta~2025.05'
+          - '9.0+preview~2025.05'
           - '8.20~2025.01'
-          - '8.19~2024.10'
 
     steps:
       - name: Set git to use LF
@@ -71,9 +70,6 @@ jobs:
       - name: Run common platform script
         shell: cmd
         run: coq_platform_make_windows.bat -destcyg=C:\cygwin_coq_platform -arch=${{matrix.architecture}} -packages=${{matrix.variant}} %PLATFORM_ARGS% -dumplogs
-
-      - name: Set COQ_PLATFORM_PACKAGE_PICK_FILE
-        run: echo "COQ_PLATFORM_PACKAGE_PICK_FILE=package_picks/package-pick-${{ matrix.variant }}.sh" >> $GITHUB_ENV
 
       - name: Create installer
         shell: cmd
