@@ -51,7 +51,7 @@ jobs:
           - '64'
         variant:
           # Keep this in sync with the Smoke test below
-          - '9.0+preview~2025.05'
+          - '9.0+preview~2025.08'
           - '8.20~2025.01'
 
     steps:
