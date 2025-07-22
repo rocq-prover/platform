@@ -87,7 +87,7 @@ then
   PACKAGES="${PACKAGES} coq-mathcomp-field.2.4.0"
   PACKAGES="${PACKAGES} coq-mathcomp-character.2.4.0"
   PACKAGES="${PACKAGES} coq-mathcomp-bigenough.1.0.2"
-  PACKAGES="${PACKAGES} coq-mathcomp-finmap.2.2.1"
+  PACKAGES="${PACKAGES} rocq-mathcomp-finmap.2.2.1"
   PACKAGES="${PACKAGES} coq-mathcomp-real-closed.2.0.3"
   PACKAGES="${PACKAGES} coq-mathcomp-zify.1.5.0+2.0+8.16"
   PACKAGES="${PACKAGES} coq-mathcomp-multinomials.2.4.0"
