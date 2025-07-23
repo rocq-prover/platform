@@ -18,7 +18,6 @@ set -o nounset
 set -o errexit
 HERE="$(pwd)"
 
-
 ###### Common utilities ######
 
 source shell_scripts/installer_utilities.sh
@@ -51,8 +50,6 @@ MODDIR_WIN="$(cygpath -aw "${MODDIR}")"
 ###################### Coq and Coq Platform version ######################
 
 echo "##### Coq Platform release = ${COQ_PLATFORM_RELEASE} version = ${COQ_PLATFORM_PACKAGE_PICK_POSTFIX} #####" 
-
-
 
 ###################### Handle system packages ######################
 
@@ -291,10 +288,13 @@ FILE_STRINGS="$DIR_TARGET"/strings.nsh
 FILE_SEC_DESCRIPTIONS="$DIR_TARGET"/section_descriptions.nsh
 > "$FILE_SEC_DESCRIPTIONS"
 
-#### INIT VARIABLE DEPENDS TO THE MAJOR VERSION ####
+#### INIT VARIABLE DEPENDS TO THE VERSION ####
+CLEANED_POSTFIX="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX/#\~}"
+eval $(grep '^COQ_PLATFORM_COQ_TAG=' ./package_picks/package-pick-$CLEANED_POSTFIX.sh)
+
 ide_name="coqide"
 if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
-  echo "➡️ Version >_8 → use Rocq"
+  echo "➡️ Version > 8 → use Rocq"
   ide_name="rocqide"  
 fi
 

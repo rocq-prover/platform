@@ -383,6 +383,10 @@ find "${LIB_ABSDIR}" -name "META.bak" -delete
 
 
 #### INIT VARIABLE DEPENDS TO THE MAJOR VERSION ####
+
+CLEANED_POSTFIX="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX/#\~}"
+eval $(grep '^COQ_PLATFORM_COQ_TAG=' ./package_picks/package-pick-$CLEANED_POSTFIX.sh)
+
 ide_name="coqide"
 if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
   echo " Version  8 use Rocq"
