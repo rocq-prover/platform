@@ -289,10 +289,8 @@ FILE_SEC_DESCRIPTIONS="$DIR_TARGET"/section_descriptions.nsh
 > "$FILE_SEC_DESCRIPTIONS"
 
 #### INIT VARIABLE DEPENDS TO THE VERSION ####
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 CLEANED_POSTFIX="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX/#\~}"
-PICK_FILE="$REPO_ROOT/package_picks/package-pick-$CLEANED_POSTFIX.sh"
+PICK_FILE="package_picks/package-pick-$CLEANED_POSTFIX.sh"
 COQ_PLATFORM_COQ_TAG=$(grep '^COQ_PLATFORM_COQ_TAG=' "$PICK_FILE" | cut -d'"' -f2)
 echo "COQ_PLATFORM_COQ_TAG found: $COQ_PLATFORM_COQ_TAG"
 

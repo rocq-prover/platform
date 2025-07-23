@@ -100,12 +100,6 @@ echo "##### Coq Platform release = ${COQ_PLATFORM_RELEASE} version = ${COQ_PLATF
 coqpackagefull=$(opam list --installed-roots --short --columns=name,version coq | sed 's/ /./')
 opam source --dir=coq/ ${coqpackagefull}
 
-###### Get the version according to pick and version > 8 so Rocq version
-if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
-  coqide_version=$(opam list --installed --short --columns=version coqide-server | head -n 1)
-  opam source --dir=coqide-server/ "coqide-server.${coqide_version}"
-fi
-
 ##### Get the version of Coq #####
 
 COQ_VERSION=$(coqc --print-version | cut -d ' ' -f 1)
