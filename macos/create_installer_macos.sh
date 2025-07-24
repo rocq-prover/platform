@@ -378,7 +378,7 @@ find "${LIB_ABSDIR}" -name "META.bak" -delete
 
 #### INIT VARIABLE DEPENDS TO THE MAJOR VERSION ####
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 CLEANED_POSTFIX="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX/#\~}"
 PICK_FILE="$REPO_ROOT/package_picks/package-pick-$CLEANED_POSTFIX.sh"
