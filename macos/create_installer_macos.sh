@@ -375,37 +375,20 @@ find "${LIB_ABSDIR}" -name "META.bak" -delete
 
 ###################### Create installer ######################
 
-
-#### INIT VARIABLE DEPENDS TO THE MAJOR VERSION ####
-
-SCRIPT_DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
-REPO_ROOT="$(dirname "$SCRIPT_DIR")"
-CLEANED_POSTFIX="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX/#\~}"
-PICK_FILE="$REPO_ROOT/package_picks/package-pick-$CLEANED_POSTFIX.sh"
-COQ_PLATFORM_COQ_TAG=$(grep '^COQ_PLATFORM_COQ_TAG=' "$PICK_FILE" | cut -d'"' -f2)
-echo "COQ_PLATFORM_COQ_TAG found: $COQ_PLATFORM_COQ_TAG"
-
-ide_name="coqide"
-if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
-  echo " Version  8 use Rocq"
-  ide_name="rocqide" 
-fi
-
-if [ "$ide_name" = "coqide" ]; then
-   echo "INFO: Coq case folder ${ide_name}"
-  if [ -d "coq/ide/${ide_name}" ]
-  then
-    idefolder="coq/ide/${ide_name}"
-  elif [ -d coq/ide  ]
-  then
-    idefolder=coq/ide
-  else 
-    echo "ERROR: cannot find ${ide_name} folder"
-  fi
+# Detect wich (rocqide ou coqide) package is installed
+if opam list --installed --short | grep -q '^coqide-server$'; then
+  ide_name="rocqide"
+  ide_pkg="coqide-server"
+elif opam list --installed --short | grep -q '^coqide$'; then
+  ide_name="coqide"
+  ide_pkg="coqide"
 else
-  echo "INFO: Rocq case folder ${ide_name}"
-  idefolder=coqide-server/ide/${ide_name}
+  echo "ERROR: No coqide-server or coqide package installed in this OPAM switch."
+  exit 1
 fi
+
+# Create the path to the ide
+idefolder="$ide_pkg/ide/$ide_name"
 
 # Create Info.plist file
 sed -e "s/VERSION/${COQ_VERSION_MACOS}/g" ../macos/Info.plist.template > \
@@ -424,7 +407,7 @@ cc ../macos/wrapper_macos_folder.c -o "${APP_ABSDIR}/Contents/MacOS/${ide_name}"
 chmod a+x "${APP_ABSDIR}/Contents/MacOS/${ide_name}"
 
 # Icons
-cp ${idefolder}/MacOS/*.icns ${RSRC_ABSDIR}
+cp "${idefolder}/MacOS/"*.icns "${RSRC_ABSDIR}"
 
 
 ###################### Create contents of the top level DMG folder  ######################
