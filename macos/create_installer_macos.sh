@@ -265,9 +265,6 @@ mkdir -p ${RSRC_ABSDIR}             # Most files go here
 mkdir -p ${DYNLIB_ABSDIR}           # System shared libraries
 
 
-
-
-
 ###################### TOP LEVEL FILE GATHERING ######################
 
 ##### System independent opam file copying #####
@@ -378,41 +375,39 @@ find "${LIB_ABSDIR}" -name "META.bak" -delete
 
 ###################### Create installer ######################
 
-# Find CoqIDE folder
+SCRIPT_DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
+REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+CLEANED_POSTFIX="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX/#\~}"
+PICK_FILE="$REPO_ROOT/package_picks/package-pick-$CLEANED_POSTFIX.sh"
+COQ_PLATFORM_COQ_TAG=$(grep '^COQ_PLATFORM_COQ_TAG=' "$PICK_FILE" | cut -d'"' -f2)
+echo "COQ_PLATFORM_COQ_TAG found: $COQ_PLATFORM_COQ_TAG"
 
-if [ -d coq/ide/coqide ]
-then 
-  coqidefolder=coq/ide/coqide
-elif [ -d coq/ide  ]
-then
-  coqidefolder=coq/ide
-else
-  echo "ERROR: cannot find CoqIDE folder"
+ide_name="coqide"
+if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
+  echo " Version > 8 use Rocq"
+  ide_name="rocqide" 
 fi
 
-# Create Info.plist file
+idefolder=coqide-server/ide/${ide_name}
 
+# Create Info.plist file
 sed -e "s/VERSION/${COQ_VERSION_MACOS}/g" ../macos/Info.plist.template > \
     ${APP_ABSDIR}/Contents/Info.plist
 
-# Rename coqide to coqide.exe
+# Rename rocqide to rocqide.exe
+mv "${BIN_ABSDIR}/${ide_name}" "${BIN_ABSDIR}/${ide_name}.exe"
 
-mv ${BIN_ABSDIR}/coqide ${BIN_ABSDIR}/coqide.exe
-
-# Create a wrapper executable to start CoqIDE with correct environmant
+# Create a wrapper executable to start rocqide with correct environmant
 # Note: a shell script does not work - users can't access the documents folder then
-
-cc ../macos/wrapper_bin_folder.c -o ${BIN_ABSDIR}/coqide
-chmod a+x ${BIN_ABSDIR}/coqide
+cc ../macos/wrapper_bin_folder.c -o "${BIN_ABSDIR}/${ide_name}"
+chmod a+x "${BIN_ABSDIR}/${ide_name}"
 
 # Create a similar (but not identical!) wrapper in Contents/MacOS
-
-cc ../macos/wrapper_macos_folder.c -o ${APP_ABSDIR}/Contents/MacOS/coqide
-chmod a+x ${APP_ABSDIR}/Contents/MacOS/coqide
+cc ../macos/wrapper_macos_folder.c -o "${APP_ABSDIR}/Contents/MacOS/${ide_name}"
+chmod a+x "${APP_ABSDIR}/Contents/MacOS/${ide_name}"
 
 # Icons
-
-cp ${coqidefolder}/MacOS/*.icns ${RSRC_ABSDIR}
+cp ${idefolder}/MacOS/*.icns ${RSRC_ABSDIR}
 
 
 ###################### Create contents of the top level DMG folder  ######################
