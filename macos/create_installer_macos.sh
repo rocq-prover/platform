@@ -391,7 +391,7 @@ if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
   opam source --dir=rocqide-server.${COQ_PLATFORM_COQ_TAG} ${rocqidepackagefull}
 
   ide_name="rocqide"
-  idefolder=coqide-server.${COQ_PLATFORM_COQ_TAG}/ide/${ide_name}
+  idefolder=rocqide-server.${COQ_PLATFORM_COQ_TAG}/ide/${ide_name}
 fi
 
 # Create Info.plist file
