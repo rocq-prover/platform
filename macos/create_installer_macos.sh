@@ -388,7 +388,7 @@ if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
   ide_name="rocqide" 
 fi
 
-idefolder=coqide-server/ide/${ide_name}
+idefolder=coq/ide/${ide_name}
 
 # Create Info.plist file
 sed -e "s/VERSION/${COQ_VERSION_MACOS}/g" ../macos/Info.plist.template > \
