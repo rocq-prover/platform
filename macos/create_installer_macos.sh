@@ -383,12 +383,12 @@ COQ_PLATFORM_COQ_TAG=$(grep '^COQ_PLATFORM_COQ_TAG=' "$PICK_FILE" | cut -d'"' -f
 echo "COQ_PLATFORM_COQ_TAG found: $COQ_PLATFORM_COQ_TAG"
 
 ide_name="coqide"
+idefolder=coq/ide/${ide_name}
 if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
   echo " Version > 8 use Rocq"
-  ide_name="rocqide" 
+  ide_name="rocqide"
+  idefolder=coqide-server.${COQ_PLATFORM_COQ_TAG}/ide/${ide_name}
 fi
-
-idefolder=coq/ide/${ide_name}
 
 # Create Info.plist file
 sed -e "s/VERSION/${COQ_VERSION_MACOS}/g" ../macos/Info.plist.template > \
