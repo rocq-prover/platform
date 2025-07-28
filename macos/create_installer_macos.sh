@@ -386,6 +386,10 @@ ide_name="coqide"
 idefolder=coq/ide/${ide_name}
 if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
   echo " Version > 8 use Rocq"
+  # Same like coq but with rocqide package
+  rocqidepackagefull=$(opam list --installed-roots --short --columns=name,version rocqide | sed 's/ /./')
+  opam source --dir=rocqide-server.${COQ_PLATFORM_COQ_TAG} ${rocqidepackagefull}
+
   ide_name="rocqide"
   idefolder=coqide-server.${COQ_PLATFORM_COQ_TAG}/ide/${ide_name}
 fi
