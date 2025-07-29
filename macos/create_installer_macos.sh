@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Ensure the OPAM environment is properly loaded
+eval $(opam env)
+
 ###################### COPYRIGHT/COPYLEFT ######################
 
 # Released to the public under the
