@@ -244,7 +244,18 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 	echo "Coq Version = $(coqc --version)"
 
 	# set COQLIB variable
-	COQLIB="$(coqc -where | tr -d '\r')"
+	#COQLIB="$(coqc -where | tr -d '\r')"
+
+	if opam list --installed --short | grep -q '^rocq-core$'; then
+		COQLIB="$(opam var rocq-core:lib)"
+	elif opam list --installed --short | grep -q '^coq-core$'; then
+		COQLIB="$(opam var coq-core:lib)"
+	elif opam list --installed --short | grep -q '^coq$'; then
+		COQLIB="$(opam var coq:lib)"
+	else
+		echo "Could not determine COQLIB — no known Coq/Rocq core package installed."
+		exit 1
+	fi
 
 	# cd to smoke test folder
 	HERE="$(pwd)"
@@ -260,8 +271,9 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 	      here="$(pwd)"
 	      cd "${1%/*}"
 	      echo "coqc ${2:-} ${1##*/}"
-	      coqc ${2:-} "${1##*/}"
-	      cd "$here"
+	      #coqc ${2:-} "${1##*/}"
+	      coqc -coqlib "$COQLIB" ${2:-} "${1##*/}"
+		  cd "$here"
 	    echo $'\n\n'
 	  fi
 	}
