@@ -100,8 +100,18 @@ echo "##### Coq Platform release = ${COQ_PLATFORM_RELEASE} version = ${COQ_PLATF
 ###### Get the Coq sourcees from opam #####
 
 # Get installed version of coq (otherwise opam source gives the latest)
-coqpackagefull=$(opam list --installed-roots --short --columns=name,version coq | sed 's/ /./')
-opam source --dir=coq/ ${coqpackagefull}
+if [ "$(opam show -f version coq | cut -d. -f1)" -ge 9 ]; then
+  echo "Coq 9.x+ detected, sourcing components individually"
+  for pkg in coq-core coq-stdlib coqide-server rocq-runtime; do
+    version=$(opam show -f version $pkg)
+    echo "→ Sourcing $pkg.$version"
+    opam source --dir=${pkg}.${version} ${pkg}.${version}
+  done
+else
+  echo "Coq < 9.0 detected, sourcing monolithic coq package"
+  coqpackagefull=$(opam list --installed-roots --short --columns=name,version coq | sed 's/ /./')
+  opam source --dir=coq/ ${coqpackagefull}
+fi
 
 ##### Get the version of Coq #####
 
