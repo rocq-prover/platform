@@ -103,7 +103,7 @@ echo "##### Coq Platform release = ${COQ_PLATFORM_RELEASE} version = ${COQ_PLATF
 
 if [ "$(opam show -f version coq | cut -d. -f1)" -ge 9 ]; then
   echo "Coq 9.x+ detected, sourcing components individually"
-  for pkg in coq-core coq-stdlib coqide-server rocq-runtime rocq-core, rocq-stdlib; do
+  for pkg in coq-core coq-stdlib coqide-server rocq-runtime rocq-core rocq-stdlib; do
     version=$(opam show -f version $pkg)
     echo "→ Sourcing $pkg.$version"
     opam source --dir=${pkg}.${version} ${pkg}.${version}
