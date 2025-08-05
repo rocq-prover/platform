@@ -49,7 +49,10 @@ OPAM_PREFIX="$(opam conf var prefix)"
 
 ###### Get filtered (newline separated) list of explicitly installed packages #####
 
-PRIMARY_PACKAGES="$(opam list --installed-roots --short --columns=name | grep -v '^ocaml\|^opam\|^depext\|^conf\|^lablgtk\|^coq-quickchick')"
+ROOTS=$(opam list --installed-roots --short --columns=name)
+COQ_DEPS=$(opam list --required-by=coq --short --installed)
+
+PRIMARY_PACKAGES=$(echo -e "${ROOTS}\n${COQ_DEPS}" | sort -u | grep -v '^ocaml\|^opam\|^conf-\|^depext\|^lablgtk\|^coq-quickchick')
 
 ###### Associative array with package name -> file filter (regexp pattern) #####
 
