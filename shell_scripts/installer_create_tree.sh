@@ -53,7 +53,7 @@ OPAM_PREFIX="$(opam conf var prefix)"
 COQ_ROCQ_ROOTS=$(opam list --installed-roots --short | grep -E '^coq|^rocq')
 
 # Remove irrelevant packages from the list
-PRIMARY_PACKAGES=$(echo -e "${ROOTS}\n${COQ_ROCQ_ROOTS}" | sort -u | grep -v '^ocaml\|^opam\|^conf-\|^depext\|^lablgtk\|^coq-quickchick')
+PRIMARY_PACKAGES=$(echo "${COQ_ROCQ_ROOTS}" | sort -u | grep -v '^ocaml\|^opam\|^conf-\|^depext\|^lablgtk\|^coq-quickchick')
 
 
 ###### Associative array with package name -> file filter (regexp pattern) #####
