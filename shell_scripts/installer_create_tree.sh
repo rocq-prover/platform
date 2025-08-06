@@ -49,22 +49,11 @@ OPAM_PREFIX="$(opam conf var prefix)"
 
 ###### Get filtered (newline separated) list of explicitly installed packages #####
 
-ROOTS=$(opam list --installed-roots --short --columns=name)
+# Detect explicitly installed packages related to Coq/Rocq
+COQ_ROCQ_ROOTS=$(opam list --installed-roots --short | grep -E '^coq|^rocq')
 
-COQ_DEPS=""
-ROCQ_DEPS=""
-
-if opam list --installed --short | grep -q '^coq$'; then
-  COQ_DEPS=$(opam list --required-by=coq --short --installed)
-fi
-
-if opam list --installed --short | grep -q '^rocq$'; then
-  ROCQ_DEPS=$(opam list --required-by=rocq --short --installed)
-fi
-
-META_DEPS=$(echo -e "${COQ_DEPS}\n${ROCQ_DEPS}" | sort -u)
-
-PRIMARY_PACKAGES=$(echo -e "${ROOTS}\n${META_DEPS}" | sort -u | grep -v '^ocaml\|^opam\|^conf-\|^depext\|^lablgtk\|^coq-quickchick')
+# Remove irrelevant packages from the list
+PRIMARY_PACKAGES=$(echo -e "${ROOTS}\n${COQ_ROCQ_ROOTS}" | sort -u | grep -v '^ocaml\|^opam\|^conf-\|^depext\|^lablgtk\|^coq-quickchick')
 
 
 ###### Associative array with package name -> file filter (regexp pattern) #####
