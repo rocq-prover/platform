@@ -54,11 +54,11 @@
 		</dict>
 	</array>
 	<key>CFBundleIconFile</key>
-	<string>coqide.icns</string>
+	<string>rocqide.icns</string>
 	<key>CFBundleVersion</key>
 	<string>390</string>
 	<key>CFBundleName</key>
-	<string>CoqIDE</string>
+	<string>RocqIDE</string>
 	<key>CFBundleShortVersionString</key>
 	<string>VERSION</string>
 	<key>CFBundleDisplayName</key>
@@ -72,13 +72,13 @@
 	<key>CFAppleHelpAnchor</key>
 	<string>index</string>
 	<key>CFBundleExecutable</key>
-	<string>coqide</string>
+	<string>rocqide</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleIdentifier</key>
-	<string>fr.inria.coq.coqide</string>
+	<string>fr.inria.coq.rocqide</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.developer-tools</string>
 	<key>CFBundleDevelopmentRegion</key>
