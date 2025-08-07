@@ -53,7 +53,6 @@ PACKAGES="${PACKAGES} PIN.dune.3.19.1" # 3.17.2 has issues on Windows: cairo doe
 PACKAGES="${PACKAGES} PIN.dune-configurator.3.19.1"
 # The Coq compiler coqc and the Coq standard library
 PACKAGES="${PACKAGES} PIN.coq.9.0.0"
-PACKAGES="${PACKAGES} rocq-core.9.0.0"
 
 ########## IDE PACKAGES ##########
 

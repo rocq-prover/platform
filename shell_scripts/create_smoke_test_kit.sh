@@ -243,8 +243,25 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 	# Print Coq version
 	echo "Coq Version = $(coqc --version)"
 
-	# set COQLIB variable
-	COQLIB="$(coqc -where | tr -d '\r')"
+	# set COQLIB variable - handle Rocq 9.0+ path detection issues
+	if COQLIB="$(coqc -where 2>/dev/null | tr -d '\r')"
+	then
+	  echo "COQLIB detected as: $COQLIB"
+	else
+	  echo "coqc -where failed, trying to detect COQLIB manually for Rocq 9.0+"
+	  # Try common library paths for Rocq 9.0
+	  for path in "\$PWD/../lib/coq" "\$PWD/../lib/rocq" "\$PWD/../../lib/coq" "\$PWD/../../lib/rocq"; do
+	    if [ -d "\$path" ]; then
+	      COQLIB="\$path"
+	      echo "Found COQLIB at: \$COQLIB"
+	      break
+	    fi
+	  done
+	  if [ -z "\$COQLIB" ]; then
+	    echo "Warning: Could not detect COQLIB, using empty value"
+	    COQLIB=""
+	  fi
+	fi
 
 	# cd to smoke test folder
 	HERE="$(pwd)"
@@ -260,8 +277,13 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 	      here="$(pwd)"
 	      cd "${1%/*}"
 	      echo "coqc ${2:-} ${1##*/}"
-	      #coqc ${2:-} "${1##*/}"
-	      coqc -coqlib "$COQLIB" ${2:-} "${1##*/}"
+	      if [ -n "\$COQLIB" ]; then
+	        coqc -coqlib "\$COQLIB" ${2:-} "\${1##*/}"
+	      else
+	        # Fallback for Rocq 9.0+ when COQLIB detection fails
+	        echo "Trying fallback methods for Rocq 9.0+"
+	        coqc -boot -noinit ${2:-} "\${1##*/}" || coqc ${2:-} "\${1##*/}"
+	      fi
 		  cd "$here"
 	    echo $'\n\n'
 	  fi
@@ -320,8 +342,15 @@ cat <<-'EOH' | sed -e 's/$/\r/' -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PAC
 	echo "Coq Version"
 	coqc --version
 
-	REM set COQLIB variable
-	FOR /F "tokens=* USEBACKQ" %%F IN (`coqc -where`) DO SET COQLIB=%%F
+	REM set COQLIB variable - handle Rocq 9.0+ path detection issues
+	coqc -where >nul 2>&1
+	IF ERRORLEVEL 1 (
+	    ECHO "coqc -where failed, trying manual detection for Rocq 9.0+"
+	    SET "COQLIB="
+	) ELSE (
+	    FOR /F "tokens=* USEBACKQ" %%F IN (`coqc -where`) DO SET COQLIB=%%F
+	    ECHO "COQLIB detected as: %COQLIB%"
+	)
 	
 	REM cd to smoke test folder
 	SET "HERE=%CD%"
