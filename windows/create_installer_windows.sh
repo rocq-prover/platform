@@ -468,10 +468,19 @@ fi
 
 # Copy some files from source
 cp source/coq/LICENSE .
-cp source/coqide/ide/coqide/coq.ico .
 mkdir -p files/bin
-cp source/coqide/ide/coqide/coq.ico files/bin/
-cp source/coq-compcert/LICENSE coq-compcert-license.txt
+if opam list --installed --silent coqide
+then
+  cp source/coqide/ide/coqide/coq.ico .
+  cp source/coqide/ide/coqide/coq.ico files/bin/
+else
+  cp /platform/windows/coq-shell.ico .
+  cp /platform/windows/coq-shell.ico files/bin/coq.ico
+fi
+if opam list --installed --silent coq-compcert
+then
+  cp source/coq-compcert/LICENSE coq-compcert-license.txt
+fi
 if [ -n "$NSIS_VST_CHECK" ]
 then
   cp source/$vst_pkg/LICENSE coq-vst-license.txt
