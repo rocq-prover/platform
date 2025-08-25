@@ -475,7 +475,6 @@ then
   cp source/coqide/ide/coqide/coq.ico files/bin/
 else
   cp /platform/windows/coq-shell.ico .
-  cp /platform/windows/coq-shell.ico files/bin/coq.ico
 fi
 if opam list --installed --silent coq-compcert
 then
