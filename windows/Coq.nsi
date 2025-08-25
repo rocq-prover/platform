@@ -411,7 +411,9 @@ FunctionEnd
 ; if sections exist (by !ifdef <section_index_var>) to decide if the license page must be included.
 ; The section index variables are only defined after the section definitions.
 
-  !define MUI_ICON "coq.ico"
+  !system 'if exist coq.ico echo !define MUI_ICON "coq.ico"'
+  !system 'if not exist coq.ico echo !define MUI_ICON "coq-shell.ico"'
+
   ;!define MUI_CUSTOMFUNCTION_GUIINIT PreselectSections
 
   !insertmacro MUI_PAGE_WELCOME
