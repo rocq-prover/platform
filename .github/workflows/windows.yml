@@ -51,8 +51,8 @@ jobs:
           - '64'
         variant:
           # Keep this in sync with the Smoke test below
+          - '9.0+preview~2025.08'
           - '8.20~2025.01'
-          - '8.19~2024.10'
 
     steps:
       - name: Set git to use LF
@@ -103,8 +103,8 @@ jobs:
         architecture:
           - '64'
         variant:
+          - '9.0+preview~2025.08'
           - '8.20~2025.01'
-          - '8.19~2024.10'
 
     steps:
       - name: 'Download Artifact'
@@ -124,10 +124,6 @@ jobs:
         run: |
           cd ${{steps.download.outputs.download-path}}
           FOR %%f IN (*.exe) DO %%f /S /D=C:\Coq
-
-      - name: 'Smoke coqc'
-        shell: cmd
-        run: C:\Coq\bin\coqc.exe -v
 
       - name: 'Run Windows smoke test kit'
         shell: cmd

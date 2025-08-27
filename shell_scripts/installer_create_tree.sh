@@ -47,9 +47,51 @@
 # The opam prefix - stripped from absolute paths to create relative paths
 OPAM_PREFIX="$(opam conf var prefix)"
 
+###### Utility helpers & Coq version / components handling #####
+
+# list_contains may not exist in some environments: define a safe default.
+type list_contains >/dev/null 2>&1 || list_contains() {
+  # $1 = haystack (newline-separated), $2 = needle
+  local haystack="$1" needle="$2"
+  printf '%s\n' "$haystack" | grep -qx -- "$needle"
+}
+
+coq_major_version() {
+  opam show -f version coq 2>/dev/null | awk -F. 'NF{print $1; exit}'
+}
+
+coq_components_installed() {
+  # Echo the coq 9.x components that are actually present in this switch
+  for p in coq-core coq-stdlib coqide-server rocq-runtime; do
+    if opam show -f version "$p" >/dev/null 2>&1; then
+      echo "$p"
+    fi
+  done
+}
+
+# Return the raw file list (absolute paths) for a given OPAM package name.
+# Special-case: for "coq" in Coq >= 9, aggregate files from components.
+list_files_for_pkg() {
+  local pkg="$1"
+  local major="$(coq_major_version)"
+  if [ "$pkg" = "coq" ] && [ -n "$major" ] && [ "$major" -ge 9 ]; then
+    coq_components_installed | while read -r comp; do
+      [ -n "$comp" ] || continue
+      opam show --list-files "$comp" 2>/dev/null || true
+    done
+  else
+    opam show --list-files "$pkg" 2>/dev/null || true
+  fi
+}
+
 ###### Get filtered (newline separated) list of explicitly installed packages #####
 
-PRIMARY_PACKAGES="$(opam list --installed-roots --short --columns=name | grep -v '^ocaml\|^opam\|^depext\|^conf\|^lablgtk\|^coq-quickchick')"
+# Include both roots and packages required by coq (important for Coq ≥ 9 components)
+ROOTS="$(opam list --installed-roots --short --columns=name)"
+COQ_DEPS="$(opam list --required-by=coq --short --installed || true)"
+PRIMARY_PACKAGES="$(printf '%s\n%s\n' "$ROOTS" "$COQ_DEPS" \
+  | sort -u \
+  | grep -v '^ocaml\|^opam\|^depext\|^conf-\|^lablgtk\|^coq-quickchick')"
 
 ###### Associative array with package name -> file filter (regexp pattern) #####
 
@@ -124,7 +166,7 @@ function analyze_package {
     callback_package_secondary $1 $2 "$inclusion_list" "$exclusion_list"
   fi
 
-  files="$(opam show --list-files $1 | grep -E "$inclusion_list" | grep -E -v "$exclusion_list" )" || true
+  files="$(list_files_for_pkg "$1" | grep -E "$inclusion_list" | grep -E -v "$exclusion_list" )" || true
   if echo "$files" | grep '(modified since)' > /dev/null
   then
     echo "The package '$1' contains files which have been modified since opam installed them." >> WARNINGS.log
@@ -205,4 +247,3 @@ for package in $PRIMARY_PACKAGES
 do
   analyze_package "$package" 0
 done
-

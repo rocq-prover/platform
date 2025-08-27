@@ -74,12 +74,18 @@ Function .onVerifyInstDir
 FunctionEnd
 
 ;--------------------------------
+;Init major version variable 
+!ifndef IDE_NAME
+  !define IDE_NAME "coqide"
+!endif
+
+;--------------------------------
 ;Installer Sections
 
 Section "-CoqWinStuff" Sec_CoqWinStuff
   SetOutPath "$INSTDIR\"
 
-  ${registerExtension} "$INSTDIR\bin\coqide.exe" ".v" "Coq Script File"
+  ${registerExtension} "$INSTDIR\bin\${IDE_NAME}.exe" ".v" "Coq Script File"
 
   ;Store install folder
   WriteRegStr HKCU "Software\${MY_PRODUCT}" "" $INSTDIR
@@ -106,8 +112,8 @@ Section "-CoqWinStuff" Sec_CoqWinStuff
   SetOutPath "$INSTDIR"
   CreateDirectory "$SMPROGRAMS\Coq"
   ; The first shortcut set here is treated as main application by Windows 7/8.
-  ; Use CoqIDE as main application
-  CreateShortCut "$SMPROGRAMS\Coq\CoqIDE.lnk" "$INSTDIR\bin\coqide.exe" "" "$INSTDIR\bin\coq.ico" 0
+  ; Use Rocqide as main application
+  CreateShortCut "$SMPROGRAMS\Coq\${IDE_NAME}.lnk" "$INSTDIR\bin\${IDE_NAME}.exe" "" "$INSTDIR\bin\coq.ico" 0
   ; Coq shell
   CreateShortCut "$SMPROGRAMS\Coq\Coq-Shell.lnk" "%COMSPEC%" "/K $INSTDIR\coq-shell.bat" "$INSTDIR\coq-shell.ico" 0
   ; CreateShortCut "$SMPROGRAMS\Coq\Coq.lnk" "$INSTDIR\bin\coqtop.exe"
@@ -496,7 +502,7 @@ Section "Uninstall"
   Delete "$INSTDIR\coq-shell.bat"
 
   ; Start Menu
-  Delete "$SMPROGRAMS\Coq\CoqIde.lnk"
+  Delete "$SMPROGRAMS\Coq\${IDE_NAME}.lnk"
   Delete "$SMPROGRAMS\Coq\coq-shell.lnk"
   Delete "$SMPROGRAMS\Coq\Uninstall.lnk"
   Delete "$SMPROGRAMS\Coq\The Coq HomePage.url"

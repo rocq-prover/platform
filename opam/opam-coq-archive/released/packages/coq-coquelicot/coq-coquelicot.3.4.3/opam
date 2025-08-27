@@ -1,0 +1,42 @@
+opam-version: "2.0"
+maintainer: "guillaume.melquiond@inria.fr"
+homepage: "http://coquelicot.saclay.inria.fr/"
+dev-repo: "git+https://gitlab.inria.fr/coquelicot/coquelicot.git"
+bug-reports: "https://gitlab.inria.fr/coquelicot/coquelicot/issues"
+license: "LGPL-3.0-or-later"
+build: [
+  ["autoconf"] {dev}
+   # Patch Remakefile.in to force coqdep to disable worker
+  # This replaces @COQDEP@ with "@COQDEP@ -worker """, so remake will not
+  # inject the path to rocqworker.exe in dependencies (which breaks Windows)
+  ["sed" "-i" "-e" "s/@COQDEP@/@COQDEP@ -worker \\\"\\\"/" "Remakefile.in"] {os = "win32"}
+
+  ["./configure"]
+  ["./remake" "-j%{jobs}%"]
+]
+install: ["./remake" "install"]
+depends: [
+  "coq" {>= "8.12" & < "9.2~"}
+  "coq-mathcomp-ssreflect" {>= "1.6" & < "2.5~"}
+  "conf-autoconf" {build & dev}
+  ("conf-g++" {build} | "conf-clang" {build})
+]
+tags: [
+  "keyword:real analysis"
+  "keyword:topology"
+  "keyword:filters"
+  "keyword:metric spaces"
+  "category:Mathematics/Real Calculus and Topology"
+  "logpath:Coquelicot"
+  "date:2025-01-27"
+]
+authors: [
+  "Sylvie Boldo <sylvie.boldo@inria.fr>"
+  "Catherine Lelay <catherine.lelay@inria.fr>"
+  "Guillaume Melquiond <guillaume.melquiond@inria.fr>"
+]
+synopsis: "A Coq formalization of real analysis compatible with the standard library"
+url {
+  src: "https://coquelicot.gitlabpages.inria.fr/releases/coquelicot-3.4.3.tar.gz"
+  checksum: "sha512=619207d1dfc170dc0c79e72e893fa2e1a60f9df85a56ea23fb3bb8e4bca1b273cd0a3dd588d4b29a138154852a9fe5b7b23fa317c77c512ef058958e05a1f4c2"
+}
