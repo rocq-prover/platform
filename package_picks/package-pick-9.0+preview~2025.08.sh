@@ -91,7 +91,7 @@ then
   PACKAGES="${PACKAGES} coq-mathcomp-real-closed.2.0.3"
   PACKAGES="${PACKAGES} coq-mathcomp-zify.1.5.0+2.0+8.16"
   PACKAGES="${PACKAGES} coq-mathcomp-multinomials.2.4.0"
-  PACKAGES="${PACKAGES} coq-coquelicot.3.4.3"
+  PACKAGES="${PACKAGES} coq-coquelicot.3.4.4" # testing to update to 3.4.4
 
   # Number theory
   PACKAGES="${PACKAGES} coq-coqprime.1.6.0"
