@@ -159,21 +159,25 @@ then
   PACKAGES="${PACKAGES} coq-mathcomp-word.3.2" # Works with version relaxation
   
   #  Error compilation compcert
-  #case "$COQ_PLATFORM_COMPCERT" in
-  #   [yY]) PACKAGES="${PACKAGES} coq-compcert.3.15" ;; # Error compilation
-  #  [nN]) true ;;
-  #  *) echo "Illegal value for COQ_PLATFORM_COMPCERT - aborting"; false ;;
-  #esac
-
+  if false
+  then
+  case "$COQ_PLATFORM_COMPCERT" in
+     [yY]) PACKAGES="${PACKAGES} coq-compcert.3.15" ;; 
+    [nN]) true ;;
+    *) echo "Illegal value for COQ_PLATFORM_COMPCERT - aborting"; false ;;
+  esac
+  fi
   #  depends to "coq-compcert" {= "3.13.1"}
-  #case "$COQ_PLATFORM_VST" in
-  #  [yY])
-  #    PACKAGES="${PACKAGES} coq-vst.2.15"
-  #    true ;;
-  #  [nN]) true ;;
-  #  *) echo "Illegal value for COQ_PLATFORM_VST - aborting"; false ;;
-  #esac
-
+  if false
+  then
+  case "$COQ_PLATFORM_VST" in
+    [yY])
+     PACKAGES="${PACKAGES} coq-vst.2.15"
+      true ;;
+    [nN]) true ;;
+    *) echo "Illegal value for COQ_PLATFORM_VST - aborting"; false ;;
+  esac
+  fi
   # # Proof analysis and other tools
   PACKAGES="${PACKAGES} coq-dpdgraph.1.0+9.0"
 fi

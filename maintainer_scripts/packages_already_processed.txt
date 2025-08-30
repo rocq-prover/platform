@@ -1,8 +1,8 @@
+rocq-bignums
 coq-ext-lib
-coq-stdpp
 elpi
-coq-elpi
-coq-hierarchy-builder
+rocq-elpi
+rocq-hierarchy-builder
 coq-mathcomp-ssreflect
 coq-mathcomp-fingroup
 coq-mathcomp-algebra
@@ -10,7 +10,7 @@ coq-mathcomp-solvable
 coq-mathcomp-field
 coq-mathcomp-character
 coq-mathcomp-bigenough
-coq-mathcomp-finmap
+rocq-mathcomp-finmap
 coq-mathcomp-real-closed
 coq-mathcomp-zify
 coq-mathcomp-multinomials
@@ -27,7 +27,7 @@ coq-hott
 coq-unimath
 coq-simple-io
 coq-menhirlib
-coq-equations
+rocq-equations
 coq-aac-tactics
 coq-unicoq
 coq-mtac2
@@ -46,8 +46,6 @@ coq-iris
 coq-iris-heap-lang
 coq-ott
 coq-mathcomp-word
-coq-compcert
-coq-vst
 coq-dpdgraph
 coq-deriving
 coq-metacoq
