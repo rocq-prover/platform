@@ -101,7 +101,7 @@ then
   PACKAGES="${PACKAGES} coq-flocq.4.2.1"
   #PACKAGES="${PACKAGES} coq-interval.4.11.1"  # Compilation error, 
   #PACKAGES="${PACKAGES} coq-gappa.1.7.0"  # Compilation error
-  PACKAGES="${PACKAGES} gappa.1.6.0" # Guillaume Melquiond confirmed the latest release version
+  PACKAGES="${PACKAGES} gappa.1.4.1" # Guillaume answered me he provided only a tarball so it's necessary to create opam package if we want to update version.
 
   # Constructive mathematics
   PACKAGES="${PACKAGES} coq-math-classes.9.0.0" # Maintainer confirmed there is a verison 9.0.0 on github
