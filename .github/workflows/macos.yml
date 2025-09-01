@@ -54,7 +54,7 @@ jobs:
 
     steps:
       - name: Setup Xcode 16.0
-        uses: maxim-lobanov/setup-xcode-version@v1
+        uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: '16.0'
 
