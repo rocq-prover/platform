@@ -101,11 +101,11 @@ then
   PACKAGES="${PACKAGES} coq-flocq.4.2.1"
   #PACKAGES="${PACKAGES} coq-interval.4.11.1"  # Compilation error, 
   #PACKAGES="${PACKAGES} coq-gappa.1.7.0"  # Compilation error
-  PACKAGES="${PACKAGES} gappa.1.4.1"
+  PACKAGES="${PACKAGES} gappa.1.6.0" # Guillaume Melquiond confirmed the latest release version
 
   # Constructive mathematics
-  #PACKAGES="${PACKAGES} coq-math-classes.8.19.0" # Compilation error
-  #PACKAGES="${PACKAGES} coq-corn.8.20.0"  # Depends to coq-math-classes
+  PACKAGES="${PACKAGES} coq-math-classes.9.0.0" # Maintainer confirmed there is a verison 9.0.0 on github
+  PACKAGES="${PACKAGES} coq-corn.9.0.0"  # Maintainer confirmed there is a verison 9.0.0 on github
 
   # Homotopy Type Theory (HoTT)
   #PACKAGES="${PACKAGES} coq-hott.8.20" # Compilation error
@@ -199,7 +199,7 @@ then
 
   # Gallina extensions
   #PACKAGES="${PACKAGES} coq-reduction-effects.0.1.5" # Compilation error
-  PACKAGES="${PACKAGES} coq-record-update.0.3.4"
+  PACKAGES="${PACKAGES} coq-record-update.0.3.5" # Maintainers asked to update to version 0.3.5
 
   # Communication with coqtop
   # PACKAGES="${PACKAGES} coq-serapi.8.20.0+0.20.0"  # Compilation error
