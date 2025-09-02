@@ -52,10 +52,10 @@ jobs:
           - '9.0+preview~2025.08'
           - '8.20~2025.01'
     steps:
-      - name: Setup Xcode 16.4
+      - name: Setup Xcode 16.0
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '16.4'
+          xcode-version: '16.0'
           
       - name: Git checkout
         uses: actions/checkout@v4
