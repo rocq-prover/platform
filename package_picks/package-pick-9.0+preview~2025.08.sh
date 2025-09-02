@@ -78,7 +78,7 @@ then
   PACKAGES="${PACKAGES} coq-stdpp.1.12.0"
 
   # General mathematics
-  PACKAGES="${PACKAGES} elpi.2.0.7 rocq-elpi.2.5.2" # rocq-elpi 2.5.2 is not compatible with elpi 3.0.0
+  PACKAGES="${PACKAGES} elpi.3.1.0 rocq-elpi.3.0.0" # rocq-elpi 2.5.2 is not compatible with elpi 3.0.0
   PACKAGES="${PACKAGES} rocq-hierarchy-builder.1.9.1"
   PACKAGES="${PACKAGES} coq-mathcomp-ssreflect.2.4.0"
   PACKAGES="${PACKAGES} coq-mathcomp-fingroup.2.4.0"
@@ -199,7 +199,7 @@ then
 
   # Gallina extensions
   #PACKAGES="${PACKAGES} coq-reduction-effects.0.1.5" # Compilation error
-  PACKAGES="${PACKAGES} coq-record-update.0.3.5" # Maintainers asked to update to version 0.3.5
+  PACKAGES="${PACKAGES} coq-record-update.0.3.4" # Maintainers asked to update to version 0.3.5
 
   # Communication with coqtop
   # PACKAGES="${PACKAGES} coq-serapi.8.20.0+0.20.0"  # Compilation error
