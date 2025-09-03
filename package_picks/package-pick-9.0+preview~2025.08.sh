@@ -78,8 +78,8 @@ then
   PACKAGES="${PACKAGES} coq-stdpp.1.12.0"
 
   # General mathematics
-  PACKAGES="${PACKAGES} elpi.2.0.7 rocq-elpi.2.5.2" # rocq-elpi 2.5.2 is not compatible with elpi 3.0.0
-  PACKAGES="${PACKAGES} rocq-hierarchy-builder.1.9.1"
+  PACKAGES="${PACKAGES} elpi.3.1.0 rocq-elpi.3.1.0" # according to Enrico's wishes
+  PACKAGES="${PACKAGES} rocq-hierarchy-builder.1.10.0"
   PACKAGES="${PACKAGES} coq-mathcomp-ssreflect.2.4.0"
   PACKAGES="${PACKAGES} coq-mathcomp-fingroup.2.4.0"
   PACKAGES="${PACKAGES} coq-mathcomp-algebra.2.4.0"
@@ -101,11 +101,11 @@ then
   PACKAGES="${PACKAGES} coq-flocq.4.2.1"
   #PACKAGES="${PACKAGES} coq-interval.4.11.1"  # Compilation error, 
   #PACKAGES="${PACKAGES} coq-gappa.1.7.0"  # Compilation error
-  PACKAGES="${PACKAGES} gappa.1.4.1"
+  PACKAGES="${PACKAGES} gappa.1.4.1" # Guillaume answered me he provided only a tarball so it's necessary to create opam package if we want to update version.
 
   # Constructive mathematics
-  #PACKAGES="${PACKAGES} coq-math-classes.8.19.0" # Compilation error
-  #PACKAGES="${PACKAGES} coq-corn.8.20.0"  # Depends to coq-math-classes
+  PACKAGES="${PACKAGES} coq-math-classes.9.0.0" # Maintainer confirmed there is a verison 9.0.0 on github
+  PACKAGES="${PACKAGES} coq-corn.9.0.0"  # Maintainer confirmed there is a verison 9.0.0 on github
 
   # Homotopy Type Theory (HoTT)
   #PACKAGES="${PACKAGES} coq-hott.8.20" # Compilation error
@@ -147,7 +147,7 @@ then
   
   # General mathematics (which requires one of the above tools)
   PACKAGES="${PACKAGES} coq-mathcomp-analysis.1.12.0"
-  #PACKAGES="${PACKAGES} coq-mathcomp-algebra-tactics.1.2.5" # Works with version relaxation
+  PACKAGES="${PACKAGES} coq-mathcomp-algebra-tactics.1.2.6" # Pierre roux recommends to test 1.2.6
   #PACKAGES="${PACKAGES} coq-relation-algebra.1.7.11" #  depends coq-aac-tactics
 
   # Formal languages, compilers and code verification
@@ -159,21 +159,25 @@ then
   PACKAGES="${PACKAGES} coq-mathcomp-word.3.2" # Works with version relaxation
   
   #  Error compilation compcert
-  #case "$COQ_PLATFORM_COMPCERT" in
-  #   [yY]) PACKAGES="${PACKAGES} coq-compcert.3.15" ;; # Error compilation
-  #  [nN]) true ;;
-  #  *) echo "Illegal value for COQ_PLATFORM_COMPCERT - aborting"; false ;;
-  #esac
-
+  if false
+  then
+  case "$COQ_PLATFORM_COMPCERT" in
+     [yY]) PACKAGES="${PACKAGES} coq-compcert.3.15" ;; 
+    [nN]) true ;;
+    *) echo "Illegal value for COQ_PLATFORM_COMPCERT - aborting"; false ;;
+  esac
+  fi
   #  depends to "coq-compcert" {= "3.13.1"}
-  #case "$COQ_PLATFORM_VST" in
-  #  [yY])
-  #    PACKAGES="${PACKAGES} coq-vst.2.15"
-  #    true ;;
-  #  [nN]) true ;;
-  #  *) echo "Illegal value for COQ_PLATFORM_VST - aborting"; false ;;
-  #esac
-
+  if false
+  then
+  case "$COQ_PLATFORM_VST" in
+    [yY])
+     PACKAGES="${PACKAGES} coq-vst.2.15"
+      true ;;
+    [nN]) true ;;
+    *) echo "Illegal value for COQ_PLATFORM_VST - aborting"; false ;;
+  esac
+  fi
   # # Proof analysis and other tools
   PACKAGES="${PACKAGES} coq-dpdgraph.1.0+9.0"
 fi
@@ -195,7 +199,7 @@ then
 
   # Gallina extensions
   #PACKAGES="${PACKAGES} coq-reduction-effects.0.1.5" # Compilation error
-  PACKAGES="${PACKAGES} coq-record-update.0.3.4"
+  PACKAGES="${PACKAGES} coq-record-update.0.3.4" # Maintainers asked to update to version 0.3.5
 
   # Communication with coqtop
   # PACKAGES="${PACKAGES} coq-serapi.8.20.0+0.20.0"  # Compilation error

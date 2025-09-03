@@ -11,10 +11,10 @@ echo SHELL="$SHELL"
 # Creative Commons CC0 1.0 Universal License
 # See https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt
 
-###################### Notify Coq Platform Maintainers ######################
+###################### Notify Rocq Platform Maintainers ######################
 
-# This script interactively creates upstream issues to notify Coq Platform
-# package maintainers about the status of their package in Coq Platform.
+# This script interactively creates upstream issues to notify Rocq Platform
+# package maintainers about the status of their package in Rocq Platform.
 
 ##### Initialization #####
 
@@ -26,7 +26,7 @@ ROOT_PATH="$(dirname "${SCRIPT_PATH}")"
 
 ##### Parameters #####
 
-# $1: Path of Coq Platform package list file
+# $1: Path of Rocq Platform package list file
 # Note: this script will make a copy of the package list with
 # commented out packages commented in!
 PACKAGE_LIST_FILE="$1"
@@ -36,21 +36,21 @@ PACKAGE_FILTER_RE="${2:-.}"
 
 ########## Settings ##########
 
-# Extension and release date of the Coq release
+# Extension and release date of the Rocq release
 EXT_RELEASE=".0"
-DATE_RELEASE="September 3rd, 2024"
-# Extension and release date of the Coq release, in case the above is a beta
+DATE_RELEASE="March 12th, 2025"
+# Extension and release date of the Rocq release, in case the above is a beta
 EXT_FINAL=""
 DATE_FINAL=""
-# Coq Platform release code and dates
-VERSION_PLATFORM="2025.01"
-DATE_PLATFORM_BETA="Dec 8th, 2024"
-DATE_PLATFORM_NOTIFY="Dec 31st, 2024"
-DATE_PLATFORM_EXPECTED="Jan 31st, 2025"
-DATE_PLATFORM_LATEST="Feb 28th, 2025"
-PLATFORM_MAIN_BRANCH="https://github.com/coq/platform/tree/main"
+# Rocq Platform release code and dates
+VERSION_PLATFORM="2025.09"
+DATE_PLATFORM_BETA="Aug 28th, 2025"
+DATE_PLATFORM_NOTIFY="Sep 26th, 2025" # When people notify if they are a problem
+DATE_PLATFORM_EXPECTED="Oct 24th, 2025" # When the install is finished
+DATE_PLATFORM_LATEST="Nov 21st, 2025" # The last date to make a fix
+PLATFORM_MAIN_BRANCH="https://github.com/rocq-prover/platform/tree/main"
 
-CC="CC: https://github.com/coq/platform/issues/449"
+CC="CC: https://github.com/rocq-prover/platform/issues/481"
 #CC="\n@coqbot column:...."
 
 COQ_PLATFORM_UNIMATH=Y
@@ -60,35 +60,38 @@ COQ_PLATFORM_UNIMATH=Y
 PROCESSED_LIST_FILE="${SCRIPT_PATH}/packages_already_processed.txt"
 PATCHED_PACKAGE_LIST_FILE="${SCRIPT_PATH}/PATCHED_PACKAGE_LIST_FILE.sh"
 
-########## Coq CI interface functions ##########
+########## Rocq CI interface functions ##########
 
-# This function accepts an opam package name as $1 and results in a Coq CI package name
+# This function accepts an opam package name as $1 and results in a Rocq CI package name
 
 function coq_ci_translate_package_name() {
   package_ci=''
   case "$1" in
     coq)                           ;;
+    rocq)                          ;;
     coqide)                        ;;
-    coq-mathcomp-ssreflect)        package_ci='mathcomp' ;; 
-    coq-mathcomp-fingroup.1.12.0)  ;;
-    coq-mathcomp-algebra.1.12.0)   ;;
-    coq-mathcomp-solvable.1.12.0)  ;;
-    coq-mathcomp-field.1.12.0)     ;;
-    coq-mathcomp-character.1.12.0) ;;
+    rocqide)                        ;;
+    rocq-mathcomp-ssreflect)        package_ci='mathcomp' ;; 
+    rocq-mathcomp-fingroup.1.12.0)  ;;
+    rocq-mathcomp-algebra.1.12.0)   ;;
+    rocq-mathcomp-solvable.1.12.0)  ;;
+    rocq-mathcomp-field.1.12.0)     ;;
+    rocq-mathcomp-character.1.12.0) ;;
     coq-*)                         package_ci="${package_main#coq-}" ;;
+    rocq-*)                        package_ci="${package_main#rocq-}" ;;
     *)                             ;;
   esac
   echo "${package_ci//-/_}"
 }
 
 # get the GIT repo name from a ci-basic-overlay.sh file
-# $1 is the Coq CI package name
+# $1 is the Rocq CI package name
 function coq_ci_get_repo_name() {
   grep "project  *$1" "${CI_PACKAGE_LIST}" | cut -d ' ' -f 3 | tr -d "'\"" || true
 }
 
 # get the GIT tag/hash/branch name from a ci-basic-overlay.sh file
-# $1 is the Coq CI package name
+# $1 is the Rocq CI package name
 function coq_ci_get_ref() {
   grep "project  *$1" "${CI_PACKAGE_LIST}" | cut -d ' ' -f 4 | tr -d "'\"" || true
 }
@@ -115,12 +118,12 @@ function opam_get_installed_opam_repo() {
   repo=$(opam show -f repository "$1")
   case $repo in
     default)             echo 'official repository https://opam.ocaml.org' ;;
-    coq-core-dev)        echo 'official repository https://coq.inria.fr/opam/core-dev' ;;
-    coq-extra-dev)       echo 'official repository https://coq.inria.fr/opam/extra-dev' ;;
-    coq-released)        echo 'official repository https://coq.inria.fr/opam/released' ;;
-    *patch_coq-dev)      echo 'platform patch repository https://github.com/coq/platform/tree/main/opam/opam-coq-archive/extra-dev' ;;
-    *patch_coq-released) echo 'platform patch repository https://github.com/coq/platform/tree/main/opam/opam-coq-archive/released' ;;
-    *patch_ocaml)        echo 'platform patch repository https://github.com/coq/platform/tree/main/opam/opam-repository' ;;
+    coq-core-dev)        echo 'official repository https://rocq-prover.inria.fr/opam/core-dev' ;;
+    coq-extra-dev)       echo 'official repository https://rocq-prover.inria.fr/opam/extra-dev' ;;
+    coq-released)        echo 'official repository https://rocq-prover.inria.fr/opam/released' ;;
+    *patch_coq-dev)      echo 'platform patch repository https://github.com/rocq-prover/platform/tree/main/opam/opam-coq-archive/extra-dev' ;;
+    *patch_coq-released) echo 'platform patch repository https://github.com/rocq-prover/platform/tree/main/opam/opam-coq-archive/released' ;;
+    *patch_ocaml)        echo 'platform patch repository https://github.com/rocq-prover/platform/tree/main/opam/opam-repository' ;;
     *)                   echo 'unknown repository' ;;
   esac
 }
@@ -184,29 +187,29 @@ function ask_user {
 # This function used various environment variables to fill in details
 
 function open_issue_tag() {
-  TITLE="Please create a tag for Coq ${COQ_PLATFORM_COQ_BASE_VERSION} in Coq Platform ${VERSION_PLATFORM}"
-  BODY="The Coq team released Coq "'`'"${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_RELEASE}"'`'" on ${DATE_RELEASE}${DATE_FINAL:+ and plans to release Coq ${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_FINAL} around ${DATE_FINAL}}.
-The corresponding Coq Platform release "'`'"${VERSION_PLATFORM}"'`'" should be released before **${DATE_PLATFORM_EXPECTED}**.
+  TITLE="Please create a tag for Rocq ${COQ_PLATFORM_COQ_BASE_VERSION} in Rocq Platform ${VERSION_PLATFORM}"
+  BODY="The Rocq team released Rocq "'`'"${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_RELEASE}"'`'" on ${DATE_RELEASE}${DATE_FINAL:+ and plans to release Rocq ${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_FINAL} around ${DATE_FINAL}}.
+The corresponding Rocq Platform release "'`'"${VERSION_PLATFORM}"'`'" should be released before **${DATE_PLATFORM_EXPECTED}**.
 It can be delayed in case of difficulties until ${DATE_PLATFORM_LATEST}, but this should be an exception.
 
-This issue is to inform you that to our (possibly a few days old) best knowledge the latest released version of your project (${LATEST_OPAM_VERSION}) **does not work** with Coq "'`'"${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_RELEASE}"'`'".
+This issue is to inform you that to our (possibly a few days old) best knowledge the latest released version of your project (${LATEST_OPAM_VERSION}) **does not work** with Rocq "'`'"${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_RELEASE}"'`'".
 We tried to remove version restrictions in opam files and possibly make or configure files, but this did not suffice.
 
-Please note that in Coq Platform CI (unlike Coq CI) we test only released / tagged versions. ${COQ_CI_TEST_INFO}
+Please note that in Rocq Platform CI (unlike Rocq CI) we test only released / tagged versions. ${COQ_CI_TEST_INFO}
 
-Could you please create a tag and opam package, or communicate us any existing tag that works with Coq branch ${COQ_PLATFORM_COQ_BRANCH}, **preferably before ${DATE_PLATFORM_NOTIFY}**?
-In case we might have to delay the Coq Platform release cause of issues with your project, we would prefer to be informed about the situation as early as possible.
+Could you please create a tag and opam package, or communicate us any existing tag that works with Rocq branch ${COQ_PLATFORM_COQ_BRANCH}, **preferably before ${DATE_PLATFORM_NOTIFY}**?
+In case we might have to delay the Rocq Platform release cause of issues with your project, we would prefer to be informed about the situation as early as possible.
 
-In case the tag and opam package are available before ${DATE_PLATFORM_BETA}, it will be included in an early Coq Platform beta release of the for Coq ${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_RELEASE}.
+In case the tag and opam package are available before ${DATE_PLATFORM_BETA}, it will be included in an early Rocq Platform beta release of the for Rocq ${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_RELEASE}.
 
-The working branch of Coq Platform, can be found here [main](${PLATFORM_MAIN_BRANCH}).
-It contains package pick ["'`'"${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}"'`'"](${PLATFORM_MAIN_BRANCH}/package_picks/${PACKAGE_LIST_FILE##*/}) which already supports Coq version "'`'"${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_RELEASE}"'`'" and contains already working (possibly patched / commit pinned) Coq Platform packages.
+The working branch of Rocq Platform, can be found here [main](${PLATFORM_MAIN_BRANCH}).
+It contains package pick ["'`'"${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}"'`'"](${PLATFORM_MAIN_BRANCH}/package_picks/${PACKAGE_LIST_FILE##*/}) which already supports Rocq version "'`'"${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_RELEASE}"'`'" and contains already working (possibly patched / commit pinned) Rocq Platform packages.
 
 Please **don't** close this issue, even after creating the new tag and/or opam package.
-We will close the issue after updating Coq Platform.
+We will close the issue after updating Rocq Platform.
 This is a measure of 'double book keeping' in order to avoid that we ship the wrong version.
 
-In any case, Coq Platform won't be released before this issue is closed!
+In any case, Rocq Platform won't be released before this issue is closed!
 
 Thanks!
 
@@ -222,27 +225,27 @@ $CC
 # This function used various environment variables to fill in details
 
 function open_issue_inform() {
-  TITLE="Please pick the version you prefer for Coq ${COQ_PLATFORM_COQ_BASE_VERSION} in Coq Platform ${VERSION_PLATFORM}"
-  BODY="The Coq team released Coq "'`'"${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_RELEASE}"'`'" on ${DATE_RELEASE}${DATE_FINAL:+ and plans to release Coq ${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_FINAL} around ${DATE_FINAL}}.
-The corresponding Coq Platform release "'`'"${VERSION_PLATFORM}"'`'" should be released before **${DATE_PLATFORM_EXPECTED}**.
+  TITLE="Please pick the version you prefer for Rocq ${COQ_PLATFORM_COQ_BASE_VERSION} in Rocq Platform ${VERSION_PLATFORM}"
+  BODY="The Rocq team released Rocq "'`'"${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_RELEASE}"'`'" on ${DATE_RELEASE}${DATE_FINAL:+ and plans to release Rocq ${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_FINAL} around ${DATE_FINAL}}.
+The corresponding Rocq Platform release "'`'"${VERSION_PLATFORM}"'`'" should be released before **${DATE_PLATFORM_EXPECTED}**.
 It can be delayed in case of difficulties until ${DATE_PLATFORM_LATEST}, but this should be an exception.
 
-This issue is to inform you that the opam package we are currently testing in Coq Platform CI **works fine** with Coq "'`'"${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_RELEASE}"'`'".
+This issue is to inform you that the opam package we are currently testing in Rocq Platform CI **works fine** with Rocq "'`'"${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_RELEASE}"'`'".
 
 ${COQ_PLATFORM_TEST_INFO}
 
-**In case this is the version you want to see in Coq Platform, there is nothing to do for you - please just close this issue.**
+**In case this is the version you want to see in Rocq Platform, there is nothing to do for you - please just close this issue.**
 
-In case you would prefer to see an updated or an older version in the upcoming Coq Platform "'`'"${VERSION_PLATFORM}"'`'", please inform us as soon as possible and before **${DATE_PLATFORM_NOTIFY}**!
+In case you would prefer to see an updated or an older version in the upcoming Rocq Platform "'`'"${VERSION_PLATFORM}"'`'", please inform us as soon as possible and before **${DATE_PLATFORM_NOTIFY}**!
 
-The working branch of Coq Platform, can be found here [main](${PLATFORM_MAIN_BRANCH}).
-It contains package pick ["'`'"${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}"'`'"](${PLATFORM_MAIN_BRANCH}/package_picks/${PACKAGE_LIST_FILE##*/}) which already supports Coq version "'`'"${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_RELEASE}"'`'" and contains already working (possibly patched / commit pinned) Coq Platform packages.
+The working branch of Rocq Platform, can be found here [main](${PLATFORM_MAIN_BRANCH}).
+It contains package pick ["'`'"${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}"'`'"](${PLATFORM_MAIN_BRANCH}/package_picks/${PACKAGE_LIST_FILE##*/}) which already supports Rocq version "'`'"${COQ_PLATFORM_COQ_BASE_VERSION}${EXT_RELEASE}"'`'" and contains already working (possibly patched / commit pinned) Rocq Platform packages.
 
 In case you want to select a different version, please **don't** close this issue, even after creating the new tag and/or opam package.
-We will close the issue after updating Coq Platform.
+We will close the issue after updating Rocq Platform.
 This is a measure of 'double book keeping' in order to avoid that we ship the wrong version.
 
-In any case, Coq Platform won't be released before this issue is closed!
+In any case, Rocq Platform won't be released before this issue is closed!
 
 Thanks!
 
@@ -339,12 +342,12 @@ set | grep '^COQ_PLATFORM'
 echo PACKAGES                      = "${PACKAGES}"
 
 
-########## Coq CI handling ##########
+########## Rocq CI handling ##########
 
 CI_PACKAGE_LIST=${SCRIPT_PATH}/ci_package_list.sh
 
 # Get ci-basic-overlay.sh file from the branch corresponding to the version
-wget -nv https://raw.githubusercontent.com/coq/coq/${COQ_PLATFORM_COQ_BRANCH}/dev/ci/ci-basic-overlay.sh -O "${CI_PACKAGE_LIST}"
+wget -nv https://raw.githubusercontent.com/rocq-prover/rocq/${COQ_PLATFORM_COQ_BRANCH}/dev/ci/ci-basic-overlay.sh -O "${CI_PACKAGE_LIST}"
 
 declare -a projects
 export projects
@@ -360,6 +363,7 @@ do
   # General package filter
   case ${package_main} in
     coq-*)   ;;
+    rocq-*)   ;;
     gappa*)  ;;
     elpi*)   ;;
     *)       continue ;;
@@ -382,7 +386,7 @@ do
     package_opam_repo_hint="$(opam_get_installed_opam_repo_hint  ${package_main})"
     echo "OPAM installed:   ${package_opam_version}  (${package_opam_repo})"
     echo "OPAM issue url    ${package_opam_issue_url}"
-    COQ_PLATFORM_TEST_INFO="Coq Platform CI is currently testing opam package \`${package_main}.${package_opam_version}\`"$'\n'"from ${package_opam_repo}/packages/${package_main}/${package}/opam. ${package_opam_repo_hint}"
+    COQ_PLATFORM_TEST_INFO="Rocq Platform CI is currently testing opam package \`${package_main}.${package_opam_version}\`"$'\n'"from ${package_opam_repo}/packages/${package_main}/${package}/opam. ${package_opam_repo_hint}"
     if opam_is_heavily_patched "${package_main}"
     then
       PLATFORM_CI_OK=N
@@ -392,27 +396,27 @@ do
   else
     echo "OPAM:             NOT INSTALLED"
     echo "OPAM issue url    ${package_opam_issue_url}"
-    COQ_PLATFORM_TEST_INFO="Coq Platform CI is currently **not testing** this project - which means we couldn't bring the latest tag or opam package to work with trivial patches like removing coq version restrictions."
+    COQ_PLATFORM_TEST_INFO="Rocq Platform CI is currently **not testing** this project - which means we couldn't bring the latest tag or opam package to work with trivial patches like removing rocq version restrictions."
     PLATFORM_CI_OK=N
   fi
 
-  # Get package status in Coq CI
+  # Get package status in Rocq CI
   package_ci="$(coq_ci_translate_package_name "${package_main}")"
   if [ -z "${package_ci}" ]
   then
-    echo "Coq CI:           NOT IN COQ CI"
-    COQ_CI_TEST_INFO="Btw.: Coq CI apparently does not test this project."
+    echo "Rocq CI:           NOT IN COQ CI"
+    COQ_CI_TEST_INFO="Btw.: Rocq CI apparently does not test this project."
   else
     package_ci_repo="$(coq_ci_get_repo_name "${package_ci}")"
     package_ci_ref="$(coq_ci_get_ref "${package_ci}")"
     if [ -z "${package_ci_ref}" ]
     then
-      echo "Coq CI:           SPECIAL HANDLING"
-      COQ_CI_TEST_INFO="Coq CI appears to test this project, but has some special handling for your project which makes it difficult to retrieve the commit it tests for your project."
+      echo "Rocq CI:           SPECIAL HANDLING"
+      COQ_CI_TEST_INFO="Rocq CI appears to test this project, but has some special handling for your project which makes it difficult to retrieve the commit it tests for your project."
     else
-      echo "Coq CI repo:      ${package_ci_repo}"
-      echo "Coq CI ref:       ${package_ci_ref}"
-      COQ_CI_TEST_INFO="Coq CI is currently testing commit ${package_ci_ref} on repository ${package_ci_repo} - which likely means that this commit does work in Coq CI."
+      echo "Rocq CI repo:      ${package_ci_repo}"
+      echo "Rocq CI ref:       ${package_ci_ref}"
+      COQ_CI_TEST_INFO="Rocq CI is currently testing commit ${package_ci_ref} on repository ${package_ci_repo} - which likely means that this commit does work in Rocq CI."
     fi
   fi
 
