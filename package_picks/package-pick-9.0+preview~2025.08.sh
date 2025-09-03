@@ -78,7 +78,7 @@ then
   PACKAGES="${PACKAGES} coq-stdpp.1.12.0"
 
   # General mathematics
-  PACKAGES="${PACKAGES} elpi.3.1.0 rocq-elpi.3.0.0" # rocq-elpi 2.5.2 is not compatible with elpi 3.0.0
+  PACKAGES="${PACKAGES} elpi.3.1.0 rocq-elpi.3.1.0" # according to Enrico's wishes
   PACKAGES="${PACKAGES} rocq-hierarchy-builder.1.9.1"
   PACKAGES="${PACKAGES} coq-mathcomp-ssreflect.2.4.0"
   PACKAGES="${PACKAGES} coq-mathcomp-fingroup.2.4.0"
