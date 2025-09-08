@@ -199,7 +199,8 @@ then
 
   # Gallina extensions
   #PACKAGES="${PACKAGES} coq-reduction-effects.0.1.5" # Compilation error
-  PACKAGES="${PACKAGES} coq-record-update.0.3.4" # Maintainers asked to update to version 0.3.5
+  PACKAGES="${PACKAGES} coq-record-update.0.3.6" # update according maintainer request
+  
 
   # Communication with coqtop
   # PACKAGES="${PACKAGES} coq-serapi.8.20.0+0.20.0"  # Compilation error
