@@ -198,7 +198,7 @@ then
  PACKAGES="${PACKAGES} coq-extructures.0.5.0"
 
   # Gallina extensions
-  #PACKAGES="${PACKAGES} coq-reduction-effects.0.1.5" # Compilation error
+  PACKAGES="${PACKAGES} coq-reduction-effects.0.1.6" # update according maintainer request
   PACKAGES="${PACKAGES} coq-record-update.0.3.6" # update according maintainer request
   
 
