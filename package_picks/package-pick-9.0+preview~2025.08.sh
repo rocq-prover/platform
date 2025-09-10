@@ -147,7 +147,7 @@ then
   
   # General mathematics (which requires one of the above tools)
   PACKAGES="${PACKAGES} coq-mathcomp-analysis.1.12.0"
-  PACKAGES="${PACKAGES} coq-mathcomp-algebra-tactics.1.2.6" # Pierre roux recommends to test 1.2.6
+  PACKAGES="${PACKAGES} coq-mathcomp-algebra-tactics.1.2.7"
   #PACKAGES="${PACKAGES} coq-relation-algebra.1.7.11" #  depends coq-aac-tactics
 
   # Formal languages, compilers and code verification
@@ -198,8 +198,9 @@ then
  PACKAGES="${PACKAGES} coq-extructures.0.5.0"
 
   # Gallina extensions
-  #PACKAGES="${PACKAGES} coq-reduction-effects.0.1.5" # Compilation error
-  PACKAGES="${PACKAGES} coq-record-update.0.3.4" # Maintainers asked to update to version 0.3.5
+  PACKAGES="${PACKAGES} coq-reduction-effects.0.1.6" # update according maintainer request
+  PACKAGES="${PACKAGES} coq-record-update.0.3.6" # update according maintainer request
+  
 
   # Communication with coqtop
   # PACKAGES="${PACKAGES} coq-serapi.8.20.0+0.20.0"  # Compilation error
