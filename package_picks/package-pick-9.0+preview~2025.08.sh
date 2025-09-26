@@ -146,7 +146,7 @@ then
   PACKAGES="${PACKAGES} coq-itauto.8.20.0"
   
   # General mathematics (which requires one of the above tools)
-  PACKAGES="${PACKAGES} coq-mathcomp-analysis.1.12.0"
+  PACKAGES="${PACKAGES} coq-mathcomp-analysis.1.13.0"
   PACKAGES="${PACKAGES} coq-mathcomp-algebra-tactics.1.2.7"
   #PACKAGES="${PACKAGES} coq-relation-algebra.1.7.11" #  depends coq-aac-tactics
 
