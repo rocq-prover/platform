@@ -108,7 +108,7 @@ then
   PACKAGES="${PACKAGES} coq-corn.9.0.0"  # Maintainer confirmed there is a verison 9.0.0 on github
 
   # Homotopy Type Theory (HoTT)
-  #PACKAGES="${PACKAGES} coq-hott.8.20" # Compilation error
+  PACKAGES="${PACKAGES} coq-hott.9.0" # Compilation error
 
   # Univalent Mathematics (UniMath)
   # Note: coq-unimath requires too much memory for 32 bit architectures
