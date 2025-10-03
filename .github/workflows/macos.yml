@@ -53,10 +53,18 @@ jobs:
           - '8.20~2025.01'
 
     steps:
-      - name: Setup Xcode 16.0
+      - name: Select Xcode 16.4
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '16.0'
+          xcode-version: '16.4'
+
+      - name: Print toolchain info
+        run: |
+          sw_vers
+          xcodebuild -version
+          xcode-select -p
+          xcrun --show-sdk-path
+          xcrun --show-sdk-platform-version || true
           
       - name: Git checkout
         uses: actions/checkout@v4
@@ -165,7 +173,7 @@ jobs:
   Macos_smoke:
     name: Smoke test Macos
     needs: Macos_platform
-    runs-on: macos-latest
+    runs-on: macos-15
     strategy:
       fail-fast: false
       matrix:
