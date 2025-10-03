@@ -138,7 +138,7 @@ then
     # coq-hammer does not work on Windows because it heavily relies on fork
     # PACKAGES="${PACKAGES} coq-hammer.1.3.2+8.20"  # Compilation error
     PACKAGES="${PACKAGES} eprover.3.1" # ToDo Check
-    PACKAGES="${PACKAGES} z3_tptp.4.13.0" # ToDo Check
+    PACKAGES="${PACKAGES} z3_tptp.4.13.3" # ToDo Check
   fi
   PACKAGES="${PACKAGES} coq-paramcoq.1.1.3+rocq9.0" # upgrade to 1.1.3+rocq9.0
   PACKAGES="${PACKAGES} coq-coqeal.2.1.0"
