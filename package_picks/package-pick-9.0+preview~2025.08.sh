@@ -53,6 +53,7 @@ PACKAGES="${PACKAGES} PIN.dune.3.19.1" # 3.17.2 has issues on Windows: cairo doe
 PACKAGES="${PACKAGES} PIN.dune-configurator.3.19.1"
 # The Coq compiler coqc and the Coq standard library
 PACKAGES="${PACKAGES} PIN.coq.9.0.0"
+PACKAGES="${PACKAGES} PIN.rocq-stdlib.9.0.0"
 
 ########## IDE PACKAGES ##########
 
@@ -100,7 +101,7 @@ then
   # Numerical mathematics
   PACKAGES="${PACKAGES} coq-flocq.4.2.1"
   #PACKAGES="${PACKAGES} coq-interval.4.11.1"  # Compilation error, 
-  #PACKAGES="${PACKAGES} coq-gappa.1.7.0"  # Compilation error
+  #PACKAGES="${PACKAGES} coq-gappa.1.7.1" # Compilation error
   PACKAGES="${PACKAGES} gappa.1.4.1" # Guillaume answered me he provided only a tarball so it's necessary to create opam package if we want to update version.
 
   # Constructive mathematics
@@ -108,14 +109,14 @@ then
   PACKAGES="${PACKAGES} coq-corn.9.0.0"  # Maintainer confirmed there is a verison 9.0.0 on github
 
   # Homotopy Type Theory (HoTT)
-  PACKAGES="${PACKAGES} coq-hott.9.0" # Compilation error
+  PACKAGES="${PACKAGES} coq-hott.9.0"
 
   # Univalent Mathematics (UniMath)
   # Note: coq-unimath requires too much memory for 32 bit architectures
   if [ "${BITSIZE}" == "64" ]
   then
     case "$COQ_PLATFORM_UNIMATH" in
-    [yY]) PACKAGES="${PACKAGES} coq-unimath.20240923" ;;
+    [yY]) PACKAGES="${PACKAGES} coq-unimath.20250923" ;;
     [nN]) true ;;
     *) echo "Illegal value for COQ_PLATFORM_UNIMATH - aborting"; false ;;
     esac
@@ -191,7 +192,8 @@ then
   PACKAGES="${PACKAGES} coq-deriving.0.2.2"
   if [ "${BITSIZE}" == "64" ]
   then
-    PACKAGES="${PACKAGES} coq-metacoq.1.3.4+9.0" # Test latest version 1.3.4+9.0
+    PACKAGES="${PACKAGES} coq-metacoq.1.3.4+9.0" # MetaCoq latest 1.3.4+9.0
+    PACKAGES="${PACKAGES} rocq-metarocq.1.4+9.0" # MetaRocq renaming
   fi
 
   # General mathematics
@@ -203,7 +205,6 @@ then
   
 
   # Communication with coqtop
-  # PACKAGES="${PACKAGES} coq-serapi.8.20.0+0.20.0"  # Compilation error
 
   # fiat crypto, bedrock2, rupicola and dependencies
   if [ "${BITSIZE}" == "64" ]
