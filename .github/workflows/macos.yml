@@ -142,10 +142,70 @@ jobs:
           retention-days: 5
 
       - name: Install findutils, coreutils and macpack (needed by DMG script)
+        shell: bash
         run: |
-          brew install findutils
-          brew install coreutils
+          set -euo pipefail
+          brew install findutils coreutils
+          . .venv/bin/activate
           pip3 install macpack
+          
+          # Patch macpack to create/set an asyncio loop on Python 3.14
+          python3 <<'EOF'
+          import sysconfig
+          import pathlib
+          import re
+
+          pure = sysconfig.get_paths()['purelib']
+          print(f"Searching for macpack in: {pure}")
+
+          patched = False
+          for rel in ('macpack/patcher.py', 'tmp/patcher.py'):
+              p = pathlib.Path(pure) / rel
+              if not p.exists():
+                  print(f"Not found: {p}")
+                  continue
+              
+              print(f"Found patcher.py at: {p}")
+              s = p.read_text()
+              
+              # Replace the problematic line with proper indentation
+              old_pattern = r'(\s*)loop\s*=\s*asyncio\.get_event_loop\(\)'
+              
+              def replacement(match):
+                  indent = match.group(1)
+                  return f'''{indent}try:
+          {indent}    loop = asyncio.get_running_loop()
+          {indent}except RuntimeError:
+          {indent}    loop = asyncio.new_event_loop()
+          {indent}    asyncio.set_event_loop(loop)'''
+              
+              s2 = re.sub(old_pattern, replacement, s, count=1)
+              
+              if s2 != s:
+                  p.write_text(s2)
+                  print(f"✓ Patched: {p}")
+                  patched = True
+                  
+                  # Verify the patch
+                  if 'get_running_loop' in s2:
+                      print("✓ Patch verification successful")
+                  break
+              else:
+                  print(f"Pattern not found in: {p}")
+
+          if not patched:
+              print("⚠ WARNING: Could not find or patch macpack/patcher.py")
+              print("This may cause issues with Python 3.14")
+          EOF
+          
+          # Sanity check: show which macpack will run
+          which macpack
+          python3 -c "import macpack; print('macpack imported successfully')"
+          
+          # Sanity check: show which macpack will run
+          which macpack
+          python3 -c "import macpack; print('macpack imported successfully')"
+
 
       - name: 'Build DMG installer'
         uses: Wandalen/wretry.action@v3
