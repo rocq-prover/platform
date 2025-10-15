@@ -80,7 +80,7 @@ then
 
   # General mathematics
   PACKAGES="${PACKAGES} elpi.3.1.0 rocq-elpi.3.1.0" # according to Enrico's wishes
-  PACKAGES="${PACKAGES} rocq-hierarchy-builder.1.10.0"
+  PACKAGES="${PACKAGES} rocq-hierarchy-builder.1.10.1"
   PACKAGES="${PACKAGES} coq-mathcomp-ssreflect.2.4.0"
   PACKAGES="${PACKAGES} coq-mathcomp-fingroup.2.4.0"
   PACKAGES="${PACKAGES} coq-mathcomp-algebra.2.4.0"
@@ -100,7 +100,7 @@ then
   
   # Numerical mathematics
   PACKAGES="${PACKAGES} coq-flocq.4.2.1"
-  #PACKAGES="${PACKAGES} coq-interval.4.11.1"  # Compilation error, 
+  PACKAGES="${PACKAGES} coq-interval.4.11.3"  # Compilation error, 
   #PACKAGES="${PACKAGES} coq-gappa.1.7.1" # Compilation error
   PACKAGES="${PACKAGES} gappa.1.4.1" # Guillaume answered me he provided only a tarball so it's necessary to create opam package if we want to update version.
 
@@ -197,7 +197,7 @@ then
   fi
 
   # General mathematics
- PACKAGES="${PACKAGES} coq-extructures.0.5.0"
+  PACKAGES="${PACKAGES} coq-extructures.0.5.0"
 
   # Gallina extensions
   PACKAGES="${PACKAGES} coq-reduction-effects.0.1.6" # update according maintainer request
@@ -211,12 +211,12 @@ then
   then
     case "$COQ_PLATFORM_FIATCRYPTO" in
       [yY])
-        #PACKAGES="${PACKAGES} coq-coqutil.0.0.6" # Compilation error
+        PACKAGES="${PACKAGES} coq-coqutil.0.0.7"
         PACKAGES="${PACKAGES} coq-rewriter.0.0.12"
-        #PACKAGES="${PACKAGES} coq-riscv.0.0.5"  #required coq-coqutil.0.0.6
-        #PACKAGES="${PACKAGES} coq-bedrock2.0.0.8"  #required coq-coqutil.0.0.6
+        PACKAGES="${PACKAGES} coq-riscv.0.0.6"
+        PACKAGES="${PACKAGES} coq-bedrock2.0.0.9"
         #PACKAGES="${PACKAGES} coq-bedrock2-compiler.0.0.8"  #required coq-coqutil.0.0.6
-        #PACKAGES="${PACKAGES} coq-rupicola.0.0.10"  #required coq-coqutil.0.0.6
+        PACKAGES="${PACKAGES} coq-rupicola.0.0.11"
         #PACKAGES="${PACKAGES} coq-fiat-crypto.0.1.3"  #required coq-coqutil.0.0.6
         ;;
       [nN]) true ;;
