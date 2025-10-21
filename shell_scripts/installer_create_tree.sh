@@ -203,7 +203,7 @@ function analyze_package {
   do
     local included=false
     # Unless the dependency is excluded, record the dependency
-    if ! list_contains "$OPAM_PACKAGE_EXCLUSION_LIST" "$dependency" && [[ ! "$dependency" =~ ${OPAM_PACKAGE_EXCLUSION_RE} ]] || [[ "$dependency" =~ ${OPAM_PACKAGE_EXCLUSION_OVERRIDE_RE} ]]
+    if ! list_contains "$OPAM_PACKAGE_EXCLUSION_LIST" "$dependency" && [[ ! "$dependency" =~ ${OPAM_PACKAGE_EXCLUSION_RE} ]] || [[ -n "${OPAM_PACKAGE_EXCLUSION_OVERRIDE_RE}" && "$dependency" =~ ${OPAM_PACKAGE_EXCLUSION_OVERRIDE_RE} ]]
     then
       included=true
       # Check if dependency is visible or hidden and write dependency checker macro call in respective NSIS include file
