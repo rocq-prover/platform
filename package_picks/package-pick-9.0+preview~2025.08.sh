@@ -100,9 +100,9 @@ then
   
   # Numerical mathematics
   PACKAGES="${PACKAGES} coq-flocq.4.2.1"
-  PACKAGES="${PACKAGES} coq-interval.4.11.3"  # Compilation error, 
-  PACKAGES="${PACKAGES} coq-gappa.1.7.1" # Compilation error
-  PACKAGES="${PACKAGES} gappa.1.4.1" # Guillaume answered me he provided only a tarball so it's necessary to create opam package if we want to update version.
+  PACKAGES="${PACKAGES} coq-interval.4.11.3" 
+  #PACKAGES="${PACKAGES} coq-gappa.1.7.1"
+  PACKAGES="${PACKAGES} gappa.1.4.1"
 
   # Constructive mathematics
   PACKAGES="${PACKAGES} coq-math-classes.9.0.0" # Maintainer confirmed there is a verison 9.0.0 on github
@@ -133,11 +133,11 @@ then
   PACKAGES="${PACKAGES} coq-unicoq.1.6+8.20"
   PACKAGES="${PACKAGES} coq-mtac2.1.4+9.0"
   PACKAGES="${PACKAGES} coq-quickchick.2.1.1"
-  PACKAGES="${PACKAGES} coq-hammer-tactics.1.3.2+8.20"
+  PACKAGES="${PACKAGES} coq-hammer-tactics.1.3.2+9.0"
   if [[ "$OSTYPE" != cygwin ]]
   then
     # coq-hammer does not work on Windows because it heavily relies on fork
-    #PACKAGES="${PACKAGES} coq-hammer.1.3.2+9.0"  # Compilation error
+    PACKAGES="${PACKAGES} coq-hammer.1.3.2+9.0" 
     PACKAGES="${PACKAGES} eprover.3.1" # ToDo Check
     PACKAGES="${PACKAGES} z3_tptp.4.13.0" # ToDo Check
   fi
@@ -150,7 +150,7 @@ then
   # General mathematics (which requires one of the above tools)
   PACKAGES="${PACKAGES} coq-mathcomp-analysis.1.13.0"
   PACKAGES="${PACKAGES} coq-mathcomp-algebra-tactics.1.2.7"
-  #PACKAGES="${PACKAGES} coq-relation-algebra.1.7.11" #  depends coq-aac-tactics
+  PACKAGES="${PACKAGES} rocq-relation-algebra.1.8.0" 
 
   # Formal languages, compilers and code verification
   PACKAGES="${PACKAGES} coq-reglang.1.2.2"
