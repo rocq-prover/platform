@@ -1,0 +1,30 @@
+opam-version: "2.0"
+maintainer: "beta.ziliani@gmail.com"
+homepage: "https://github.com/Mtac2/Mtac2"
+dev-repo: "git+https://github.com/Mtac2/Mtac2.git"
+bug-reports: "https://github.com/Mtac2/Mtac2/issues"
+authors: [
+ "Beta Ziliani <beta.ziliani@gmail.com>"
+ "Jan-Oliver Kaiser <janno@mpi-sws.org"
+ "Robbert Krebbers <mail@robbertkrebbers.nl>"
+ "Yann Régis-Gianas <yrg@pps.univ-paris-diderot.fr>"
+]
+license: "MIT"
+synopsis: "Typed tactic language for Coq"
+build: [
+  ["./configure.sh"]
+  [make "-j%{jobs}%"]
+]
+install: [
+  [make "install"]
+]
+depends: [
+  "coq" {>= "9.0~"}
+  "coq-unicoq" {>= "1.5" & < "2~"}
+]
+url {
+  src: "https://github.com/Mtac2/Mtac2/archive/refs/tags/v1.4-coq9.0.tar.gz"
+  checksum: [
+    "sha512=aa708bf156cc4d3ce09df489edc0dc65bd46d0c52a8417a6c06808ee28eb1358a31600e44239eea6fbb6d94e87e22831e31c24efff85fcad0bb3839b00949ab9"
+  ]
+}
