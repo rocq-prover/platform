@@ -133,11 +133,11 @@ then
   PACKAGES="${PACKAGES} coq-unicoq.1.6+8.20"
   PACKAGES="${PACKAGES} coq-mtac2.1.4+9.0"
   PACKAGES="${PACKAGES} coq-quickchick.2.1.1"
-  PACKAGES="${PACKAGES} coq-hammer-tactics.1.3.2+9.0"
+  #PACKAGES="${PACKAGES} coq-hammer-tactics.1.3.2+9.0"
   if [[ "$OSTYPE" != cygwin ]]
   then
     # coq-hammer does not work on Windows because it heavily relies on fork
-    PACKAGES="${PACKAGES} coq-hammer.1.3.2+9.0" 
+    #PACKAGES="${PACKAGES} coq-hammer.1.3.2+9.0" 
     PACKAGES="${PACKAGES} eprover.3.1" # ToDo Check
     PACKAGES="${PACKAGES} z3_tptp.4.13.0" # ToDo Check
   fi

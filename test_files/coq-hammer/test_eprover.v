@@ -26,8 +26,6 @@ Unset Hammer Z3.
 Unset Hammer Vampire.
 Unset Hammer CVC4.
 
-(*
 Lemma lem_2 : forall n : nat, Nat.Odd n \/ Nat.Odd (n + 1).
   Time hammer.
 Qed.
-*)
