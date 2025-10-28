@@ -96,7 +96,12 @@ PATCH_CMDS[coq-gappa]='/^Require Import Gappa_tactic.$/ {print "From Gappa "$0; 
 TEST_FILES[coq-gappa-flocq3]='testsuite/example-20101018.v testsuite/example-20090706.v testsuite/example-20080417.v'
 PATCH_CMDS[coq-gappa-flocq3]='/^From Gappa Require/ {sub("From Gappa Require", "From GappaFlocq3 Require", $0); print $0; next} /^From Flocq Require/ {sub("From Flocq Require", "From Flocq3 Require", $0); print $0; next}'
 TEST_FILES[coq-hammer-tactics]='/examples/tutorial/sauto/isort.v'
-TEST_FILES[coq-hammer]='../../test_files/coq-hammer/test_eprover.v ../../test_files/coq-hammer/test_z3.v'
+if command -v eprover >/dev/null 2>&1; then
+	TEST_FILES[coq-hammer]='../../test_files/coq-hammer/test_eprover.v ../../test_files/coq-hammer/test_z3.v'
+else
+	echo "[coq-hammer] eprover not found: launch only test_z3.v (smoke minimal)."
+	TEST_FILES[coq-hammer]='../../test_files/coq-hammer/test_z3.v'
+fi
 TEST_FILES[coq-hierarchy-builder]='examples/demo2/classical.v examples/demo2/stage10.v examples/demo2/stage11.v'
 TEST_FILES[coq-hierarchy-builder~8.12]='demo2/classical.v demo2/stage10.v demo2/stage11.v'
 PATCH_CMDS[coq-hierarchy-builder~8.12]='/^From HB.demo2 / {sub("From HB.demo2 ", "", $0); print $0; next}'
