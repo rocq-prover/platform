@@ -7,9 +7,9 @@ On Linux currently the only way to install Coq Platform is to build from sources
 This method is intended for experienced users, who may want to use opam to install additional packages, beyond the standard set provided by the Coq Platform.
 
 - Install buildtools
-  - Debian, Ubuntu:       sudo apt-get install build-essential
-  - CentOS, RHEL, Fedora: sudo dnf groupinstall "Development Tools"
-  - OpenSuse:             sudo zypper in -t pattern devel_C_C++
+  - Debian, Ubuntu:       `sudo apt install build-essential`
+  - CentOS, RHEL, Fedora: `sudo dnf groupinstall "Development Tools"`
+  - OpenSuse:             `sudo zypper in -t pattern devel_C_C++`
 - For CentOS and possibly RHEL some additional steps are required, see [CentOS](#centos) below.
 - Get the Coq Platform scripts via either of these methods
   - Most users should download and extract `https://github.com/coq/platform/archive/refs/tags/2025.01.0.zip`.
@@ -30,7 +30,7 @@ This method is intended for experienced users, who may want to use opam to insta
 
 ## CentOS: Enable sudo for current user
 
-CentOS requires two additional steps. First sudo should be enabled, so that opam depext can work. opam depext automatically installs required system dependencies, which requires sudo rights. Since one cannot run the complete script as super user, there is no easy way around using sudo. The only method is to make sure that all prerequisites are installed upfront. One way to do this is to run the Coq Platform script until it asks for the sudo password and then see what it want's to do and do this as super user.
+CentOS requires two additional steps. First sudo should be enabled, so that opam depext can work. opam depext automatically installs required system dependencies, which requires `sudo` rights. Since one cannot run the complete script as super user, there is no easy way around using sudo. The only method is to make sure that all prerequisites are installed upfront. One way to do this is to run the Coq Platform script until it asks for the sudo password and then see what it want's to do and do this as super user.
 
 Sudo can be enabled for the current user as follows:
 ```

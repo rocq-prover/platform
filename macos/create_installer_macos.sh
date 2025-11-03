@@ -56,7 +56,7 @@ done
 ###### Common utilities ######
 
 source shell_scripts/installer_utilities.sh
-source shell_scripts/init_macos_set_depolyment_target.sh
+source shell_scripts/init_macos_set_deployment_target.sh
 
 ##### Get the release and package pick of the Coq Platform #####
 
