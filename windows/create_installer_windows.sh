@@ -230,13 +230,16 @@ FILE_SEC_DESCRIPTIONS="$DIR_TARGET"/section_descriptions.nsh; > "$FILE_SEC_DESCR
 SCRIPT_DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 CLEANED_POSTFIX="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX/#\~}"
-PICK_FILE="$REPO_ROOT/package_picks/package-pick-$CLEANED_POSTFIX.sh"
+BASE_VER_RAW="${COQ_PLATFORM_COQ_TAG:-$CLEANED_POSTFIX}"
+BASE_VER_MM="$(printf '%s' "$BASE_VER_RAW" | sed -E 's/^([0-9]+)\.([0-9]+).*/\1.\2/')"
+NORMALIZED_POSTFIX="$(printf '%s' "$CLEANED_POSTFIX" | sed -E "s/^[0-9]+\.[0-9]+(\.[0-9]+)?/$BASE_VER_MM/")"
+PICK_FILE="$REPO_ROOT/package_picks/package-pick-$NORMALIZED_POSTFIX.sh"
 COQ_PLATFORM_COQ_TAG=$(grep '^COQ_PLATFORM_COQ_TAG=' "$PICK_FILE" | cut -d'"' -f2)
 echo "COQ_PLATFORM_COQ_TAG found: $COQ_PLATFORM_COQ_TAG"
 
 ide_name="coqide"
 if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
-  echo "➡️ Version > 8 use Rocq"
+  echo "Version > 8 use Rocq"
   ide_name="rocqide"
 fi
 

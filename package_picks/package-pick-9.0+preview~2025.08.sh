@@ -143,7 +143,6 @@ then
   fi
   PACKAGES="${PACKAGES} coq-paramcoq.1.1.3+rocq9.0" # upgrade to 1.1.3+rocq9.0
   PACKAGES="${PACKAGES} coq-coqeal.2.1.0"
-  #PACKAGES="${PACKAGES} coq-libhyps.3.0.2"  # Compilation error
   PACKAGES="${PACKAGES} rocq-libhyps.4.0"
   PACKAGES="${PACKAGES} coq-itauto.8.20.0"
   
@@ -218,7 +217,7 @@ then
         PACKAGES="${PACKAGES} coq-bedrock2.0.0.9"
         PACKAGES="${PACKAGES} coq-bedrock2-compiler.0.0.9"  #required coq-coqutil.0.0.6
         PACKAGES="${PACKAGES} coq-rupicola.0.0.11"
-        #PACKAGES="${PACKAGES} coq-fiat-crypto.0.1.6"  #required coq-coqutil.0.0.6
+        PACKAGES="${PACKAGES} coq-fiat-crypto.0.1.6"  #required coq-coqutil.0.0.6
         ;;
       [nN]) true ;;
       *) echo "Illegal value for COQ_PLATFORM_FIATCRYPTO - aborting"; false ;;

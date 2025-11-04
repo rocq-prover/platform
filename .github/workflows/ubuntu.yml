@@ -72,6 +72,28 @@ jobs:
           echo "=== Initial df -i (inodes) ==="
           df -i
 
+      - name: Disk usage diagnostics (before build)
+        run: |
+          echo "=== df -h ==="
+          df -h
+
+          echo "=== df -i (inodes) ==="
+          df -i
+
+          echo "=== du -sh top-level directories ==="
+          for d in /home/runner/* /usr/* /opt/*; do
+            if [ -d "$d" ]; then
+              du -sh "$d" || true
+            fi
+          done
+
+          echo "=== Directory structure (3 levels deep) for big folders ==="
+          for d in /home/runner /usr /opt; do
+            echo "--- $d ---"
+            find "$d" -maxdepth 3 -type d | head -n 200
+            echo
+          done
+
       - name: Set PLATFORM
         if: ${{ github.event.inputs.platform != '' }}
         run: echo "PLATFORM=${{ github.event.inputs.platform }}" >> $GITHUB_ENV
