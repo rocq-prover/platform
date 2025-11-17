@@ -93,7 +93,37 @@ jobs:
             find "$d" -maxdepth 3 -type d | head -n 200
             echo
           done
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+      - name: Disk usage diagnostics (after clean-up)
+        run: |
+          echo "=== df -h ==="
+          df -h
 
+          echo "=== df -i (inodes) ==="
+          df -i
+
+          echo "=== du -sh top-level directories ==="
+          for d in /home/runner/* /usr/* /opt/*; do
+            if [ -d "$d" ]; then
+              du -sh "$d" || true
+            fi
+          done
+
+          echo "=== Directory structure (3 levels deep) for big folders ==="
+          for d in /home/runner /usr /opt; do
+            echo "--- $d ---"
+            find "$d" -maxdepth 3 -type d | head -n 200
+            echo
+          done
       - name: Set PLATFORM
         if: ${{ github.event.inputs.platform != '' }}
         run: echo "PLATFORM=${{ github.event.inputs.platform }}" >> $GITHUB_ENV

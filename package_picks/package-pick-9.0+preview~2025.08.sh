@@ -163,7 +163,7 @@ then
   if false
   then
   case "$COQ_PLATFORM_COMPCERT" in
-     [yY]) PACKAGES="${PACKAGES} coq-compcert.3.15" ;; 
+     [yY]) PACKAGES="${PACKAGES} coq-compcert.3.16" ;; 
     [nN]) true ;;
     *) echo "Illegal value for COQ_PLATFORM_COMPCERT - aborting"; false ;;
   esac
@@ -173,7 +173,7 @@ then
   then
   case "$COQ_PLATFORM_VST" in
     [yY])
-     PACKAGES="${PACKAGES} coq-vst.2.15"
+     PACKAGES="${PACKAGES} coq-vst.2.16"
       true ;;
     [nN]) true ;;
     *) echo "Illegal value for COQ_PLATFORM_VST - aborting"; false ;;
