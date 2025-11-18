@@ -80,7 +80,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install bubblewrap build-essential
-          sudo rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
           echo "=== Disk after apt install ==="
           df -h
         
@@ -97,6 +96,7 @@ jobs:
           echo
           echo "=== Top 15 biggest directories in ~ ==="
           du -xhd1 ~ 2>/dev/null | sort -hr | head -n 15 || true
+          
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
         with:
