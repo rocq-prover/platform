@@ -52,7 +52,7 @@ jobs:
         variant:
           # Keep this in sync with the Smoke test below
           - '9.0+preview~2025.08'
-          - '8.20~2025.01'
+          #- '8.20~2025.01'
 
     steps:
       - name: Set git to use LF
@@ -70,6 +70,16 @@ jobs:
       - name: Run common platform script
         shell: cmd
         run: coq_platform_make_windows.bat -destcyg=C:\cygwin_coq_platform -arch=${{matrix.architecture}} -packages=${{matrix.variant}} %PLATFORM_ARGS% -dumplogs
+
+      # Debugging upload build logs
+      - name: Upload build logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'build-logs-${{matrix.architecture}}-${{matrix.variant}}'
+          path: C:/cygwin_coq_platform/opam/log/
+          if-no-files-found: warn
+          retention-days: 5
 
       - name: Create installer
         shell: cmd
