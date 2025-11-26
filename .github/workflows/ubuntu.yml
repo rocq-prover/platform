@@ -63,6 +63,14 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v4
+      
+      - name: Initial disk usage
+        run: |
+          echo "=== Initial df -h ==="
+          df -h
+          echo
+          echo "=== Initial df -i (inodes) ==="
+          df -i
 
       - name: Set PLATFORM
         if: ${{ github.event.inputs.platform != '' }}
@@ -72,10 +80,56 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install bubblewrap build-essential
+          echo "=== Disk after apt install ==="
+          df -h
+        
+      - name: Free additional disk space
+        run: |
+          echo "=== Disk before cleanup ==="
+          df -h
+          rm -rf ~/.cache/pip ~/.npm ~/.cache/npm || true
+          if command -v docker >/dev/null 2>&1; then
+            docker system prune -af || true
+          fi
+          echo "=== Disk after cleanup ==="
+          df -h
+          echo
+          echo "=== Top 15 biggest directories in ~ ==="
+          du -xhd1 ~ 2>/dev/null | sort -hr | head -n 15 || true
+          
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: true
+          swap-storage: true
+
+      - name: Disk usage before platform script
+        run: |
+          echo "=== Disk before coq_platform_make.sh ==="
+          df -h
+          df -i
 
       - name: Run common platform script
         shell: bash
         run: ./coq_platform_make.sh  -packages=${{matrix.variant}} $PLATFORM -dumplogs
+
+      - name: Disk usage after platform script
+        if: always()
+        run: |
+          echo "=== Disk after coq_platform_make.sh ==="
+          df -h
+          df -i
+          echo
+          echo "=== du -sh ~/.opam (if exists) ==="
+          du -sh ~/.opam || echo "no ~/.opam directory"
+          echo
+          echo "=== Top 20 biggest directories in ~/.opam (if exists) ==="
+          du -xhd2 ~/.opam 2>/dev/null | sort -hr | head -n 20 || true
 
       - name: Create smoke test kit
         shell: bash
