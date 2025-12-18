@@ -394,20 +394,30 @@ find "${LIB_ABSDIR}" -name "META.bak" -delete
 SCRIPT_DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 CLEANED_POSTFIX="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX/#\~}"
-PICK_FILE="$REPO_ROOT/package_picks/package-pick-$CLEANED_POSTFIX.sh"
+BASE_VER_RAW="${COQ_PLATFORM_COQ_TAG:-$CLEANED_POSTFIX}"
+BASE_VER_MM="$(printf '%s' "$BASE_VER_RAW" | sed -E 's/^([0-9]+)\.([0-9]+).*/\1.\2/')"
+NORMALIZED_POSTFIX="$(printf '%s' "$CLEANED_POSTFIX" | sed -E "s/^[0-9]+\.[0-9]+(\.[0-9]+)?/$BASE_VER_MM/")"
+
+PICK_FILE="$REPO_ROOT/package_picks/package-pick-$NORMALIZED_POSTFIX.sh"
+
 COQ_PLATFORM_COQ_TAG=$(grep '^COQ_PLATFORM_COQ_TAG=' "$PICK_FILE" | cut -d'"' -f2)
 echo "COQ_PLATFORM_COQ_TAG found: $COQ_PLATFORM_COQ_TAG"
 
 ide_name="coqide"
 idefolder=coq/ide/${ide_name}
-if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
+
+tag="${COQ_PLATFORM_COQ_TAG:-}"
+major="${tag%%.*}"
+
+if [ -n "$major" ] && [ "$major" -gt 8 ]; then
+
   echo " Version > 8 use Rocq"
   # Same like coq but with rocqide package
   rocqidepackagefull=$(opam list --installed-roots --short --columns=name,version rocqide | sed 's/ /./')
   opam source --dir=rocqide-server.${COQ_PLATFORM_COQ_TAG} ${rocqidepackagefull}
 
   ide_name="rocqide"
-  idefolder=rocqide-server.${COQ_PLATFORM_COQ_TAG}/ide/${ide_name}
+  idefolder="rocqide-server.${tag}/ide/${ide_name}"
 fi
 
 # Create Info.plist file
@@ -458,7 +468,7 @@ if [ "${CREATEREADME}" == "Y" ]
 then
   echo '##### Create README.html #####'
   pushd ..
-  maintainer_scripts/create_readme.sh -pick="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}" -installed -html -output=macos_installer/_dmg/README.html -table=macos_installer/_dmg/Packages_and_licenses.csv
+  maintainer_scripts/create_readme.sh -pick="${NORMALIZED_POSTFIX}" -installed -html -output=macos_installer/_dmg/README.html -table=macos_installer/_dmg/Packages_and_licenses.csv
   popd
 fi
 

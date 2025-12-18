@@ -1,0 +1,59 @@
+opam-version: "2.0"
+maintainer: "guillaume.melquiond@inria.fr"
+homepage: "https://gappa.gitlabpages.inria.fr/"
+dev-repo: "git+https://gitlab.inria.fr/gappa/coq.git"
+bug-reports: "https://gitlab.inria.fr/gappa/coq/issues"
+license: "LGPL-3.0-or-later"
+patches: [
+  "coq-gappa-1.7.1-remake-cygwin.patch" { os = "win32" }
+]
+build: [
+  ["sed" "-i" "-e" "s/@COQDEP@/@COQDEP@ -worker \\\"\\\"/" "Remakefile.in"] {os = "win32"}
+  ["mkdir" "-p" "m4"] {os = "win32"}
+  ["cp" "m4_ax_prog_cc_for_build.m4" "m4/m4_ax_prog_cc_for_build.m4"] {os = "win32"}
+  ["cp" "m4_ax_prog_cxx_for_build.m4" "m4/m4_ax_prog_cxx_for_build.m4"] {os = "win32"}
+  ["autoreconf" "-vfi"] {os = "win32"}
+  ["./configure"] {os != "win32"}
+  ["sh" "-c" "OCAMLFIND='%{bin}%/ocamlfind' ./configure"] {os = "win32"}
+  ["sh" "-c"
+    "sed -i 's/^src\\/Gappa_tactic.vo: src\\/Gappa_tactic.v /src\\/Gappa_tactic.vo: src\\/Gappa_tactic.v src\\/Gappa_library.vo /' Remakefile"
+  ] {os = "win32"}
+  ["./remake" "src/gappatac.cmxs" "src/gappatac.cmo"]
+  ["sh" "-c"
+    "sed -i '/src\\/Gappa_tactic.vo:/,/^[[:space:]]*@COQC@/ { /| .*remake -r/d; }' Remakefile"
+  ] {os = "win32"}
+  ["./remake" "-j%{jobs}%"]
+  ["sh" "-c"
+    "mkdir -p '%{lib}%/coq-gappa' && \
+     cp src/META.coq-gappa '%{lib}%/coq-gappa/META' && \
+     cp src/gappatac.cmxs '%{lib}%/coq-gappa/' && \
+     cp src/gappatac.cmo '%{lib}%/coq-gappa/'"
+  ] {os = "win32"}
+]
+install: [
+  ["./remake" "install"]
+]
+remove: ["./remake" "uninstall"]
+depends: [
+  "ocaml"
+  "ocamlfind" {build}
+  "coq" {>= "8.16"}
+  "coq-flocq" {>= "4.1"}
+  "gappa"
+  "conf-autoconf" {build & dev}
+  ("conf-g++" {build} | "conf-clang" {build})
+]
+tags: [
+  "keyword:floating-point arithmetic"
+  "keyword:interval arithmetic"
+  "keyword:decision procedure"
+  "category:Computer Science/Decision Procedures and Certified Algorithms/Decision procedures"
+  "logpath:Gappa"
+  "date:2025-06-11"
+]
+authors: [ "Guillaume Melquiond <guillaume.melquiond@inria.fr>" ]
+synopsis: "A Coq tactic for discharging goals about floating-point arithmetic and round-off errors using the Gappa prover"
+url {
+  src: "https://gappa.gitlabpages.inria.fr/releases/gappalib-coq-1.7.1.tar.gz"
+  checksum: "sha512=d7ce43e05b2c16a761ef7ebc3b4129c52c9ee043a25d7496254c3905f3fa5e01d73694da25408d0c90f8026eec7e3d6e45217391d9664aa3b5f2239aa0468014"
+}

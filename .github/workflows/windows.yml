@@ -71,6 +71,16 @@ jobs:
         shell: cmd
         run: coq_platform_make_windows.bat -destcyg=C:\cygwin_coq_platform -arch=${{matrix.architecture}} -packages=${{matrix.variant}} %PLATFORM_ARGS% -dumplogs
 
+      # Debugging upload build logs
+      - name: Upload build logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'build-logs-${{matrix.architecture}}-${{matrix.variant}}'
+          path: C:/cygwin_coq_platform/opam/log/
+          if-no-files-found: warn
+          retention-days: 5
+
       - name: Create installer
         shell: cmd
         run: C:\cygwin_coq_platform\bin\bash --login -c "cd /platform/ && windows/create_installer_windows.sh && mkdir /cygdrive/c/installer && cp windows_installer/*exe /cygdrive/c/installer/"

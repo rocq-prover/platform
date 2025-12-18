@@ -1,0 +1,66 @@
+--- a/configure.in
++++ b/configure.in
+@@ -1,6 +1,7 @@
+ AC_INIT([Coq support library for Gappa], [1.7.1],
+         [Guillaume Melquiond <guillaume.melquiond@inria.fr>],
+         [gappalib-coq])
++AC_CONFIG_MACRO_DIR([m4])
+
+ m4_divert_push(99)
+ if test "$ac_init_help" = "long"; then
+   ac_init_help=short
+@@ -63,26 +64,32 @@ if test "$byte_tactic" = yes; then        
+
+ rm -f conftest.ml conftest.cm*
+
+ AC_ARG_VAR(REMAKE, [Remake [vendored version]])
+
+-if test -z "$REMAKE"; then
+-AC_PROG_CXX
+-
+-AC_MSG_NOTICE([building remake...])
+-case `$CXX -v 2>&1 | grep -e "^Target:"` in
+-*mingw*)
+-       $CXX -Wall -O2 -o remake.exe remake.cpp -lws2_32      
+-       if test $? != 0; then AC_MSG_FAILURE([failed]); fi    
+-       REMAKE=./remake.exe
+-       ;;
+-*)
+-       $CXX -Wall -O2 -o remake remake.cpp
+-       if test $? != 0; then AC_MSG_FAILURE([failed]); fi    
+-       REMAKE=./remake
+-       ;;
+-esac
+-fi
++if test -z "$REMAKE"; then
++  AC_PROG_CXX
++  AX_PROG_CXX_FOR_BUILD
++
++  AC_MSG_NOTICE([building remake...])
++  case `uname -s` in
++  MINGW*)
++    $CXX -Wall -O2 -o remake.exe remake.cpp -lws2_32
++    if test $? != 0; then AC_MSG_FAILURE([failed]); fi       
++    REMAKE=./remake.exe
++    ;;
++  *)
++    $CXX_FOR_BUILD -Wall -O2 -o remake remake.cpp
++    if test $? != 0; then AC_MSG_FAILURE([failed]); fi       
++    REMAKE=./remake
++    ;;
++  esac
++fi
+
+ AC_SUBST(TACTIC_TARGETS)
+ AC_SUBST(TACTIC_PARAM)
+
+--- a/src/Gappa_tactic.v
++++ b/src/Gappa_tactic.v
+@@ -1,6 +1,6 @@
+ From Coq Require Import ZArith Reals List Lia Lra.
+ From Flocq Require Import Core.
+
+-Require Export Gappa_library.
++From Gappa Require Export Gappa_library.
+
+ Strategy 1000 [Generic_fmt.round].
