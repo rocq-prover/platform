@@ -107,10 +107,10 @@ GIT tag-versions: 8.6.0  8.7.0  8.8+beta1  8.8.0  8.9.0  8.10+beta1  8.10.0  8.1
 - Update the platform release number in coq-platform-main/package_picks/coq_platform_release.sh
   **ATTENTION**: the release always has a minor extension (like 2022.04.0)
 - remove folders macos_installer, windows_installer, smoke_test_kit
-- search for the old switch name `CP.2025.01.0~8.20~2025.01` and replace it with the new switch name (one by one, e.g. using VSCode file search individual replace
+- search for the old switch name `CP.2025.08.0~9.0~2025.08` and replace it with the new switch name (one by one, e.g. using VSCode file search individual replace
   - **do not replacing entries in the two opam switch list in ReadMe.md**
   - alternatively replace everywhere and fix the switch lists later (must be touched anyway to insert the new switch)
-- search for the old switch prefix `CP.2025.01.0` and replace with the new switch prefix
+- search for the old switch prefix `CP.2025.08.0` and replace with the new switch prefix
   - **ATTENTION**: the release always has a minor extension (like 2022.04.0) - the pick never has a minor extension!
   - **ATTENTION**: search for the new switch prefix and then search for just "CP.20" and compare the hit count to make sure nothing was left over
   The **difference should be one** cause of the hit to CP.20 2 lines above.
