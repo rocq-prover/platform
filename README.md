@@ -88,6 +88,10 @@ The Coq Platform team does no double check this information.
 
 ## Changes in 2025.01.0
 
+- added new pick `9.0~2025.01`
+
+## Changes in 2025.01.0
+
 - added new pick `8.20~2025.01`
 - added package `vscoq-language-server` to picks `8.20~2025.01` and `8.19~2024.10`
 - Windows: link DLLs into opam switch bin folder, so that binaries can be called from outside cygwin
