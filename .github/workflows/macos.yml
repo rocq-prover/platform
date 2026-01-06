@@ -238,7 +238,7 @@ jobs:
       fail-fast: false
       matrix:
         variant:
-          - '9.0+preview~2025.08'
+          - '9.0~2025.08'
           - '8.20~2025.01'
 
     steps:
