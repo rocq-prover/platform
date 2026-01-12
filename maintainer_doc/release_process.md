@@ -117,7 +117,7 @@ GIT tag-versions: 8.6.0  8.7.0  8.8+beta1  8.8.0  8.9.0  8.10+beta1  8.10.0  8.1
 - search for last release name "2025.01.0" and change in an appropriate way
   - doing so, exclude the release notes entry
   - do change the release Readme files - we usually don't want to recreate all of them!
-- search for the old pick code `8.20~2025.01` and replace it with the new one
+- search for the old pick code `9.0~2025.08` and replace it with the new one
 - double check
   - search for `https://github.com/coq/platform/archive/refs/tags`
   - search for `git clone --branch`
@@ -146,13 +146,13 @@ GIT tag-versions: 8.6.0  8.7.0  8.8+beta1  8.8.0  8.9.0  8.10+beta1  8.10.0  8.1
 ### Create documentation for new release
 
 - make a complete (extended, include large and all optional packages) build by running
-  `./coq_platform_make.sh -packages="8.20~2025.01" -extent=x -parallel=p -jobs=8 -compcert=y -large=i`
+  `./coq_platform_make.sh -packages="9.0~2025.08" -extent=x -parallel=p -jobs=8 -compcert=y -large=i`
 - create the ReadMe .md file, the package list .csv file and depedency graph .pdf file with
   **ATTENTION** this script is not compatible with zsh (porting is in progress but complicated - maybe better move to python)!
   `brew install bash`
   `ln -s /opt/homebrew/bin/bash /usr/local/bin`
   `hash -r`
-  `maintainer_scripts/create_readme.sh -pick=8.20~2025.01 -depgraph`
+  `maintainer_scripts/create_readme.sh -pick=9.0~2025.08 -depgraph`
 
 ### Optional: recreate documentation for all picks
 
@@ -173,7 +173,7 @@ GIT tag-versions: 8.6.0  8.7.0  8.8+beta1  8.8.0  8.9.0  8.10+beta1  8.10.0  8.1
 ### Mac
 
 - make a complete (extended, include large and all optional packages) build by running
-  `./coq_platform_make.sh -packages="8.20~2025.01" -extent=x -parallel=p -jobs=8 -compcert=y -large=i`
+  `./coq_platform_make.sh -packages="9.0~2025.08" -extent=x -parallel=p -jobs=8 -compcert=y -large=i`
 - select the created switch (if you did not answer 'y' at the corresponding question above) and run `eval $(opem env)`
 - check the minimum OS version with `otool -l $(which coqc) | grep -A 1 minos` (should be `minos 11.0` on ARM and `minos 10.13` on Intel)
 - create the smoke test kit by running `shell_scripts/create_smoke_test_kit.sh`
@@ -190,7 +190,7 @@ GIT tag-versions: 8.6.0  8.7.0  8.8+beta1  8.8.0  8.9.0  8.10+beta1  8.10.0  8.1
   - usually no executable does run then, even from the console
   - run these commands to run at least coqc and vscoqtop:
     ```
-    cd /Applications/Coq-Platform~8.20~2025.01.app/Contents/Resources/bin
+    cd /Applications/Coq-Platform~9.0~2025.08.app/Contents/Resources/bin
     codesign --sign - --force --preserve-metadata=entitlements,requirements,flags,runtime coqc
     codesign --sign - --force --preserve-metadata=entitlements,requirements,flags,runtime vscoqtop
     codesign --sign - --force --preserve-metadata=entitlements,requirements,flags,runtime ../lib/dylib/libgmp.10.dylib
@@ -240,7 +240,7 @@ Note: coqc can also be used from an unsigned installer!
 
 ### Tag
 
-- git tag 2025.01.0 -a -m "Release 2025.01.0 with latest pick 8.20~2025.01"
+- git tag 2025.01.0 -a -m "Release 2025.01.0 with latest pick 9.0~2025.08"
 - git push --tags
 
 ### Remove the "ATTENTION RELEASE IN PROGRESS" note from ReadMe.md
