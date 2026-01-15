@@ -6,13 +6,13 @@
 
 **In case you experience dead links, please replace `2025.08.0` with `2025.01.0`.**
 
-The [Coq proof assistant](https://coq.inria.fr) provides a formal language
+The [Rocq proof assistant](https://rocq-prover.org/) provides a formal language
 to write mathematical definitions, executable algorithms, and theorems, together
 with an environment for semi-interactive development of machine-checked proofs.
 
-The **Coq Platform** is a distribution of Coq together with a selection of
-libraries and plugins. The main goal of the Coq Platform is to provide a
-distribution for developing and teaching with Coq that is:
+The **Rocq Platform** is a distribution of Rocq together with a selection of
+libraries and plugins. The main goal of the Rocq Platform is to provide a
+distribution for developing and teaching with Rocq that is:
 
 - operating system independent
 - dependable
@@ -21,27 +21,27 @@ distribution for developing and teaching with Coq that is:
 
 See the [Charter](charter.md) for more on the Platform concept, and
 [CEP 52](https://github.com/coq/ceps/blob/master/text/052-platform-release-cycle.md)
-for more on how the Platform is related to the Coq release cycle.
+for more on how the Platform is related to the Rocq release cycle.
 
-The Coq Platform is based on the OCaml package manager **opam** and provides a set
-of scripts to compile and/or install opam, Coq and the platform contents on macOS,
+The Rocq Platform is based on the OCaml package manager **opam** and provides a set
+of scripts to compile and/or install opam, Rocq and the platform contents on macOS,
 Windows and many Linux distributions in a reliable way with consistent results.
 In addition **pre-compiled binary packages** or **installers** are provided for **macOS** and
 **Windows** (Docker is in preparation). Note that snap for Linux is no longer supported
 (the maintenance effort was too high).
 
-The Coq Platform supports installing several versions of Coq - also in parallel,
-e.g., for porting developments from one version of Coq to another. For the
-previous release version of Coq, Coq Platform provides extended and updated
+The Rocq Platform supports installing several versions of Coq - also in parallel,
+e.g., for porting developments from one version of Rocq to another. For the
+previous release version of Rocq, Rocq Platform provides extended and updated
 package picks which are as much as possible compatible to the pick of the latest
-release version of Coq. For this reason for some Coq versions several different
+release version of Rocq. For this reason for some Rocq versions several different
 package picks are provided.
 
 The table below contains links to the README files for the supported versions
-of Coq and libraries. Each README file contains a list of included packages with
+of Rocq and libraries. Each README file contains a list of included packages with
 detailed information for each package.
 
-- [Coq 9.0.1  (released Aug 2025) with the first package pick from Aug 2025](doc/README~9.0~2025.08.md)
+- [Rocq 9.0.1  (released Aug 2025) with the first package pick from Aug 2025](doc/README~9.0~2025.08.md)
 - [Coq 8.20.1 (released Jan 2025) with the first package pick from Jan 2025](doc/README~8.20~2025.01.md)
 - [Coq 8.19.2 (released Jun 2024) with the first package pick from Oct 2024](doc/README~8.19~2024.10.md)
 - [Coq 8.18.0 (released Sep 2023) with the first package pick from Nov 2023](doc/README~8.18~2023.11.md)
@@ -59,12 +59,12 @@ detailed information for each package.
 - [Coq 8.12.2 (released Dec 2020)](doc/README~8.12.md)
 - [Coq Developer (latest developer branch)](doc/README~dev.md)
 
-If you have questions on the Coq Platform, please contact us on zulip chat [Coq-Platform & users](https://coq.zulipchat.com/#narrow/stream/250632-Coq-Platform.20devs.20.26.20users)
+If you have questions on the Rocq Platform, please contact us on zulip chat [Rocq-Platform & users](https://rocq-prover.zulipchat.com/#narrow/stream/250632-Coq-Platform.20devs.20.26.20users)
 
 ## Installation
 
-The Coq platform is the recommended way to install Coq for both beginners and experts.
-Beginners are encouraged to use one of the binary installers. Experienced users are advised to run the scripts provided by the Coq platform to install from sources as this will allow them to install additional packages with opam.
+The Rocq platform is the recommended way to install Rocq for both beginners and experts.
+Beginners are encouraged to use one of the binary installers. Experienced users are advised to run the scripts provided by the Rocq platform to install from sources as this will allow them to install additional packages with opam.
 Please refer to the ReadMe file for your operating system, which contains information on both methods respectively.
 
 - macOS: see [README_macOS](doc/README_macOS.md).
@@ -75,12 +75,12 @@ Please refer to the ReadMe file for your operating system, which contains inform
 
 <details><summary><font size="+1">Licenses</font></summary>
 
-The Coq Platform setup scripts and the selection of package recipes and patches are licensed Creative Commons CC0.
-This license does **not** apply to the packages installed by the Coq Platform.
+The Rocq Platform setup scripts and the selection of package recipes and patches are licensed Creative Commons CC0.
+This license does **not** apply to the packages installed by the Rocq Platform.
 The README files linked above provide license information for each package.
 This information is also available as .CSV files here [doc](doc).
 Please note that the license information is obtained from opam.
-The Coq Platform team does no double check this information.
+The Rocq Platform team does no double check this information.
 
 </details>
 
