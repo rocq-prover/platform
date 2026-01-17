@@ -261,11 +261,22 @@ function callback_file {
 
 ###################### Create installer folder structure ######################
 
+# Determine major version from COQ_VERSION (already computed above)
+coq_major="${COQ_VERSION%%.*}"
+
+SHELL_PREFIX="coq"
+PRODUCT_PREFIX="Coq-Platform"
+if [ -n "${coq_major}" ] && [ "${coq_major}" -ge 9 ]; then
+  PRODUCT_PREFIX="Rocq-Platform"
+  SHELL_PREFIX="rocq"
+fi
+
+APP_NAME="${PRODUCT_PREFIX}${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}.app"
+DMG_NAME="${PRODUCT_PREFIX}-release-${COQ_PLATFORM_RELEASE}-version${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}-MacOS-$(uname -m)"
+
 
 # Folder and image names
 
-APP_NAME="Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}.app"
-DMG_NAME="Coq-Platform-release-${COQ_PLATFORM_RELEASE}-version${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}-MacOS-$(uname -m)"
 APP_ABSDIR="_dmg/${APP_NAME}"
 RSRC_ABSDIR="${APP_ABSDIR}/Contents/Resources"
 BIN_ABSDIR="$RSRC_ABSDIR/bin"

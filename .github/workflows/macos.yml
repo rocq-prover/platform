@@ -222,12 +222,21 @@ jobs:
         with:
           name: 'DMG script error logs ${{matrix.variant}}'
           path: macos_installer/logs/
+      
+      - name: Set APP_PREFIX (Coq vs Rocq)
+        shell: bash
+        run: |
+          if [[ "${{ matrix.variant }}" == 9.* ]]; then
+            echo "APP_PREFIX=Rocq-Platform" >> "$GITHUB_ENV"
+          else
+            echo "APP_PREFIX=Coq-Platform" >> "$GITHUB_ENV"
+          fi
 
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         with:
           name: 'Macos installer ${{matrix.variant}} x86_64'
-          path: macos_installer/Coq-Platform-*.dmg
+          path: macos_installer/${{ env.APP_PREFIX }}-*.dmg
           retention-days: 5
 
   Macos_smoke:
@@ -256,20 +265,29 @@ jobs:
         id: download-smoke
         with:
           name: 'Smoke Test Kit Macos ${{matrix.variant}}'
+      
+      - name: Set APP_PREFIX (Coq vs Rocq)
+        shell: bash
+        run: |
+          if [[ "${{ matrix.variant }}" == 9.* ]]; then
+            echo "APP_PREFIX=Rocq-Platform" >> "$GITHUB_ENV"
+          else
+            echo "APP_PREFIX=Coq-Platform" >> "$GITHUB_ENV"
+          fi
 
       - name: 'Run Installer'
         shell: bash
         run: |
           cd ${{steps.download.outputs.download-path}}
-          DMG=$(ls Coq-Platform-*.dmg)
-          hdiutil attach $DMG
-          cp -r /Volumes/${DMG%%.dmg}/Coq-Platform*.app /Applications/
-          hdiutil detach /Volumes/${DMG%%.dmg}/
+          DMG=$(ls "${APP_PREFIX}"-*.dmg)
+          hdiutil attach "$DMG"
+          cp -r "/Volumes/${DMG%%.dmg}/${APP_PREFIX}"*.app /Applications/
+          hdiutil detach "/Volumes/${DMG%%.dmg}/"
 
       - name: 'Smoke coqc'
         shell: bash
         run: |
-          cd /Applications/Coq-Platform*.app/Contents/Resources/bin/
+          cd /Applications/${APP_PREFIX}*.app/Contents/Resources/bin/
           
           # Try default coqc first
           if ./coqc -v 2>/dev/null; then
@@ -290,21 +308,24 @@ jobs:
           echo "Trying boot mode..."
           ./coqc -boot -noinit -v
 
-      - name: 'Run Macos smoke test kit'
+            - name: 'Run Macos smoke test kit'
         shell: bash
         run: |
-          ls /Applications/Coq-Platform*.app
-          export PATH="$PATH:$(cd /Applications/Coq-Platform*.app/Contents/Resources/bin/; pwd)"
-          
-          # Try to set COQLIB, but don't fail if it doesn't work
-          if COQLIB_TEMP=$(coqc -where 2>/dev/null); then
-              export COQLIB="$COQLIB_TEMP"
-              echo "COQLIB set to: $COQLIB"
+          ls /Applications/${APP_PREFIX}*.app
+          export PATH="$PATH:$(cd /Applications/${APP_PREFIX}*.app/Contents/Resources/bin/; pwd)"
+
+          # Prefer ROCQLIB for Rocq 9+, but keep COQLIB fallback
+          if ROCQLIB_TEMP=$(coqc -where 2>/dev/null); then
+              export ROCQLIB="$ROCQLIB_TEMP"
+              export COQLIB="$ROCQLIB_TEMP"
+              echo "ROCQLIB set to: $ROCQLIB"
           else
-              echo "Warning: coqc -where failed, COQLIB not set"
+              echo "Warning: coqc -where failed, ROCQLIB/COQLIB not set"
+              export ROCQLIB=""
               export COQLIB=""
           fi
-          
+
           cd ${{steps.download-smoke.outputs.download-path}}
           chmod a+x ./run-smoke-test.sh
           ./run-smoke-test.sh
+
