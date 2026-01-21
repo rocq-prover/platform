@@ -20,9 +20,9 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
-			<string>coqfile.icns</string>
+			<string>rocqfile.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>Coq file</string>
+			<string>Rocq file</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleTypeMIMETypes</key>
@@ -54,15 +54,15 @@
 		</dict>
 	</array>
 	<key>CFBundleIconFile</key>
-	<string>coqqide.icns</string>
+	<string>rocqide.icns</string>
 	<key>CFBundleVersion</key>
 	<string>390</string>
 	<key>CFBundleName</key>
-	<string>CoqIDE</string>
+	<string>RocqIDE</string>
 	<key>CFBundleShortVersionString</key>
 	<string>VERSION</string>
 	<key>CFBundleDisplayName</key>
-	<string>Coq Proof Assistant vVERSION</string>
+	<string>Rocq Proof Assistant vVERSION</string>
 	<key>CFBundleGetInfoString</key>
 	<string>Coq_vVERSION</string>
 	<key>NSHumanReadableCopyright</key>
@@ -72,7 +72,7 @@
 	<key>CFAppleHelpAnchor</key>
 	<string>index</string>
 	<key>CFBundleExecutable</key>
-	<string>coqide</string>
+	<string>rocqide</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleInfoDictionaryVersion</key>

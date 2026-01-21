@@ -308,7 +308,7 @@ jobs:
           echo "Trying boot mode..."
           ./coqc -boot -noinit -v
 
-            - name: 'Run Macos smoke test kit'
+      - name: 'Run Macos smoke test kit'
         shell: bash
         run: |
           ls /Applications/${APP_PREFIX}*.app

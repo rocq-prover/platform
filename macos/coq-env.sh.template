@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Coq-Platform (ancien nom)
+# Coq-Platform (old name)
 if [ -f "/Applications/Coq-Platform@@VERSION@@.app/Contents/Resources/bin/coqc" ]
 then
   echo "export PATH='/Applications/Coq-Platform@@VERSION@@.app/Contents/Resources/bin':"'"$PATH"'
   echo "export COQLIB='/Applications/Coq-Platform@@VERSION@@.app/Contents/Resources/lib/coq'"
 fi
 
-# Rocq-Platform (nouveau nom)
+# Rocq-Platform (new name)
 if [ -f "/Applications/Rocq-Platform@@VERSION@@.app/Contents/Resources/bin/coqc" ]
 then
   echo "export PATH='/Applications/Rocq-Platform@@VERSION@@.app/Contents/Resources/bin':"'"$PATH"'

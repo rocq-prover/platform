@@ -243,6 +243,19 @@ if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
   ide_name="rocqide"
 fi
 
+APP_PREFIX="Coq-Platform"
+NSIS_SCRIPT="Coq.nsi"
+SHELL_BAT="coq-shell.bat"
+SHELL_ICO="coq-shell.ico"
+
+if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -ge 9 ]; then
+  echo "Coq >= 9 => Rocq branding"
+  APP_PREFIX="Rocq-Platform"
+  NSIS_SCRIPT="Rocq.nsi"
+  SHELL_BAT="rocq-shell.bat"
+  SHELL_ICO="coq-shell.ico"
+fi
+
 ###################### TOP LEVEL FILE GATHERING ######################
 
 ##### System independent opam file copying #####
@@ -290,8 +303,8 @@ add_folder_recursively "/usr/${COQ_ARCH}-w64-mingw32/sys-root/mingw/" "share/gtk
 
 ### coq-shell.bat ###
 
-add_single_file "windows/" "coq-shell.bat" "files_coq"
-add_single_file "windows/" "coq-shell.ico" "files_coq"
+add_single_file "windows/" "${SHELL_BAT}" "files_coq"
+add_single_file "windows/" "${SHELL_ICO}" "files_coq"
 add_single_file "$DIR_TARGET/files/" "bin/coq.ico" "files_${ide_name}"
 
 ###################### Create installer ######################
@@ -430,10 +443,10 @@ echo "NOTE: The creation of the installer can take 10 minutes"
 echo "(cause of the CPU heavy but effective LZMA compression used)"
 echo "==============================================================================="
 
-"$NSIS" -DRELEASE="${COQ_PLATFORM_RELEASE}" -DVERSION="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}" -DARCH="$COQ_ARCH" -DIDE_NAME="${ide_name}" $NSIS_VST_CHECK Coq.nsi
+"$NSIS" -DRELEASE="${COQ_PLATFORM_RELEASE}" -DVERSION="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}" -DARCH="$COQ_ARCH" -DIDE_NAME="${ide_name}" -DAPP_PREFIX="${APP_PREFIX}" $NSIS_VST_CHECK "${NSIS_SCRIPT}"
 
 echo "==============================================================================="
 echo "Created installer:"
-echo "$DIR_TARGET/Coq-Platform-release-${COQ_PLATFORM_RELEASE}-version${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}-Windows-${COQ_ARCH}.exe"
+echo "$DIR_TARGET/${APP_PREFIX}-release-${COQ_PLATFORM_RELEASE}-version${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}-Windows-${COQ_ARCH}.exe"
 echo "==============================================================================="
 cd ..
