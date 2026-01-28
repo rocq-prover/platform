@@ -212,7 +212,7 @@ then
     case "$COQ_PLATFORM_FIATCRYPTO" in
       [yY])
         PACKAGES="${PACKAGES} coq-coqutil.0.0.7"
-        PACKAGES="${PACKAGES} coq-rewriter.0.0.12"
+        PACKAGES="${PACKAGES} coq-rewriter.0.0.15"
         PACKAGES="${PACKAGES} coq-riscv.0.0.6"
         PACKAGES="${PACKAGES} coq-bedrock2.0.0.9"
         PACKAGES="${PACKAGES} coq-bedrock2-compiler.0.0.9"  #required coq-coqutil.0.0.6

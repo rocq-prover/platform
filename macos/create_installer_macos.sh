@@ -261,11 +261,22 @@ function callback_file {
 
 ###################### Create installer folder structure ######################
 
+# Determine major version from COQ_VERSION (already computed above)
+coq_major="${COQ_VERSION%%.*}"
+
+SHELL_PREFIX="coq"
+PRODUCT_PREFIX="Coq-Platform"
+if [ -n "${coq_major}" ] && [ "${coq_major}" -ge 9 ]; then
+  PRODUCT_PREFIX="Rocq-Platform"
+  SHELL_PREFIX="rocq"
+fi
+
+APP_NAME="${PRODUCT_PREFIX}${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}.app"
+DMG_NAME="${PRODUCT_PREFIX}-release-${COQ_PLATFORM_RELEASE}-version${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}-MacOS-$(uname -m)"
+
 
 # Folder and image names
 
-APP_NAME="Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}.app"
-DMG_NAME="Coq-Platform-release-${COQ_PLATFORM_RELEASE}-version${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}-MacOS-$(uname -m)"
 APP_ABSDIR="_dmg/${APP_NAME}"
 RSRC_ABSDIR="${APP_ABSDIR}/Contents/Resources"
 BIN_ABSDIR="$RSRC_ABSDIR/bin"
@@ -420,12 +431,26 @@ if [ -n "$major" ] && [ "$major" -gt 8 ]; then
   idefolder="rocqide-server.${tag}/ide/${ide_name}"
 fi
 
-# Create Info.plist file
-sed -e "s/VERSION/${COQ_VERSION_MACOS}/g" ../macos/Info.plist.template > \
-    ${APP_ABSDIR}/Contents/Info.plist
+IS_ROCQ="N"
+if [ -n "${coq_major}" ] && [ "${coq_major}" -ge 9 ]; then
+  IS_ROCQ="Y"
+fi
+
+PLIST_TEMPLATE="../macos/Info.plist.template"
+if [ "${IS_ROCQ}" = "Y" ]; then
+  PLIST_TEMPLATE="../macos/Info.plist.rocq.template"
+fi
+
+sed -e "s/VERSION/${COQ_VERSION_MACOS}/g" "$PLIST_TEMPLATE" > "${APP_ABSDIR}/Contents/Info.plist"
 
 # Rename rocqide to rocqide.exe
-mv "${BIN_ABSDIR}/${ide_name}" "${BIN_ABSDIR}/${ide_name}.exe"
+cp "${BIN_ABSDIR}/${ide_name}" "${BIN_ABSDIR}/${ide_name}.exe"
+
+# Add coqide too
+if [ "${IS_ROCQ}" = "Y" ]; then
+  cp -f "${BIN_ABSDIR}/rocqide"     "${BIN_ABSDIR}/coqide"
+  cp -f "${BIN_ABSDIR}/rocqide.exe" "${BIN_ABSDIR}/coqide.exe"
+fi
 
 # Create a wrapper executable to start rocqide with correct environmant
 # Note: a shell script does not work - users can't access the documents folder then
@@ -438,6 +463,11 @@ chmod a+x "${APP_ABSDIR}/Contents/MacOS/${ide_name}"
 
 # Icons
 cp ${idefolder}/MacOS/*.icns ${RSRC_ABSDIR}
+
+if [ "${IS_ROCQ}" = "Y" ]; then
+  [ -f "${RSRC_ABSDIR}/coqide.icns" ] && mv -f "${RSRC_ABSDIR}/coqide.icns" "${RSRC_ABSDIR}/rocqide.icns"
+  [ -f "${RSRC_ABSDIR}/coqfile.icns" ] && mv -f "${RSRC_ABSDIR}/coqfile.icns" "${RSRC_ABSDIR}/rocqfile.icns"
+fi
 
 
 ###################### Create contents of the top level DMG folder  ######################

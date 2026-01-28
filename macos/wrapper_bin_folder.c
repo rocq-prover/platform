@@ -37,9 +37,20 @@ int main (int argc, char* argv[])
     strncpy(bin_folder, resources_folder, sizeof(bin_folder)-1);
     strncat(bin_folder, "/bin", sizeof(bin_folder)-1);
 
-    // Generate CoqIDE exe path
+    // Decide which IDE to launch based on wrapper name
+    char wrapper_name[PROC_PIDPATHINFO_MAXSIZE];
+    strncpy(wrapper_name, basename(normalized_full_exe_path), sizeof(wrapper_name)-1);
+    wrapper_name[sizeof(wrapper_name)-1] = '\0';
+
+    const char *ide_exe = "coqide.exe";
+    if (strcmp(wrapper_name, "rocqide") == 0 || strcmp(wrapper_name, "rocqide.exe") == 0) {
+        ide_exe = "rocqide.exe";
+    }
+
+    // Generate CoqIDE exe path (now conditional)
     strncpy(coqide_path, bin_folder, sizeof(value)-1);
-    strncat(coqide_path, "/coqide.exe", sizeof(coqide_path)-1);
+    strncat(coqide_path, "/", sizeof(coqide_path)-1);
+    strncat(coqide_path, ide_exe, sizeof(coqide_path)-1);
 
     // Generate and set GDK_PIXBUF_MODULE_FILE value
     strncpy(value, resources_folder, sizeof(value)-1);
@@ -70,6 +81,12 @@ int main (int argc, char* argv[])
         setenv("PATH", path_new, 1);
         free(path_new);
     }
+
+    // Generate and set COQLIB value (Coq/Rocq standard library inside the bundle)
+    strncpy(value, resources_folder, sizeof(value)-1);
+    value[sizeof(value)-1] = '\0';
+    strncat(value, "/lib/coq", sizeof(value)-strlen(value)-1);
+    setenv("COQLIB", value, 1);
 
     // call executable
     {

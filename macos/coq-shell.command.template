@@ -2,20 +2,45 @@
 
 echo "============================== COQ SHELL =============================="
 
-# Find Coq and put it into the path
-if ! [ -f /Applications/Coq-Platform@@VERSION@@.app/Contents/Resources/bin/coqc ]
-then
-  echo "This script expects that Coq is installed in"
-  echo "/Applications/Coq-Platform@@VERSION@@.app/"
-  exit 1
+COQ_APP="/Applications/Coq-Platform@@VERSION@@.app"
+ROCQ_APP="/Applications/Rocq-Platform@@VERSION@@.app"
+
+COQ_BIN="$COQ_APP/Contents/Resources/bin"
+ROCQ_BIN="$ROCQ_APP/Contents/Resources/bin"
+
+# Pick the right install (Coq-Platform old name / Rocq-Platform new name)
+if [ -f "$COQ_BIN/coqc" ]; then
+  APP_HOME="$COQ_APP"
+  BIN_DIR="$COQ_BIN"
+  APP_LABEL="Coq-Platform@@VERSION@@"
+elif [ -f "$ROCQ_BIN/coqc" ]; then
+  APP_HOME="$ROCQ_APP"
+  BIN_DIR="$ROCQ_BIN"
+  APP_LABEL="Rocq-Platform@@VERSION@@"
 else
-  echo "Using coqc and tools from:"
-  echo "/Applications/Coq-Platform@@VERSION@@.app/Contents/Resources/bin"
-  export PATH='/Applications/Coq-Platform@@VERSION@@.app/Contents/Resources/bin':"$PATH"
+  echo "This script expects that Coq/Rocq Platform is installed in one of:"
+  echo "  $COQ_APP"
+  echo "  $ROCQ_APP"
+  exit 1
 fi
 
-# Set COQLIB variable
-export COQLIB="$(coqc -where | tr -d '\r')"
+echo "Using coqc and tools from:"
+echo "  $BIN_DIR"
+export PATH="$BIN_DIR:$PATH"
+
+# Set COQLIB variable (portable, avoids CR)
+COQLIB="$(coqc -where | tr -d '\r')"
+export COQLIB
+
+# Optional: also export ROCQLIB when using Rocq-Platform (matches your coq-env.sh behavior)
+if [ "$APP_HOME" = "$ROCQ_APP" ]; then
+  export ROCQLIB="$COQLIB"
+fi
+
+echo "COQLIB=$COQLIB"
+if [ -n "$ROCQLIB" ]; then
+  echo "ROCQLIB=$ROCQLIB"
+fi
 
 echo "============================== COQ SHELL =============================="
 
