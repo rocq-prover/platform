@@ -35,7 +35,7 @@ The table below contains links to the README files for the supported versions
 of Rocq and libraries. Each README file contains a list of included packages with
 detailed information for each package.
 
-- [Rocq 9.0.1  (released Aug 2025) with the first package pick from Aug 2025](doc/README~9.0~2025.08.md)
+- [Rocq 9.0.1  (released Aug 2025) with the first package pick from Aug 2025](doc/README~9.0.1~2025.08.md)
 - [Coq 8.20.1 (released Jan 2025) with the first package pick from Jan 2025](doc/README~8.20~2025.01.md)
 - [Coq 8.19.2 (released Jun 2024) with the first package pick from Oct 2024](doc/README~8.19~2024.10.md)
 - [Coq 8.18.0 (released Sep 2023) with the first package pick from Nov 2023](doc/README~8.18~2023.11.md)
