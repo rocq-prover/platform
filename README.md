@@ -1,11 +1,5 @@
 # Overview
 
-# ATTENTION RELEASE IN PROGRESS
-
-**We are currently preparing a release, which has the effect that some links already refer to the new tag, even though this does not exist as yet.**
-
-**In case you experience dead links, please replace `2025.08.0` with `2025.01.0`.**
-
 The [Rocq proof assistant](https://rocq-prover.org/) provides a formal language
 to write mathematical definitions, executable algorithms, and theorems, together
 with an environment for semi-interactive development of machine-checked proofs.
