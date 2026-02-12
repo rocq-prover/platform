@@ -168,7 +168,10 @@ jobs:
 
       - name: Run common platform script
         shell: bash
-        run: ./coq_platform_make.sh  -packages=${{matrix.variant}} $PLATFORM -dumplogs
+        run: |
+          ARGS="${PLATFORM:-$PLATFORM_ARGS}"
+          echo "Using ARGS=$ARGS"
+          ./coq_platform_make.sh -packages=${{matrix.variant}} $ARGS -dumplogs
 
       - name: Disk usage after platform script
         if: always()
