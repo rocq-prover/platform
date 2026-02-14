@@ -69,7 +69,10 @@ jobs:
 
       - name: Run common platform script
         shell: cmd
-        run: coq_platform_make_windows.bat -destcyg=C:\cygwin_coq_platform -arch=${{matrix.architecture}} -packages=${{matrix.variant}} %PLATFORM_ARGS% -dumplogs
+        run: |
+          if not "%PLATFORM%"=="" (set "ARGS=%PLATFORM%") else (set "ARGS=%PLATFORM_ARGS%")
+          echo Using ARGS=%ARGS%
+          coq_platform_make_windows.bat -destcyg=C:\cygwin_coq_platform -arch=${{matrix.architecture}} -packages=${{matrix.variant}} %ARGS% -dumplogs
 
       # Debugging upload build logs
       - name: Upload build logs on failure
