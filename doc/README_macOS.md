@@ -1,4 +1,4 @@
-This README presents the two standard methods to install the Coq Platform on macOS:
+This README presents the two standard methods to install the Rocq Platform on macOS:
 - using a [macOS DMG package](#installation-using-the-macos-dmg-package),
 - [from sources](#installation-by-compiling-from-sources-using-opam), using the platform scripts.
 
@@ -10,22 +10,22 @@ This method is intended for beginners.
 
 In case you want to use the fast path:
 
-- Download the DMG package from https://github.com/coq/platform/releases (click on "Assets" at the end of a release section).
+- Download the DMG package from https://github.com/rocq-prover/platform/releases (click on "Assets" at the end of a release section).
 - Open the downloaded DMG package with a double click.
-- Drag and drop the "Coq_Platform_2025.01.0.app" icon on the link to the "Applications" folder.
-- CoqIDE appears under `/Applications` in Finder and in Launcher.
-- The published installers are always signed by INRIA, but no notarized by Apple yet. This means that on first start of the application, you must right click on the Coq application in the `Applications` folder and select `open`. Subsequently this is not required - the application can be started directly.
+- Drag and drop the "Rocq-Platform~9.0~2025.08.app" icon on the link to the "Applications" folder.
+- RocqIDE appears under `/Applications` in Finder and in Launcher.
+- The published installers are always signed by INRIA, but no notarized by Apple yet. This means that on first start of the application, you must right click on the Rocq application in the `Applications` folder and select `open`. Subsequently this is not required - the application can be started directly.
 - In case you want to use the installed `coqc` and other tools from the command line, you have three options:
-  - Use the supplied `coq-shell.command` file. This file is included in the top level folder of the `.dmg` file and can be dragged e.g. to the desktop and started from there. It opens a terminal window in which the environment variables `$PATH` and `$COQLIB` are set. These `.command` files always refer to a specifc version of Coq, so you can keep multiple of these files for multiple versions of Coq.
-  - Run `eval $(/Applications/Coq-Platform~8.15~2022.04.app/Contents/Resources/bin/coq-env.sh)` in your shell. This will set the same environment variables as `coq-shell.command` in the current shell.
-  - Add the folder `/Applications/Coq-Platform~8.15~2022.04.app/Contents/Resources/bin` to your `$PATH`, e.g. by running `sudo sh -c "echo '/Applications/Coq-Platform~8.15~2022.04.app/Contents/Resources/bin' > /etc/paths.d/coq"`. Please note that this method has two disadvantages: first it is difficult to switch between different versions of Coq and second some tools require additional environment variables, e.g. `COQLIB` or `LD_LIBRARY_PATH` to be set.
-- If you want to inspect the installed content, right click the `Coq_Platform` app in `/Applications` in Finder and select `Show Package Contents`.
+  - Use the supplied `rocq-shell.command` file. This file is included in the top level folder of the `.dmg` file and can be dragged e.g. to the desktop and started from there. It opens a terminal window in which the environment variables `$PATH` and `$COQLIB` are set. These `.command` files always refer to a specifc version of Rocq, so you can keep multiple of these files for multiple versions of Rocq.
+  - Run `eval $(/Applications/Rocq-Platform~9.0~2025.08.app/Contents/Resources/bin/coq-env.sh)` in your shell. This will set the same environment variables as `rocq-shell.command` in the current shell.
+  - Add the folder `/Applications/Rocq-Platform~9.0~2025.08.app/Contents/Resources/bin` to your `$PATH`, e.g. by running `sudo sh -c "echo '/Applications/Rocq-Platform~9.0~2025.08.app/Contents/Resources/bin' > /etc/paths.d/coq"`. Please note that this method has two disadvantages: first it is difficult to switch between different versions of Rocq and second some tools require additional environment variables, e.g. `COQLIB` or `LD_LIBRARY_PATH` to be set.
+- If you want to inspect the installed content, right click the `Rocq_Platform` app in `/Applications` in Finder and select `Show Package Contents`.
 
 **A note to lecturers:** it is easy to create a customized Windows installer from an opam switch - see [Customized Installers](FAQ-customized-installers.md)
 
 # Installation by compiling from Sources using opam
 
-This method is intended for experienced users, who may want to use opam to install additional packages, beyond the standard set provided by the Coq Platform.
+This method is intended for experienced users, who may want to use opam to install additional packages, beyond the standard set provided by the Rocq Platform.
 
 **ATTENTION for Apple silicon users**: when you moved your user data from an Intel silicon Mac, please make sure to rename the `.opam` folder in your home folder to e.g. `.opam_intel` (press `CMD`+`.` to make it visible in finder). If the `.opam` folder was copied over from an Intel silicon Mac, you will end up with a mix of ARM and Intel executables and libraries which won't work. Eventually you might want to delete the `.opam_intel` folder, but please make sure it doesn't contain anything you still need before you delete it.
 
@@ -35,20 +35,20 @@ This method is intended for experienced users, who may want to use opam to insta
     In case this does not work, first install "XCode Developer Tools" from the App store (might take 1 hour) and try again.
 - If you have neither Homebrew nor MacPorts installed, read the section [Homebrew and MacPorts](#homebrew-and-macports) below.
 - If you have Homebrew installed, read the section [Homebrew issues and workarounds](#homebrew-issues-and-workarounds) below.
-- Get the Coq Platform scripts via either of these methods
-  - Most users should download and extract `https://github.com/coq/platform/archive/refs/tags/2025.01.0.zip`.
-  - Users which intend to contribute to Coq Platform should use `git clone --branch 2025.01.0 https://github.com/coq/platform.git`.
+- Get the Rocq Platform scripts via either of these methods
+  - Most users should download and extract `https://github.com/coq/platform/archive/refs/tags/2025.08.1.zip`.
+  - Users which intend to contribute to Rocq Platform should use `git clone --branch 2025.08.1 https://github.com/rocq-prover/platform.git`.
 - Open a shell, navigate to the download folder and execute `coq_platform_make.sh`.
 - If you are using MacPorts, the system will ask once for sudo permissions to install prerequisites after installing OCaml (5..20 minutes after script start).
 - In case the script aborts e.g. cause of internet issues, just rerun the script.
-- The script creates a new opam switch named e.g. CP.2025.01.0~8.20~2025.01 - the exact name depends on the Coq version and package pick you selected.
+- The script creates a new opam switch named e.g. CP.2025.01.0~8.20~2025.01 - the exact name depends on the Rocq version and package pick you selected.
   This means the script does not touch your existing opam setup unless you already have a switch of this name.
 - Use the following commands to activate this switch after opening a new shell:
-  - `opam switch CP.2025.01.0~8.20~2025.01` (note: the switch name might vary if you choose a different version of Coq - please use `opam switch` to see a list of switch names)
+  - `opam switch CP.2025.08.1~9.0~2025.01` (note: the switch name might vary if you choose a different version of Rocq - please use `opam switch` to see a list of switch names)
   - `eval $(opam env)`
   - The second step can be automated by rerunning `opam init`
-- The main opam repositories for Coq and OCaml developments are already added to the created opam switch, so it should be easy to install additional Coq (or OCaml) packages.
-- CoqIDE can be started from the shell prompt with `coqide`.
+- The main opam repositories for Rocq and OCaml developments are already added to the created opam switch, so it should be easy to install additional Coq (or OCaml) packages.
+- RocqIDE can be started from the shell prompt with `rocqide`.
 - The full installation might require up to 5 GB of disk space.
 - The setup script creates a folder `$HOME/coq-platform` where it stores a few files but this will likely be removed in future releases.
 
@@ -56,7 +56,7 @@ This method is intended for experienced users, who may want to use opam to insta
 
 ## Homebrew or MacPorts?
 
-You need one or the other to install all the prerequisites required by the opam packages which make up the Coq Platform. Installing all these packages manually is quite a bit of work - unless you are happy with a subset of the command line tools. Especially heavy in terms of dependencies are CoqIDE - alternatives are VSCoq for visual studio code and Emacs with Proof General - and the numerical proof tool GAPPA. The CoqPlatform installation does not require Homebrew or MacPorts - it just calls these to install dependencies. An important dependency is opam itself. In case you have all dependencies already installed (including opam) there is no need for either.
+You need one or the other to install all the prerequisites required by the opam packages which make up the Rocq Platform. Installing all these packages manually is quite a bit of work - unless you are happy with a subset of the command line tools. Especially heavy in terms of dependencies are RocqIDE - alternatives are VSRocq for visual studio code and Emacs with Proof General - and the numerical proof tool GAPPA. The RocqPlatform installation does not require Homebrew or MacPorts - it just calls these to install dependencies. An important dependency is opam itself. In case you have all dependencies already installed (including opam) there is no need for either.
 
 If you already have MacPorts or Homebrew installed, we recommend to keep what you have. If you have neither installed, below are a few differences which might help you decide.
 
@@ -64,7 +64,7 @@ If you already have MacPorts or Homebrew installed, we recommend to keep what yo
 
 - MacPorts uses rsync transport - this is fast but can be an issue if you are behind a proxy. Using different transports is a bit complicated - e.g. one can use git or https zip download to get the package repository manually and point MacPorts to it, but then it won't update automatically. Homebrew uses git over https transport, which should work behind a proxy (if this doesn't work, not much else will work either).
 - MacPorts requires sudo rights to install software while Homebrew makes its target folder (`/usr/local`) writable to the current user. Some people say there are security issues with the Homebrew approach. See [Is Homebrew safe?](#is-homebrew-safe) below for a short presentation of the arguments.
-- Homebrew seems to be a bit more widely used with a bit broader package support than MacPorts, but for the Coq Platform both work equally well.
+- Homebrew seems to be a bit more widely used with a bit broader package support than MacPorts, but for the Rocq Platform both work equally well.
 - MacPorts uses /opt/local as default installation folder, while Homebrew uses /usr/local as default folder. On a plain fresh macOS, /usr/local is typically empty, but other software seems to use the same folder. Since Homebrew requires that /usr/local is writable to the current user this can result in issues. You might have to make /usr/local recursively writable by the current user and possibly even reinstall all Homebrew packages to solve such issues. See [Homebrew issues and workarounds](#homebrew-issues-and-workarounds) below. The folder used by MacPorts seems to be exclusively used by MacPorts, so it does not have similar issues. Definitely when you decide to install Homebrew fresh, you should check if `/usr/local` is empty, and if not run `sudo chown -R ${USER}:admin /usr/local/*` before you install Homebrew.
 - MacPorts ports use a dedicated text format for port description files - similar to opam. Homebrew by contrast uses arbitrary Ruby programs as package description. So MacPorts is possibly more structured while Homebrew is more flexible.
 

@@ -80,9 +80,9 @@ The Rocq Platform team does no double check this information.
 
 <details><summary><font size="+1">Release notes / changelog</font></summary>
 
-## Changes in 2025.01.0
+## Changes in 2025.08.0
 
-- added new pick `9.0~2025.01`
+- added new pick `9.0~2025.08`
 
 ## Changes in 2025.01.0
 
