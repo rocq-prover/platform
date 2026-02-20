@@ -1,4 +1,5 @@
 This README presents the two standard methods to install the Rocq Platform on macOS:
+
 - using a [macOS DMG package](#installation-using-the-macos-dmg-package),
 - [from sources](#installation-by-compiling-from-sources-using-opam), using the platform scripts.
 
@@ -36,15 +37,15 @@ This method is intended for experienced users, who may want to use opam to insta
 - If you have neither Homebrew nor MacPorts installed, read the section [Homebrew and MacPorts](#homebrew-and-macports) below.
 - If you have Homebrew installed, read the section [Homebrew issues and workarounds](#homebrew-issues-and-workarounds) below.
 - Get the Rocq Platform scripts via either of these methods
-  - Most users should download and extract `https://github.com/coq/platform/archive/refs/tags/2025.08.1.zip`.
-  - Users which intend to contribute to Rocq Platform should use `git clone --branch 2025.08.1 https://github.com/rocq-prover/platform.git`.
+  - Most users should download and extract `https://github.com/coq/platform/archive/refs/tags/2025.08.2.zip`.
+  - Users which intend to contribute to Rocq Platform should use `git clone --branch 2025.08.2 https://github.com/rocq-prover/platform.git`.
 - Open a shell, navigate to the download folder and execute `coq_platform_make.sh`.
 - If you are using MacPorts, the system will ask once for sudo permissions to install prerequisites after installing OCaml (5..20 minutes after script start).
 - In case the script aborts e.g. cause of internet issues, just rerun the script.
 - The script creates a new opam switch named e.g. CP.2025.01.0~8.20~2025.01 - the exact name depends on the Rocq version and package pick you selected.
   This means the script does not touch your existing opam setup unless you already have a switch of this name.
 - Use the following commands to activate this switch after opening a new shell:
-  - `opam switch CP.2025.08.1~9.0~2025.01` (note: the switch name might vary if you choose a different version of Rocq - please use `opam switch` to see a list of switch names)
+  - `opam switch CP.2025.08.2~9.0~2025.01` (note: the switch name might vary if you choose a different version of Rocq - please use `opam switch` to see a list of switch names)
   - `eval $(opam env)`
   - The second step can be automated by rerunning `opam init`
 - The main opam repositories for Rocq and OCaml developments are already added to the created opam switch, so it should be easy to install additional Coq (or OCaml) packages.
@@ -73,7 +74,7 @@ If you already have MacPorts or Homebrew installed, we recommend to keep what yo
 - For MacPorts installation follow the instructions at (https://www.macports.org/install.php) - that is download the installer package matching our OS version and double click on the downloaded package.
 
 - For homebrew installation instructions see (https://brew.sh/index) - we followed the recommended approach
-`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"` using the default location - see the next section on a discussion if this is safe.
+  `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"` using the default location - see the next section on a discussion if this is safe.
 
 ## Is Homebrew safe?
 
@@ -81,6 +82,7 @@ There is an ongoing dispute if Homebrew's strategy of making the `/usr/local` fo
 See e.g. (https://discourse.brew.sh/t/security-issues-using-Homebrew-malicious-insertion/3379) or various comments in (https://gist.github.com/irazasyed/7732946).
 
 A short summary of the dispute:
+
 - The Homebrew authors say that it is safer to make `/usr/local` writable to the current user and run installers without elevated rights, because this way an installer can only mess up `/usr/local` - which is not part of the core system - while an installer run with sudo rights can mess up any file in the system. This is a valid argument.
 - The Homebrew critics say that making especially `/usr/local/bin` writable to the current user is dangerous, because it is the first folder in the default PATH. So an adversary could say put a version of `sudo` there which steals your admin password. The bad thing is that any program run by the user - even without elevated rights - could do this, since with Homebrew installed `/usr/local/bin` is writable for the current user. This is also a valid argument.
 
