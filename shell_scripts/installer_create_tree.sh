@@ -88,8 +88,7 @@ list_files_for_pkg() {
 
 # Include both roots and packages required by coq (important for Coq ≥ 9 components)
 ROOTS="$(opam list --installed-roots --short --columns=name)"
-COQ_DEPS="$(opam list --required-by=coq --short --installed || true)"
-PRIMARY_PACKAGES="$(printf '%s\n%s\n' "$ROOTS" "$COQ_DEPS" \
+PRIMARY_PACKAGES="$(printf '%s\n' "$ROOTS" \
   | sort -u \
   | grep -v '^ocaml\|^opam\|^depext\|^conf-\|^lablgtk\|^coq-quickchick')"
 
@@ -187,6 +186,10 @@ function analyze_package {
       # filename="$(basename $relpath)"
       reldir="${relpath%/*}"
       filename="${relpath##*/}"
+
+      echo "DEBUG RELPATH: [$relpath]" | cat -v
+      echo "DEBUG RELDIR:  [$reldir]"  | cat -v
+      echo "DEBUG FILE:    [$filename]" | cat -v
 
       callback_file $1 "${file}" "${reldir}" "${filename}"
     else

@@ -11,24 +11,24 @@
 ###################### CONTROL VARIABLES #####################
 
 # The two lines below are used by the package selection script
-COQ_PLATFORM_VERSION_TITLE="Rocq 9.0.1 (released March 2025) with the preview package pick from July 2025"
-COQ_PLATFORM_VERSION_SORTORDER="2"
+COQ_PLATFORM_VERSION_TITLE="Rocq 9.1 (released January 2026) with the preview package pick from Mars 2026"
+COQ_PLATFORM_VERSION_SORTORDER="1"
 
 # The package list name is the final part of the opam switch name.
 # It is usually either empty ot starts with ~.
 # It might also be used for installer package names, but with ~ replaced by _
 # It is also used for version specific file selections in the smoke test kit.
-COQ_PLATFORM_PACKAGE_PICK_POSTFIX="~9.0~2025.08"
+COQ_PLATFORM_PACKAGE_PICK_POSTFIX="~9.1~2026.01"
 
 # The corresponding Coq development branch and tag
-COQ_PLATFORM_COQ_BRANCH="v9.0.1"
-COQ_PLATFORM_COQ_TAG="9.0.1"
+COQ_PLATFORM_COQ_BRANCH="v9.1"
+COQ_PLATFORM_COQ_TAG="9.1+rc1"
 
 # This controls if opam repositories for development packages are selected
-COQ_PLATFORM_USE_DEV_REPOSITORY="N"
+COQ_PLATFORM_USE_DEV_REPOSITORY="Y"
 
 # This extended descriptions is used for readme files
-COQ_PLATFORM_VERSION_DESCRIPTION="This version of Rocq Platform 2025.08 includes Rocq 9.0.1 from July 2025."
+COQ_PLATFORM_VERSION_DESCRIPTION="This version of Rocq Platform 2026.01 includes Rocq 9.1 from January 2026."
 COQ_PLATFORM_VERSION_DESCRIPTION+='This is a **preview release** of the Rocq Platform for packages maintainers'
 
 # The OCaml version to use for this pick (just the version number - options are elaborated in a platform dependent way)
@@ -47,20 +47,21 @@ PACKAGES=""
 ########## BASE PACKAGES ##########
 
 # Coq needs a patched ocamlfind to be relocatable by installers
-PACKAGES="${PACKAGES} PIN.ocamlfind.1.9.5~relocatable"  # TODO port patch to 1.9.6
+PACKAGES="${PACKAGES} PIN.ocamlfind.1.9.8+relocatable" # TODO port patch to 1.9.6 # modified
 # Since dune does support Coq, it is explicitly selected
-PACKAGES="${PACKAGES} PIN.dune.3.19.1" # 3.17.2 has issues on Windows: cairo doesn't find cairo.h
-PACKAGES="${PACKAGES} PIN.dune-configurator.3.19.1"
+PACKAGES="${PACKAGES} PIN.dune.3.21.0" # 3.17.2 has issues on Windows: cairo doesn't find cairo.h
+PACKAGES="${PACKAGES} PIN.dune-configurator.3.21.0"
 # The Coq compiler coqc and the Coq standard library
-PACKAGES="${PACKAGES} PIN.coq.9.0.1"
-PACKAGES="${PACKAGES} PIN.rocq-stdlib.9.0.0"
+PACKAGES="${PACKAGES} PIN.coq.9.1.0"
+PACKAGES="${PACKAGES} PIN.rocq-stdlib.9.0.0" # modified after discuted with Théo to bump to 9.1.0
+# Tester avec 9.0.0, avoir une version qui marche et ensuite bump et voir le nombre de paquets qui sont cassés.
 
 ########## IDE PACKAGES ##########
 
 # GTK based IDE for Coq - alternatives are VSCoq and Proofgeneral for Emacs
 if  [[ "${COQ_PLATFORM_EXTENT}"  =~ ^[iIfFxX] ]]
 then
-PACKAGES="${PACKAGES} rocqide.9.0.1"
+PACKAGES="${PACKAGES} rocqide.9.1.0"
 PACKAGES="${PACKAGES} vsrocq-language-server.2.3.4"
 fi
 
@@ -74,25 +75,26 @@ then
   PACKAGES="${PACKAGES} sexplib.v0.16.0"  
   
   # Standard library extensions
-  PACKAGES="${PACKAGES} rocq-bignums.9.0.0+rocq9.0"
+  PACKAGES="${PACKAGES} rocq-bignums.9.0.0+rocq9.1" # modified
   PACKAGES="${PACKAGES} coq-ext-lib.0.13.0"
-  PACKAGES="${PACKAGES} coq-stdpp.1.12.0"
+  PACKAGES="${PACKAGES} coq-stdpp.1.12.0" # local
 
   # General mathematics
-  PACKAGES="${PACKAGES} elpi.3.1.0 rocq-elpi.3.1.0"
-  PACKAGES="${PACKAGES} rocq-hierarchy-builder.1.10.2"
-  PACKAGES="${PACKAGES} coq-mathcomp-ssreflect.2.4.0"
-  PACKAGES="${PACKAGES} coq-mathcomp-fingroup.2.4.0"
-  PACKAGES="${PACKAGES} coq-mathcomp-algebra.2.4.0"
-  PACKAGES="${PACKAGES} coq-mathcomp-solvable.2.4.0"
-  PACKAGES="${PACKAGES} coq-mathcomp-field.2.4.0"
-  PACKAGES="${PACKAGES} coq-mathcomp-character.2.4.0"
-  PACKAGES="${PACKAGES} coq-mathcomp-bigenough.1.0.2"
-  PACKAGES="${PACKAGES} rocq-mathcomp-finmap.2.2.1"
-  PACKAGES="${PACKAGES} coq-mathcomp-real-closed.2.0.3"
-  PACKAGES="${PACKAGES} coq-mathcomp-zify.1.5.0+2.0+8.16"
-  PACKAGES="${PACKAGES} coq-mathcomp-multinomials.2.4.0"
-  PACKAGES="${PACKAGES} coq-coquelicot.3.4.4"
+  PACKAGES="${PACKAGES} elpi.3.2.0 rocq-elpi.3.2.0" # modified
+  PACKAGES="${PACKAGES} rocq-hierarchy-builder.1.10.2" # modified
+  PACKAGES="${PACKAGES} rocq-mathcomp-ssreflect.2.5.0" # modified
+  PACKAGES="${PACKAGES} coq-mathcomp-ssreflect.2.5.0" # duplication 
+  PACKAGES="${PACKAGES} rocq-mathcomp-fingroup.2.5.0" # modified
+  PACKAGES="${PACKAGES} rocq-mathcomp-algebra.2.5.0" # modified
+  PACKAGES="${PACKAGES} rocq-mathcomp-solvable.2.5.0" # modified
+  PACKAGES="${PACKAGES} rocq-mathcomp-field.2.5.0" # modified
+  PACKAGES="${PACKAGES} rocq-mathcomp-character.2.5.0" # modified
+  #PACKAGES="${PACKAGES} coq-mathcomp-bigenough.1.0.3" # modified erreur avec ssreflect.2.5.0
+  PACKAGES="${PACKAGES} rocq-mathcomp-finmap.2.2.2" # modified commentaire
+  #PACKAGES="${PACKAGES} coq-mathcomp-real-closed.2.0.3" # erreur big enough
+  #PACKAGES="${PACKAGES} coq-mathcomp-zify.1.6.0+2.3+8.18" # modified erreur
+  #PACKAGES="${PACKAGES} coq-mathcomp-multinomials.2.4.0" # erreur commentaire
+  #PACKAGES="${PACKAGES} coq-coquelicot.3.4.4" # erreur avec ssrelfect
 
   # Number theory
   PACKAGES="${PACKAGES} coq-coqprime.1.6.0"
@@ -100,7 +102,8 @@ then
   
   # Numerical mathematics
   PACKAGES="${PACKAGES} coq-flocq.4.2.1"
-  PACKAGES="${PACKAGES} coq-interval.4.11.3" 
+  #PACKAGES="${PACKAGES} coq-interval.4.11.3" #erreur avec matchcomp
+
   PACKAGES="${PACKAGES} coq-gappa.1.7.1"
   PACKAGES="${PACKAGES} gappa.1.6.0"
 
@@ -109,7 +112,7 @@ then
   PACKAGES="${PACKAGES} coq-corn.9.0.0"  # Maintainer confirmed there is a version 9.0.0 on github
 
   # Homotopy Type Theory (HoTT)
-  PACKAGES="${PACKAGES} coq-hott.9.0"
+  # PACKAGES="${PACKAGES} coq-hott.9.0" # erreur compilation
 
   # Univalent Mathematics (UniMath)
   # Note: coq-unimath requires too much memory for 32 bit architectures
@@ -123,41 +126,41 @@ then
   fi 
 
   # Code extraction
-  PACKAGES="${PACKAGES} coq-simple-io.1.11.0"
+  PACKAGES="${PACKAGES} coq-simple-io.1.11.0" # erreur requiere coq
 
   # Proof automation / generation / helpers
   # elpi + coq-elpi are already given above
-  PACKAGES="${PACKAGES} coq-menhirlib.20240715 menhir.20240715"
-  PACKAGES="${PACKAGES} rocq-equations.1.3.1+9.0"
+  PACKAGES="${PACKAGES} coq-menhirlib.20250903 menhir.20250903" # modified
+  PACKAGES="${PACKAGES} rocq-equations.1.3.1+9.1" # modified
   PACKAGES="${PACKAGES} rocq-aac-tactics.9.0.0"
-  PACKAGES="${PACKAGES} coq-unicoq.1.6+8.20"
-  PACKAGES="${PACKAGES} coq-mtac2.1.4+9.0"
+  #PACKAGES="${PACKAGES} coq-unicoq.1.6+8.20" # erreur
+  #PACKAGES="${PACKAGES} coq-mtac2.1.4+9.0" # erreur car pas de unicoq
   PACKAGES="${PACKAGES} coq-quickchick.2.1.1"
-  PACKAGES="${PACKAGES} coq-hammer-tactics.1.3.2+9.0"
+  PACKAGES="${PACKAGES} coq-hammer-tactics.1.3.2+9.1" # modified
   if [[ "$OSTYPE" != cygwin ]]
   then
     # coq-hammer does not work on Windows because it heavily relies on fork
-    PACKAGES="${PACKAGES} coq-hammer.1.3.2+9.0" 
+    PACKAGES="${PACKAGES} coq-hammer.1.3.2+9.1" # modified 
     PACKAGES="${PACKAGES} eprover.3.1" # ToDo Check
     PACKAGES="${PACKAGES} z3_tptp.4.13.0" # ToDo Check
   fi
-  PACKAGES="${PACKAGES} coq-paramcoq.1.1.3+rocq9.0" # upgrade to 1.1.3+rocq9.0
-  PACKAGES="${PACKAGES} coq-coqeal.2.1.0"
+  #PACKAGES="${PACKAGES} coq-paramcoq.1.1.3+rocq9.0" # upgrade to 1.1.3+rocq9.0 erreur < 9.1
+  PACKAGES="${PACKAGES} coq-coqeal.2.1.1" # modified
   PACKAGES="${PACKAGES} rocq-libhyps.4.0"
-  PACKAGES="${PACKAGES} coq-itauto.8.20.0"
+  #PACKAGES="${PACKAGES} coq-itauto.8.20.0" # local erreur
   
   # General mathematics (which requires one of the above tools)
-  PACKAGES="${PACKAGES} coq-mathcomp-analysis.1.13.0"
+  #PACKAGES="${PACKAGES} coq-mathcomp-analysis.1.15.0" # modified
   PACKAGES="${PACKAGES} coq-mathcomp-algebra-tactics.1.2.7"
-  PACKAGES="${PACKAGES} rocq-relation-algebra.1.8.0" 
+  PACKAGES="${PACKAGES} rocq-relation-algebra.1.8.0" # local
 
   # Formal languages, compilers and code verification
   PACKAGES="${PACKAGES} coq-reglang.1.2.2"
-  PACKAGES="${PACKAGES} coq-iris.4.4.0"
+  PACKAGES="${PACKAGES} coq-iris.4.4.0" # local
   PACKAGES="${PACKAGES} coq-iris-heap-lang.4.4.0"
-  PACKAGES="${PACKAGES} coq-ott.0.34"
+  PACKAGES="${PACKAGES} coq-ott.0.34" # local
   PACKAGES="${PACKAGES} ott.0.34"
-  PACKAGES="${PACKAGES} coq-mathcomp-word.3.2" # Works with version relaxation
+  #PACKAGES="${PACKAGES} coq-mathcomp-word.3.2" # Works with version relaxation # comment
   
   #  Error compilation compcert
   if false
@@ -180,7 +183,7 @@ then
   esac
   fi
   # # Proof analysis and other tools
-  PACKAGES="${PACKAGES} coq-dpdgraph.1.0+9.0"
+  PACKAGES="${PACKAGES} coq-dpdgraph.1.0+9.1"
 fi
 
 ########## EXTENDED" COQ PLATFORM PACKAGES ##########
@@ -192,12 +195,11 @@ then
   PACKAGES="${PACKAGES} coq-deriving.0.2.2"
   if [ "${BITSIZE}" == "64" ]
   then
-    #PACKAGES="${PACKAGES} coq-metacoq.1.3.4+9.0" # MetaCoq latest 1.3.4+9.0
-    PACKAGES="${PACKAGES} rocq-metarocq.1.4+9.0.1" # MetaRocq renaming
+    PACKAGES="${PACKAGES} rocq-metarocq.1.4.1+9.1" # MetaRocq renaming # modified
   fi
 
   # General mathematics
-  PACKAGES="${PACKAGES} coq-extructures.0.5.0"
+  PACKAGES="${PACKAGES} coq-extructures.0.5.0" # local
 
   # Gallina extensions
   PACKAGES="${PACKAGES} coq-reduction-effects.0.1.6" # update according maintainer request

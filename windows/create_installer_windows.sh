@@ -227,29 +227,16 @@ FILE_VISIBLE_DESEL="$DIR_TARGET"/dependencies_visible_deselection.nsh
 FILE_STRINGS="$DIR_TARGET"/strings.nsh;                     > "$FILE_STRINGS"
 FILE_SEC_DESCRIPTIONS="$DIR_TARGET"/section_descriptions.nsh; > "$FILE_SEC_DESCRIPTIONS"
 
-SCRIPT_DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
-REPO_ROOT="$(dirname "$SCRIPT_DIR")"
-CLEANED_POSTFIX="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX/#\~}"
-BASE_VER_RAW="${COQ_PLATFORM_COQ_TAG:-$CLEANED_POSTFIX}"
-BASE_VER_MM="$(printf '%s' "$BASE_VER_RAW" | sed -E 's/^([0-9]+)\.([0-9]+).*/\1.\2/')"
-NORMALIZED_POSTFIX="$(printf '%s' "$CLEANED_POSTFIX" | sed -E "s/^[0-9]+\.[0-9]+(\.[0-9]+)?/$BASE_VER_MM/")"
-PICK_FILE="$REPO_ROOT/package_picks/package-pick-$NORMALIZED_POSTFIX.sh"
-COQ_PLATFORM_COQ_TAG=$(grep '^COQ_PLATFORM_COQ_TAG=' "$PICK_FILE" | cut -d'"' -f2)
-echo "COQ_PLATFORM_COQ_TAG found: $COQ_PLATFORM_COQ_TAG"
-
 ide_name="coqide"
-if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -gt 8 ]; then
-  echo "Version > 8 use Rocq"
-  ide_name="rocqide"
-fi
-
 APP_PREFIX="Coq-Platform"
 NSIS_SCRIPT="Coq.nsi"
 SHELL_BAT="coq-shell.bat"
 SHELL_ICO="coq-shell.ico"
 
-if [ "$(echo "$COQ_PLATFORM_COQ_TAG" | cut -d. -f1)" -ge 9 ]; then
+COQ_MAJOR="$(opam show -f version coq | cut -d. -f1 || echo 0)"
+if [ "${COQ_MAJOR:-0}" -ge 9 ]; then
   echo "Coq >= 9 => Rocq branding"
+  ide_name="rocqide"
   APP_PREFIX="Rocq-Platform"
   NSIS_SCRIPT="Rocq.nsi"
   SHELL_BAT="rocq-shell.bat"

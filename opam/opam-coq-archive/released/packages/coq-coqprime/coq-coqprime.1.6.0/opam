@@ -13,7 +13,7 @@ install: [
 ]
 depends: [
   "ocaml"
-  "coq" {>= "8.20" & < "9.1.0"}
+  "coq" {>= "8.20" & < "9.2.0"}
   "coq-bignums"
 ]
 synopsis: "Certifying prime numbers in Coq"

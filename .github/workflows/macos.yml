@@ -15,15 +15,15 @@ on:
       - main
   pull_request:
     branches:
-      - '**'
+      - "**"
   schedule:
     - cron: "0 0 * * *"
   workflow_dispatch:
     inputs:
       platform:
-        description: 'Arguments for the platform script:'
+        description: "Arguments for the platform script:"
         required: true
-        default: '-extent=x -parallel=p -jobs=2 -large=e -compcert=y -set-switch=y'
+        default: "-extent=x -parallel=p -jobs=2 -large=e -compcert=y -set-switch=y"
 
 ###############################################################################
 # Platform script options shared among all jobs
@@ -49,14 +49,14 @@ jobs:
       matrix:
         variant:
           # Keep this in sync with the Smoke test below
-          - '9.0~2025.08'
-          - '8.20~2025.01'
+          - "9.1~2026.01"
+          - "9.0~2025.08"
 
     steps:
       - name: Setup Xcode 16.0
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '16.0'
+          xcode-version: "16.0"
 
       - name: Print toolchain info
         run: |
@@ -65,7 +65,7 @@ jobs:
           xcode-select -p
           xcrun --show-sdk-path
           xcrun --show-sdk-platform-version || true
-          
+
       - name: Git checkout
         uses: actions/checkout@v4
 
@@ -77,7 +77,7 @@ jobs:
         # This is to avoid errors of these kinds:
         # - ==> Downloading https://ghcr.io/v2/homebrew/core/harfbuzz/manifests/5.1.0
         #   Error: adwaita-icon-theme: Failed to download resource "harfbuzz_bottle_manifest"
-        #   The downloaded GitHub Packages manifest was corrupted or modified (it is not valid JSON): 
+        #   The downloaded GitHub Packages manifest was corrupted or modified (it is not valid JSON):
         # - dyld[45184]: Library not loaded: '/usr/local/opt/libunistring/lib/libunistring.2.dylib'
         #   Referenced from: '/usr/local/Cellar/wget/1.21.3/bin/wget'
         #   Reason: tried: '/usr/local/opt/libunistring/lib/libunistring.2.dylib' (no such file),
@@ -114,18 +114,18 @@ jobs:
           echo "Using ARGS=$ARGS"
           ./coq_platform_make.sh -packages=${{matrix.variant}} $ARGS -dumplogs
 
-      - name: 'Upload opam log folder on failure'
+      - name: "Upload opam log folder on failure"
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: 'Opam log folder ${{matrix.variant}}'
+          name: "Opam log folder ${{matrix.variant}}"
           path: /Users/runner/.opam/log/
 
-      - name: 'Upload opam build folder on failure'
+      - name: "Upload opam build folder on failure"
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: 'Opam build folder ${{matrix.variant}}'
+          name: "Opam build folder ${{matrix.variant}}"
           path: /Users/runner/.opam/CP*${{matrix.variant}}/.opam-switch/build
 
       - name: Install bash (needed by smoke scripts)
@@ -137,10 +137,10 @@ jobs:
           eval $(opam env)
           shell_scripts/create_smoke_test_kit.sh
 
-      - name: 'Upload smoke test kit'
+      - name: "Upload smoke test kit"
         uses: actions/upload-artifact@v4
         with:
-          name: 'Smoke Test Kit Macos ${{matrix.variant}}'
+          name: "Smoke Test Kit Macos ${{matrix.variant}}"
           path: smoke-test-kit/
           retention-days: 5
 
@@ -151,7 +151,7 @@ jobs:
           brew install findutils coreutils
           . .venv/bin/activate
           pip3 install macpack
-          
+
           # Patch macpack to create/set an asyncio loop on Python 3.14
           python3 <<'EOF'
           import sysconfig
@@ -200,17 +200,16 @@ jobs:
               print("⚠ WARNING: Could not find or patch macpack/patcher.py")
               print("This may cause issues with Python 3.14")
           EOF
-          
-          # Sanity check: show which macpack will run
-          which macpack
-          python3 -c "import macpack; print('macpack imported successfully')"
-          
+
           # Sanity check: show which macpack will run
           which macpack
           python3 -c "import macpack; print('macpack imported successfully')"
 
+          # Sanity check: show which macpack will run
+          which macpack
+          python3 -c "import macpack; print('macpack imported successfully')"
 
-      - name: 'Build DMG installer'
+      - name: "Build DMG installer"
         uses: Wandalen/wretry.action@v3
         with:
           attempt_limit: 5
@@ -219,13 +218,13 @@ jobs:
             eval $(opam env)
             macos/create_installer_macos.sh
 
-      - name: 'Upload DMG script logs on failure'
+      - name: "Upload DMG script logs on failure"
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: 'DMG script error logs ${{matrix.variant}}'
+          name: "DMG script error logs ${{matrix.variant}}"
           path: macos_installer/logs/
-      
+
       - name: Set APP_PREFIX (Coq vs Rocq)
         shell: bash
         run: |
@@ -235,10 +234,10 @@ jobs:
             echo "APP_PREFIX=Coq-Platform" >> "$GITHUB_ENV"
           fi
 
-      - name: 'Upload Artifact'
+      - name: "Upload Artifact"
         uses: actions/upload-artifact@v4
         with:
-          name: 'Macos installer ${{matrix.variant}} x86_64'
+          name: "Macos installer ${{matrix.variant}} x86_64"
           path: macos_installer/${{ env.APP_PREFIX }}-*.dmg
           retention-days: 5
 
@@ -250,25 +249,25 @@ jobs:
       fail-fast: false
       matrix:
         variant:
-          - '9.0~2025.08'
-          - '8.20~2025.01'
+          - "9.1~2026.01"
+          - "9.0~2025.08"
 
     steps:
       - name: Install bash
         run: brew install bash
 
-      - name: 'Download Artifact'
+      - name: "Download Artifact"
         uses: actions/download-artifact@v4
         id: download
         with:
-          name: 'Macos installer ${{matrix.variant}} x86_64'
+          name: "Macos installer ${{matrix.variant}} x86_64"
 
-      - name: 'Download smoke test kit'
+      - name: "Download smoke test kit"
         uses: actions/download-artifact@v4
         id: download-smoke
         with:
-          name: 'Smoke Test Kit Macos ${{matrix.variant}}'
-      
+          name: "Smoke Test Kit Macos ${{matrix.variant}}"
+
       - name: Set APP_PREFIX (Coq vs Rocq)
         shell: bash
         run: |
@@ -278,7 +277,7 @@ jobs:
             echo "APP_PREFIX=Coq-Platform" >> "$GITHUB_ENV"
           fi
 
-      - name: 'Run Installer'
+      - name: "Run Installer"
         shell: bash
         run: |
           cd ${{steps.download.outputs.download-path}}
@@ -287,18 +286,18 @@ jobs:
           cp -r "/Volumes/${DMG%%.dmg}/${APP_PREFIX}"*.app /Applications/
           hdiutil detach "/Volumes/${DMG%%.dmg}/"
 
-      - name: 'Smoke coqc'
+      - name: "Smoke coqc"
         shell: bash
         run: |
           cd /Applications/${APP_PREFIX}*.app/Contents/Resources/bin/
-          
+
           # Try default coqc first
           if ./coqc -v 2>/dev/null; then
               exit 0
           fi
-          
+
           echo "coqc -v failed, trying with library path detection for Rocq 9.0+"
-          
+
           # Try to find library path and use -coqlib
           for path in ../lib/coq ../lib/rocq ../lib/coq-stdlib; do
               if [ -d "$path" ] && ([ -f "$path/theories/Init/Prelude.vo" ] || [ -f "$path/Init/Prelude.vo" ]); then
@@ -306,12 +305,12 @@ jobs:
                   ./coqc -coqlib "$path" -v && exit 0
               fi
           done
-          
+
           # Last resort: boot mode
           echo "Trying boot mode..."
           ./coqc -boot -noinit -v
 
-      - name: 'Run Macos smoke test kit'
+      - name: "Run Macos smoke test kit"
         shell: bash
         run: |
           ls /Applications/${APP_PREFIX}*.app
@@ -331,4 +330,3 @@ jobs:
           cd ${{steps.download-smoke.outputs.download-path}}
           chmod a+x ./run-smoke-test.sh
           ./run-smoke-test.sh
-
