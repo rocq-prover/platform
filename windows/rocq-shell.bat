@@ -13,5 +13,11 @@ IF NOT EXIST "%ROOT%\bin\coqc.exe" (
     SET "PATH=%ROOT%\bin;%PATH%"
 )
 
-REM set COQLIB variable
-FOR /F "tokens=* USEBACKQ" %%F IN (`coqc -where`) DO SET "COQLIB=%%F"
+REM Set Rocq/Coq library path directly from installation layout
+IF EXIST "%ROOT%\lib\coq" (
+    SET "COQLIB=%ROOT%\lib\coq"
+    SET "ROCQLIB=%ROOT%\lib\coq"
+) ELSE (
+    ECHO Could not find Rocq libraries in %ROOT%\lib\coq
+    EXIT /B 1
+)
