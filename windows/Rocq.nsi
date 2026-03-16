@@ -124,7 +124,7 @@ Section "-CoqWinStuff" Sec_CoqWinStuff
   SetOutPath "$INSTDIR\bin\"
   Push $9
   FileOpen $9 "$INSTDIR\bin\coq_environment.txt" w
-  FileWrite $9 "COQLIB=$\"$INSTDIR$\"$\r$\n"
+  FileWrite $9 "ROCQLIB=$\"$INSTDIR\lib\coq$\"$\r$\n"
   FileWrite $9 "OCAMLFIND=$\"$INSTDIR\bin\ocamlfind.exe$\"$\r$\n"
   FileClose $9
   Pop $9
