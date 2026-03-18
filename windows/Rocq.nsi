@@ -26,6 +26,8 @@ SetCompressor lzma
 !include "Logiclib.nsh"
 ;!include "StrRep.nsh"
 ;!include "ReplaceInFile.nsh"
+!include "StrFunc.nsh"
+${StrRep}
 
 ; Used by OCaml
 ; Var COQ_SRC_PATH_BS   ; COQ_SRC_PATH with \ instead of /
@@ -123,9 +125,10 @@ Section "-CoqWinStuff" Sec_CoqWinStuff
   ; fill in rocq_environment.txt
   SetOutPath "$INSTDIR\bin\"
   Push $9
+  ${StrRep} $R0 $INSTDIR "\" "/"
   FileOpen $9 "$INSTDIR\bin\coq_environment.txt" w
-  FileWrite $9 "ROCQLIB=$\"$INSTDIR\lib\coq$\"$\r$\n"
-  FileWrite $9 "OCAMLFIND=$\"$INSTDIR\bin\ocamlfind.exe$\"$\r$\n"
+  FileWrite $9 "ROCQLIB=$\"$R0/lib/coq$\"$\r$\n"
+  FileWrite $9 "OCAMLFIND=$\"$R0/bin/ocamlfind.exe$\"$\r$\n"
   FileClose $9
   Pop $9
 SectionEnd
