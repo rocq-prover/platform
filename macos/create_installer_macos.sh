@@ -402,8 +402,7 @@ find "${LIB_ABSDIR}" -name "META.bak" -delete
 
 ###################### Create installer ######################
 
-SCRIPT_DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
-REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+REPO_ROOT="$HERE"
 CLEANED_POSTFIX="${COQ_PLATFORM_PACKAGE_PICK_POSTFIX/#\~}"
 BASE_VER_RAW="${COQ_PLATFORM_COQ_TAG:-$CLEANED_POSTFIX}"
 BASE_VER_MM="$(printf '%s' "$BASE_VER_RAW" | sed -E 's/^([0-9]+)\.([0-9]+).*/\1.\2/')"
@@ -411,18 +410,18 @@ NORMALIZED_POSTFIX="$(printf '%s' "$CLEANED_POSTFIX" | sed -E "s/^[0-9]+\.[0-9]+
 
 PICK_FILE="$REPO_ROOT/package_picks/package-pick-$NORMALIZED_POSTFIX.sh"
 
-COQ_PLATFORM_COQ_TAG=$(grep '^COQ_PLATFORM_COQ_TAG=' "$PICK_FILE" | cut -d'"' -f2)
-echo "COQ_PLATFORM_COQ_TAG found: $COQ_PLATFORM_COQ_TAG"
+COQ_PLATFORM_COQ_TAG="$(
+  sed -nE 's/^[[:space:]]*(export[[:space:]]+)?COQ_PLATFORM_COQ_TAG[[:space:]]*=[[:space:]]*["'"'"']?([^"'"'"'#[:space:]]+)["'"'"']?.*$/\2/p' \
+    "$PICK_FILE" | head -n1
+)"
+echo "COQ_PLATFORM_COQ_TAG found: '${COQ_PLATFORM_COQ_TAG}'"
 
 ide_name="coqide"
-idefolder=coq/ide/${ide_name}
-
+idefolder="coq/ide/${ide_name}"
 tag="${COQ_PLATFORM_COQ_TAG:-}"
-major="${tag%%.*}"
 
-if [ -n "$major" ] && [ "$major" -gt 8 ]; then
-
-  echo " Version > 8 use Rocq"
+if [ -n "${coq_major}" ] && [ "${coq_major}" -ge 9 ]; then
+  echo "Coq/Rocq >= 9 detected -> using rocqide"
   # Same like coq but with rocqide package
   rocqidepackagefull=$(opam list --installed-roots --short --columns=name,version rocqide | sed 's/ /./')
   opam source --dir=rocqide-server.${COQ_PLATFORM_COQ_TAG} ${rocqidepackagefull}
@@ -430,7 +429,6 @@ if [ -n "$major" ] && [ "$major" -gt 8 ]; then
   ide_name="rocqide"
   idefolder="rocqide-server.${tag}/ide/${ide_name}"
 fi
-
 IS_ROCQ="N"
 if [ -n "${coq_major}" ] && [ "${coq_major}" -ge 9 ]; then
   IS_ROCQ="Y"

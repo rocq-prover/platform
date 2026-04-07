@@ -71,15 +71,36 @@ coq_components_installed() {
 
 # Return the raw file list (absolute paths) for a given OPAM package name.
 # Special-case: for "coq" in Coq >= 9, aggregate files from components.
+# list_files_for_pkg() {
+#   local pkg="$1"
+#   local major="$(coq_major_version)"
+#   if [ "$pkg" = "coq" ] && [ -n "$major" ] && [ "$major" -ge 9 ]; then
+#     coq_components_installed | while read -r comp; do
+#       [ -n "$comp" ] || continue
+#       opam show --list-files "$comp" 2>/dev/null || true
+#     done
+#   else
+#     opam show --list-files "$pkg" 2>/dev/null || true
+#   fi
+# }
+
 list_files_for_pkg() {
   local pkg="$1"
   local major="$(coq_major_version)"
   if [ "$pkg" = "coq" ] && [ -n "$major" ] && [ "$major" -ge 9 ]; then
     coq_components_installed | while read -r comp; do
       [ -n "$comp" ] || continue
+      echo "DEBUG COMPONENT: [$comp]" >&2
+      opam show --list-files "$comp" 2>/dev/null \
+        | grep 'coq-gappa\|lib' \
+        | cat -v >&2 || true
       opam show --list-files "$comp" 2>/dev/null || true
     done
   else
+    echo "DEBUG PACKAGE: [$pkg]" >&2
+    opam show --list-files "$pkg" 2>/dev/null \
+      | grep 'coq-gappa\|lib' \
+      | cat -v >&2 || true
     opam show --list-files "$pkg" 2>/dev/null || true
   fi
 }
@@ -88,8 +109,7 @@ list_files_for_pkg() {
 
 # Include both roots and packages required by coq (important for Coq ≥ 9 components)
 ROOTS="$(opam list --installed-roots --short --columns=name)"
-COQ_DEPS="$(opam list --required-by=coq --short --installed || true)"
-PRIMARY_PACKAGES="$(printf '%s\n%s\n' "$ROOTS" "$COQ_DEPS" \
+PRIMARY_PACKAGES="$(printf '%s\n' "$ROOTS" \
   | sort -u \
   | grep -v '^ocaml\|^opam\|^depext\|^conf-\|^lablgtk\|^coq-quickchick')"
 
@@ -181,12 +201,17 @@ function analyze_package {
       true # ignore directories
     elif [ -f "$file" ]
     then
+      file="$(printf '%s' "$file" | tr -d '\357\200\215')"
       relpath="${file#$OPAM_PREFIX}"
       # using dirname and basename is terribly slow on cygwin (minutes for all files in coq)
       # reldir="$(dirname $relpath)"
       # filename="$(basename $relpath)"
       reldir="${relpath%/*}"
       filename="${relpath##*/}"
+
+      echo "DEBUG RELPATH: [$relpath]" | cat -v
+      echo "DEBUG RELDIR:  [$reldir]"  | cat -v
+      echo "DEBUG FILE:    [$filename]" | cat -v
 
       callback_file $1 "${file}" "${reldir}" "${filename}"
     else

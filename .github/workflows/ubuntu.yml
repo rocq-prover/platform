@@ -15,15 +15,15 @@ on:
       - main
   pull_request:
     branches:
-      - '**'
+      - "**"
   schedule:
     - cron: "0 0 * * *"
   workflow_dispatch:
     inputs:
       platform:
-        description: 'Arguments for the platform script:'
+        description: "Arguments for the platform script:"
         required: true
-        default: '-extent=x -parallel=p -jobs=2 -large=i -compcert=y -unimath=n -set-switch=y'
+        default: "-extent=x -parallel=p -jobs=2 -large=i -compcert=y -unimath=n -set-switch=y"
 
 ###############################################################################
 # Platform script options shared among all jobs
@@ -31,7 +31,6 @@ on:
 env:
   PLATFORM: -extent=x -parallel=p -jobs=2 -large=i -compcert=y -unimath=n -set-switch=y
   COQREGTESTING: y
-
 
 ###############################################################################
 # Ubuntu
@@ -49,21 +48,22 @@ jobs:
       matrix:
         variant:
           # This should contain all picks introduced in the current release + all original picks of all Coq versions
-          - '9.0~2025.08'
-          - '8.20~2025.01'
-          - '8.19~2024.10'
-          - '8.18~2023.11'
-          - '8.17~2023.08'
-          - '8.16~2022.09'
-          - '8.15~2022.04'
-          - '8.14~2022.01'
-          - '8.13~2021.02'
-          - '8.12'
+          - "9.1~2026.01"
+          - "9.0~2025.08"
+          - "8.20~2025.01"
+          - "8.19~2024.10"
+          - "8.18~2023.11"
+          - "8.17~2023.08"
+          - "8.16~2022.09"
+          - "8.15~2022.04"
+          - "8.14~2022.01"
+          - "8.13~2021.02"
+          - "8.12"
 
     steps:
       - name: Git checkout
         uses: actions/checkout@v4
-      
+
       - name: Initial disk usage
         run: |
           echo "=== Initial df -h ==="
@@ -134,7 +134,7 @@ jobs:
           sudo apt-get install bubblewrap build-essential
           echo "=== Disk after apt install ==="
           df -h
-        
+
       - name: Free additional disk space
         run: |
           echo "=== Disk before cleanup ==="
@@ -148,7 +148,7 @@ jobs:
           echo
           echo "=== Top 15 biggest directories in ~ ==="
           du -xhd1 ~ 2>/dev/null | sort -hr | head -n 15 || true
-          
+
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
         with:
@@ -192,15 +192,15 @@ jobs:
           eval $(opam env)
           shell_scripts/create_smoke_test_kit.sh
 
-      - name: 'Run Linux smoke test kit'
+      - name: "Run Linux smoke test kit"
         shell: bash
         run: |
           eval $(opam env)
           smoke-test-kit/run-smoke-test.sh
 
-      - name: 'Upload smoke test kit'
+      - name: "Upload smoke test kit"
         uses: actions/upload-artifact@v4
         with:
-          name: 'Smoke Test Kit ${{matrix.variant}}'
+          name: "Smoke Test Kit ${{matrix.variant}}"
           path: smoke-test-kit
           retention-days: 5
