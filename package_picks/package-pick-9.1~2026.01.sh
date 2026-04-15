@@ -89,12 +89,12 @@ then
   PACKAGES="${PACKAGES} rocq-mathcomp-solvable.2.5.0" # modified
   PACKAGES="${PACKAGES} rocq-mathcomp-field.2.5.0" # modified
   PACKAGES="${PACKAGES} rocq-mathcomp-character.2.5.0" # modified
-  #PACKAGES="${PACKAGES} coq-mathcomp-bigenough.1.0.3" # modified erreur avec ssreflect.2.5.0
-  PACKAGES="${PACKAGES} rocq-mathcomp-finmap.2.2.2" # modified commentaire
-  #PACKAGES="${PACKAGES} coq-mathcomp-real-closed.2.0.3" # erreur big enough
-  #PACKAGES="${PACKAGES} coq-mathcomp-zify.1.6.0+2.3+8.18" # modified erreur
-  #PACKAGES="${PACKAGES} coq-mathcomp-multinomials.2.4.0" # erreur commentaire
-  #PACKAGES="${PACKAGES} coq-coquelicot.3.4.4" # erreur avec ssrelfect
+  PACKAGES="${PACKAGES} rocq-mathcomp-bigenough.1.0.4"
+  PACKAGES="${PACKAGES} rocq-mathcomp-finmap.2.2.2" # modified
+  PACKAGES="${PACKAGES} coq-mathcomp-real-closed.2.0.3" 
+  PACKAGES="${PACKAGES} coq-mathcomp-zify.1.6.0+2.3+8.18" # modified
+  PACKAGES="${PACKAGES} coq-mathcomp-multinomials.2.4.0"
+  PACKAGES="${PACKAGES} coq-coquelicot.3.4.4"
 
   # Number theory
   PACKAGES="${PACKAGES} coq-coqprime.1.6.0"
@@ -102,17 +102,17 @@ then
   
   # Numerical mathematics
   PACKAGES="${PACKAGES} coq-flocq.4.2.1"
-  #PACKAGES="${PACKAGES} coq-interval.4.11.3" #erreur avec matchcomp
+  PACKAGES="${PACKAGES} coq-interval.4.11.4"
 
   PACKAGES="${PACKAGES} coq-gappa.1.7.1"
   PACKAGES="${PACKAGES} gappa.1.6.0"
 
   # Constructive mathematics
-  PACKAGES="${PACKAGES} coq-math-classes.9.0.0" # Maintainer confirmed there is a version 9.0.0 on github
-  PACKAGES="${PACKAGES} coq-corn.9.0.0"  # Maintainer confirmed there is a version 9.0.0 on github
+  PACKAGES="${PACKAGES} coq-math-classes.9.0.0"
+  PACKAGES="${PACKAGES} coq-corn.9.0.0"
 
   # Homotopy Type Theory (HoTT)
-  # PACKAGES="${PACKAGES} coq-hott.9.0" # erreur compilation
+  #PACKAGES="${PACKAGES} coq-hott.9.0" # error compilation
 
   # Univalent Mathematics (UniMath)
   # Note: coq-unimath requires too much memory for 32 bit architectures
@@ -126,15 +126,15 @@ then
   fi 
 
   # Code extraction
-  PACKAGES="${PACKAGES} coq-simple-io.1.11.0" # erreur requiere coq
+  PACKAGES="${PACKAGES} coq-simple-io.1.11.0"
 
   # Proof automation / generation / helpers
   # elpi + coq-elpi are already given above
   PACKAGES="${PACKAGES} coq-menhirlib.20250903 menhir.20250903" # modified
   PACKAGES="${PACKAGES} rocq-equations.1.3.1+9.1" # modified
   PACKAGES="${PACKAGES} rocq-aac-tactics.9.0.0"
-  #PACKAGES="${PACKAGES} coq-unicoq.1.6+8.20" # erreur
-  #PACKAGES="${PACKAGES} coq-mtac2.1.4+9.0" # erreur car pas de unicoq
+  #PACKAGES="${PACKAGES} coq-unicoq.1.6+8.20" # error
+  #PACKAGES="${PACKAGES} coq-mtac2.1.4+9.0" # error with unicoq
   PACKAGES="${PACKAGES} coq-quickchick.2.1.1"
   PACKAGES="${PACKAGES} coq-hammer-tactics.1.3.2+9.1" # modified
   if [[ "$OSTYPE" != cygwin ]]
@@ -144,23 +144,23 @@ then
     PACKAGES="${PACKAGES} eprover.3.1" # ToDo Check
     PACKAGES="${PACKAGES} z3_tptp.4.13.0" # ToDo Check
   fi
-  #PACKAGES="${PACKAGES} coq-paramcoq.1.1.3+rocq9.0" # upgrade to 1.1.3+rocq9.0 erreur < 9.1
+
   PACKAGES="${PACKAGES} coq-coqeal.2.1.1" # modified
   PACKAGES="${PACKAGES} rocq-libhyps.4.0"
-  #PACKAGES="${PACKAGES} coq-itauto.8.20.0" # local erreur
+  #PACKAGES="${PACKAGES} coq-itauto.8.20.0" # error
   
   # General mathematics (which requires one of the above tools)
-  #PACKAGES="${PACKAGES} coq-mathcomp-analysis.1.15.0" # modified
+  PACKAGES="${PACKAGES} coq-mathcomp-analysis.1.16.0" # modified
   PACKAGES="${PACKAGES} coq-mathcomp-algebra-tactics.1.2.7"
-  PACKAGES="${PACKAGES} rocq-relation-algebra.1.8.0" # local
+  PACKAGES="${PACKAGES} rocq-relation-algebra.1.8.0"
 
   # Formal languages, compilers and code verification
   PACKAGES="${PACKAGES} coq-reglang.1.2.2"
-  PACKAGES="${PACKAGES} coq-iris.4.4.0" # local
+  PACKAGES="${PACKAGES} coq-iris.4.4.0"
   PACKAGES="${PACKAGES} coq-iris-heap-lang.4.4.0"
-  PACKAGES="${PACKAGES} coq-ott.0.34" # local
+  PACKAGES="${PACKAGES} coq-ott.0.34"
   PACKAGES="${PACKAGES} ott.0.34"
-  #PACKAGES="${PACKAGES} coq-mathcomp-word.3.2" # Works with version relaxation # comment
+  PACKAGES="${PACKAGES} coq-mathcomp-word.3.4" # Works with version relaxation # comment
   
   #  Error compilation compcert
   if false
@@ -195,15 +195,15 @@ then
   PACKAGES="${PACKAGES} coq-deriving.0.2.2"
   if [ "${BITSIZE}" == "64" ]
   then
-    PACKAGES="${PACKAGES} rocq-metarocq.1.4.1+9.1" # MetaRocq renaming # modified
+    PACKAGES="${PACKAGES} rocq-metarocq.1.4.1+9.1"
   fi
 
   # General mathematics
   PACKAGES="${PACKAGES} coq-extructures.0.5.0" # local
 
   # Gallina extensions
-  PACKAGES="${PACKAGES} coq-reduction-effects.0.1.6" # update according maintainer request
-  PACKAGES="${PACKAGES} coq-record-update.0.3.6" # update according maintainer request
+  PACKAGES="${PACKAGES} coq-reduction-effects.0.1.6"
+  PACKAGES="${PACKAGES} coq-record-update.0.3.6"
   
 
   # Communication with coqtop
@@ -217,9 +217,9 @@ then
         PACKAGES="${PACKAGES} coq-rewriter.0.0.15"
         PACKAGES="${PACKAGES} coq-riscv.0.0.6"
         PACKAGES="${PACKAGES} coq-bedrock2.0.0.9"
-        PACKAGES="${PACKAGES} coq-bedrock2-compiler.0.0.9"  #required coq-coqutil.0.0.6
+        PACKAGES="${PACKAGES} coq-bedrock2-compiler.0.0.9"
         PACKAGES="${PACKAGES} coq-rupicola.0.0.11"
-        PACKAGES="${PACKAGES} coq-fiat-crypto.0.1.6"  #required coq-coqutil.0.0.6
+        PACKAGES="${PACKAGES} coq-fiat-crypto.0.1.6"
         ;;
       [nN]) true ;;
       *) echo "Illegal value for COQ_PLATFORM_FIATCRYPTO - aborting"; false ;;
