@@ -196,16 +196,14 @@ function analyze_package {
   echo "${files}" > "${LOGDIR}/$1".filelist
   for file in $files
   do
+    file="$(printf '%s' "$file" | tr -d '\357\200\215')"
+
     if [ -d "$file" ]
     then
       true # ignore directories
     elif [ -f "$file" ]
     then
-      file="$(printf '%s' "$file" | tr -d '\357\200\215')"
       relpath="${file#$OPAM_PREFIX}"
-      # using dirname and basename is terribly slow on cygwin (minutes for all files in coq)
-      # reldir="$(dirname $relpath)"
-      # filename="$(basename $relpath)"
       reldir="${relpath%/*}"
       filename="${relpath##*/}"
 
@@ -213,10 +211,10 @@ function analyze_package {
       echo "DEBUG RELDIR:  [$reldir]"  | cat -v
       echo "DEBUG FILE:    [$filename]" | cat -v
 
-      callback_file $1 "${file}" "${reldir}" "${filename}"
+      callback_file "$1" "${file}" "${reldir}" "${filename}"
     else
-      echo "In package '$1' the file '$file' does not exist"
-      exit 1
+      echo "WARNING: In package '$1' the file '$file' does not exist, skipping"
+      continue
     fi
   done
 
