@@ -17,7 +17,7 @@ build: [
 install: ["./remake" "install"]
 depends: [
   "coq" {>= "8.12" & < "9.2~"}
-  "coq-mathcomp-ssreflect" {>= "1.6" & < "2.5~"}
+  "coq-mathcomp-ssreflect" {>= "1.6" & < "2.6~"}
   "conf-autoconf" {build & dev}
   ("conf-g++" {build} | "conf-clang" {build})
 ]
@@ -37,6 +37,6 @@ authors: [
 ]
 synopsis: "A Coq formalization of real analysis compatible with the standard library"
 url {
-  src: "https://coquelicot.gitlabpages.inria.fr/releases/coquelicot-3.4.3.tar.gz"
-  checksum: "sha512=619207d1dfc170dc0c79e72e893fa2e1a60f9df85a56ea23fb3bb8e4bca1b273cd0a3dd588d4b29a138154852a9fe5b7b23fa317c77c512ef058958e05a1f4c2"
+  src: "https://coquelicot.gitlabpages.inria.fr/releases/coquelicot-3.4.4.tar.gz"
+  checksum: "sha512=d0e4bddb4438b9750458ea160a3051b421384ba524675c870183aa5061b3294dd347093fefd0682f04af2d4a5086e5911dfed39f9df7f6188caca3082a9f205c"
 }

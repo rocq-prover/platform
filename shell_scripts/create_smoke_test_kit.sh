@@ -159,6 +159,7 @@ TEST_FILES[coq-mathcomp-word~9.0~2025.08]='../../test_files/coq-mathcomp-word/te
 TEST_FILES[coq-mathcomp-word~9.1~2026.01]='../../test_files/coq-mathcomp-word/test.v'
 TEST_FILES[coq-mathcomp-zify]='examples/divmod.v examples/boolean.v'
 PATCH_CMDS[coq-mathcomp-zify]='/^From mathcomp Require Import ssreflect/ {sub("mathcomp", "mathcomp.ssreflect", $0); print $0; next}'
+PATCH_CMDS[coq-mathcomp-zify~9.1~2026.01]='/^From mathcomp Require Import ssreflect/ {print "From mathcomp.ssreflect Require Import all_ssreflect."; next}'
 TEST_FILES[coq-menhirlib]='coq-menhirlib/src/Alphabet.v'
 TEST_FILES[coq-metacoq]='examples/metacoq_tour_prelude.v examples/metacoq_tour.v'
 PATCH_CMDS[coq-metacoq]='/From MetaCoq.Examples/ {sub("From MetaCoq.Examples", "", $0); print $0; next}'
@@ -218,7 +219,7 @@ function patch_file() {
 smoke_script=smoke-test-kit/run-smoke-test.sh
 
 cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}/g" > $smoke_script
-	#/bin/bash
+	#!/usr/bin/env bash
 	# This script runs a small "smoke-test" for all Coq Platform components
 
 	# Exit on all errors
@@ -258,12 +259,29 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 	# Print Coq version
 	echo "Coq Version = $(coqc --version)"
 
+		# Print Coq version
+	echo "Coq Version = $(coqc --version)"
+
 	# set COQLIB variable
 	COQLIB="$(coqc -where | tr -d '\r')"
 
+	echo "=== DEBUG ENV ==="
+	echo "PATH=$PATH"
+	echo "coqc=$(command -v coqc)"
+	echo "COQLIB=$COQLIB"
+	echo "ROCQLIB=${ROCQLIB:-}"
+	echo "COQPATH=${COQPATH:-}"
+	echo "PWD=$(pwd)"
+	echo
+	echo "=== DEBUG SEARCH MATHCOMP ==="
+	find "$COQLIB" -path "*mathcomp/ssreflect*" 2>/dev/null | head -50 || true
+	find "$(dirname "$COQLIB")" -path "*mathcomp/ssreflect*" 2>/dev/null | head -50 || true
+	find "$(dirname "$COQLIB")/../user-contrib" -path "*mathcomp/ssreflect*" 2>/dev/null | head -50 || true
+	echo "============================="
+
 	# cd to smoke test folder
 	HERE="$(pwd)"
-	cd "$(dirname $0)"
+	cd "$(dirname "$0")"
 
 	# Run one test
 	# $1: relative path of file to run
@@ -275,6 +293,15 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 	      here="$(pwd)"
 	      cd "${1%/*}"
 	      echo "coqc ${2:-} ${1##*/}"
+	      echo "PWD=$(pwd)"
+	      echo "coqc=$(command -v coqc)"
+	      echo "COQLIB=$(coqc -where | tr -d '\r')"
+	      if [[ "$1" =~ mathcomp ]]; then
+	        echo "--- mathcomp debug for $1 ---"
+	        find "$(coqc -where | tr -d '\r')" -path "*mathcomp/ssreflect*" 2>/dev/null | head -50 || true
+	        find "$(dirname "$(coqc -where | tr -d '\r')")" -path "*mathcomp/ssreflect*" 2>/dev/null | head -50 || true
+	        echo "-----------------------------"
+	      fi
 	      coqc ${2:-} "${1##*/}"
 	      cd "$here"
 	    echo $'\n\n'

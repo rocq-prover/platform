@@ -126,7 +126,7 @@ jobs:
         if: failure()
         with:
           name: "Opam build folder ${{matrix.variant}}"
-          path: /Users/runner/.opam/CP*${{matrix.variant}}/.opam-switch/build
+          path: /Users/runner/.opam/RP*${{matrix.variant}}/.opam-switch/build
 
       - name: Install bash (needed by smoke scripts)
         run: brew install bash
