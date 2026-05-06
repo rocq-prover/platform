@@ -192,7 +192,7 @@ if  [[ "${COQ_PLATFORM_EXTENT}"  =~ ^[xX] ]]
 then
 
   # Proof automation / generation / helpers
-  PACKAGES="${PACKAGES} coq-deriving.0.2.2"
+  PACKAGES="${PACKAGES} coq-deriving.0.2.3"
   if [ "${BITSIZE}" == "64" ]
   then
     PACKAGES="${PACKAGES} rocq-metarocq.1.4.1+9.1"
