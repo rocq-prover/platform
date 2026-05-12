@@ -77,7 +77,7 @@ then
   # Standard library extensions
   PACKAGES="${PACKAGES} rocq-bignums.9.0.0+rocq9.1" # modified
   PACKAGES="${PACKAGES} coq-ext-lib.0.13.0"
-  PACKAGES="${PACKAGES} coq-stdpp.1.12.0" # local
+  PACKAGES="${PACKAGES} rocq-stdpp.1.13.0" # local
 
   # General mathematics
   PACKAGES="${PACKAGES} elpi.3.2.0 rocq-elpi.3.2.0" # modified
@@ -156,8 +156,8 @@ then
 
   # Formal languages, compilers and code verification
   PACKAGES="${PACKAGES} coq-reglang.1.2.2"
-  PACKAGES="${PACKAGES} coq-iris.4.4.0"
-  PACKAGES="${PACKAGES} coq-iris-heap-lang.4.4.0"
+  PACKAGES="${PACKAGES} rocq-iris.4.5.0"
+  PACKAGES="${PACKAGES} rocq-iris-heap-lang.4.5.0"
   PACKAGES="${PACKAGES} coq-ott.0.34"
   PACKAGES="${PACKAGES} ott.0.34"
   PACKAGES="${PACKAGES} coq-mathcomp-word.3.4" # Works with version relaxation # comment
@@ -192,7 +192,7 @@ if  [[ "${COQ_PLATFORM_EXTENT}"  =~ ^[xX] ]]
 then
 
   # Proof automation / generation / helpers
-  PACKAGES="${PACKAGES} coq-deriving.0.2.2"
+  PACKAGES="${PACKAGES} coq-deriving.0.2.3"
   if [ "${BITSIZE}" == "64" ]
   then
     PACKAGES="${PACKAGES} rocq-metarocq.1.4.1+9.1"

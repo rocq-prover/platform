@@ -168,6 +168,9 @@ then
   COQ_PLATFORM_OPAM_MAIN_REPOS="coq-core-dev,coq-extra-dev,${COQ_PLATFORM_OPAM_MAIN_REPOS}"
 fi
 
+if [ "${COQ_PLATFORM_OCAML_VERSION}" = "4.10.2" ]; then
+  COQ_PLATFORM_OPAM_MAIN_REPOS="${COQ_PLATFORM_OPAM_MAIN_REPOS},archive"
+fi
 
 if ! opam switch list --short | fgrep -qx "${COQ_PLATFORM_SWITCH_NAME}" &> /dev/null
 then
