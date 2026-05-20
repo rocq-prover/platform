@@ -80,7 +80,7 @@ then
   PACKAGES="${PACKAGES} rocq-stdpp.1.13.0" # local
 
   # General mathematics
-  PACKAGES="${PACKAGES} elpi.3.2.0 rocq-elpi.3.2.0" # modified
+  PACKAGES="${PACKAGES} elpi.3.7.1 rocq-elpi.3.4.0" # modified
   PACKAGES="${PACKAGES} rocq-hierarchy-builder.1.10.2" # modified
   PACKAGES="${PACKAGES} rocq-mathcomp-ssreflect.2.5.0" # modified
   PACKAGES="${PACKAGES} coq-mathcomp-ssreflect.2.5.0" # duplication 
@@ -101,7 +101,7 @@ then
   PACKAGES="${PACKAGES} coq-coqprime-generator.1.1.2"
   
   # Numerical mathematics
-  PACKAGES="${PACKAGES} coq-flocq.4.2.1"
+  PACKAGES="${PACKAGES} coq-flocq.4.2.2"
   PACKAGES="${PACKAGES} coq-interval.4.11.4"
 
   PACKAGES="${PACKAGES} coq-gappa.1.7.1"
