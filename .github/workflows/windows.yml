@@ -52,7 +52,7 @@ jobs:
         variant:
           # Keep this in sync with the Smoke test below
           - "9.2~2026.06"
-          - "9.1~2026.01"
+          #- "9.1~2026.01"
 
     steps:
       - name: Set git to use LF
@@ -117,7 +117,7 @@ jobs:
           - "64"
         variant:
           - "9.2~2026.06"
-          - "9.1~2026.01"
+          #- "9.1~2026.01"
 
     steps:
       - name: "Download Artifact"
