@@ -12,7 +12,7 @@
 
 # The two lines below are used by the package selection script
 COQ_PLATFORM_VERSION_TITLE="Rocq 9.1 (released January 2026) with the preview package pick from Mars 2026"
-COQ_PLATFORM_VERSION_SORTORDER="1"
+COQ_PLATFORM_VERSION_SORTORDER="2"
 
 # The package list name is the final part of the opam switch name.
 # It is usually either empty ot starts with ~.
