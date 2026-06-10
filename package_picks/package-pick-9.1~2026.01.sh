@@ -80,7 +80,7 @@ then
   PACKAGES="${PACKAGES} rocq-stdpp.1.13.0" # local
 
   # General mathematics
-  PACKAGES="${PACKAGES} elpi.3.7.1 rocq-elpi.3.4.0" # modified
+  PACKAGES="${PACKAGES} elpi.3.6.2 rocq-elpi.3.3.1" # modified
   PACKAGES="${PACKAGES} rocq-hierarchy-builder.1.10.2" # modified
   PACKAGES="${PACKAGES} rocq-mathcomp-ssreflect.2.5.0" # modified
   PACKAGES="${PACKAGES} coq-mathcomp-ssreflect.2.5.0" # duplication 
