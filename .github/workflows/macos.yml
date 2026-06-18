@@ -49,8 +49,8 @@ jobs:
       matrix:
         variant:
           # Keep this in sync with the Smoke test below
-          - "9.1~2026.01"
-          - "9.0~2025.08"
+          - "9.2~2026.06"
+          #- "9.1~2026.01"
 
     steps:
       - name: Setup Xcode 16.0
@@ -249,8 +249,8 @@ jobs:
       fail-fast: false
       matrix:
         variant:
-          - "9.1~2026.01"
-          - "9.0~2025.08"
+          - "9.2~2026.06"
+          #- "9.1~2026.01"
 
     steps:
       - name: Install bash
