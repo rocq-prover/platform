@@ -163,17 +163,17 @@ then
   PACKAGES="${PACKAGES} coq-mathcomp-word.3.4" # Works with version relaxation # comment
   
   #  Error compilation compcert
-  if false
-  then
+  #if false
+  #then
   case "$COQ_PLATFORM_COMPCERT" in
-     [yY]) PACKAGES="${PACKAGES} coq-compcert.3.16" ;; 
+     [yY]) PACKAGES="${PACKAGES} coq-compcert.3.17" ;; 
     [nN]) true ;;
     *) echo "Illegal value for COQ_PLATFORM_COMPCERT - aborting"; false ;;
   esac
-  fi
+  #fi
   #  depends to "coq-compcert" {= "3.13.1"}
-  if false
-  then
+  #if false
+  #then
   case "$COQ_PLATFORM_VST" in
     [yY])
      PACKAGES="${PACKAGES} coq-vst.2.16"
@@ -181,7 +181,7 @@ then
     [nN]) true ;;
     *) echo "Illegal value for COQ_PLATFORM_VST - aborting"; false ;;
   esac
-  fi
+  #fi
   # # Proof analysis and other tools
   PACKAGES="${PACKAGES} coq-dpdgraph.1.0+9.1"
 fi
