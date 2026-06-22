@@ -133,8 +133,8 @@ then
   PACKAGES="${PACKAGES} coq-menhirlib.20250903 menhir.20250903" # modified
   PACKAGES="${PACKAGES} rocq-equations.1.3.1+9.1" # modified
   PACKAGES="${PACKAGES} rocq-aac-tactics.9.0.0"
-  #PACKAGES="${PACKAGES} coq-unicoq.1.6+8.20" # error
-  #PACKAGES="${PACKAGES} coq-mtac2.1.4+9.0" # error with unicoq
+  PACKAGES="${PACKAGES} coq-unicoq.1.6+9.1" # modified
+  PACKAGES="${PACKAGES} coq-mtac2.1.4+9.1" # modified linked with unicoq
   PACKAGES="${PACKAGES} coq-quickchick.2.1.1"
   PACKAGES="${PACKAGES} coq-hammer-tactics.1.3.2+9.1" # modified
   if [[ "$OSTYPE" != cygwin ]]
