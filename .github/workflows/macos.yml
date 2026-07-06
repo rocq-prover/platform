@@ -53,10 +53,10 @@ jobs:
           - "9.0~2025.08"
 
     steps:
-      - name: Setup Xcode 16.4
+      - name: Setup Xcode 16.0
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: "16.4.0"
+          xcode-version: "16.0"
 
       - name: Print toolchain info
         run: |
