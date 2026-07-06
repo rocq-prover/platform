@@ -53,11 +53,6 @@ jobs:
           - "9.0~2025.08"
 
     steps:
-      - name: Setup Xcode 26.6
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: "26.6"
-
       - name: Print toolchain info
         run: |
           sw_vers
