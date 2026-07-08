@@ -16,6 +16,11 @@ on:
   pull_request:
     branches:
       - "**"
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - labeled
   schedule:
     - cron: "0 0 * * *"
   workflow_dispatch:
@@ -40,25 +45,33 @@ env:
 # - build-essential pulls in the C toolchain
 ###############################################################################
 jobs:
+  define_matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      variants: ${{ steps.set-matrix.outputs.variants }}
+    steps:
+      - id: set-matrix
+        shell: bash
+        run: |
+          FULL='["9.1~2026.01","9.0~2025.08","8.20~2025.01","8.19~2024.10","8.18~2023.11","8.17~2023.08","8.16~2022.09","8.15~2022.04","8.14~2022.01","8.13~2021.02","8.12"]'
+          SHORT='["9.1~2026.01","9.0~2025.08"]'
+          REST='["8.20~2025.01","8.19~2024.10","8.18~2023.11","8.17~2023.08","8.16~2022.09","8.15~2022.04","8.14~2022.01","8.13~2021.02","8.12"]'
+
+          if [[ "${{ github.event_name }}" != "pull_request" ]]; then
+            echo "variants=$FULL" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ contains(github.event.pull_request.labels.*.name, 'ci:ubuntu-full') }}" == "true" ]]; then
+            echo "variants=$REST" >> "$GITHUB_OUTPUT"
+          else
+            echo "variants=$SHORT" >> "$GITHUB_OUTPUT"
+          fi
   Ubuntu_platform:
-    name: Ubuntu
+    name: Ubuntu ${{ matrix.variant }}
+    needs: define_matrix
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        variant:
-          # This should contain all picks introduced in the current release + all original picks of all Coq versions
-          - "9.1~2026.01"
-          - "9.0~2025.08"
-          - "8.20~2025.01"
-          - "8.19~2024.10"
-          - "8.18~2023.11"
-          - "8.17~2023.08"
-          - "8.16~2022.09"
-          - "8.15~2022.04"
-          - "8.14~2022.01"
-          - "8.13~2021.02"
-          - "8.12"
+        variant: ${{ fromJSON(needs.define_matrix.outputs.variants) }}
 
     steps:
       - name: Git checkout
