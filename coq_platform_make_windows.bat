@@ -378,7 +378,7 @@ REM Delete Cygwin setup file if it is older than 1 day, so that it is downloaded
 FORFILES /P %CYGWIN_LOCAL_CACHE_WFMT% /M %SETUP% /D -1 /C "cmd /C del @file" 2> NUL
 
 IF NOT EXIST "%CYGWIN_LOCAL_CACHE_WFMT%\%SETUP%" (
-  powershell -Command "(New-Object Net.WebClient).DownloadFile('http://www.cygwin.com/%SETUP%', '%CYGWIN_LOCAL_CACHE_WFMT%/%SETUP%')"
+  powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.cygwin.com/%SETUP%', '%CYGWIN_LOCAL_CACHE_WFMT%/%SETUP%')"
 )
 
 ECHO "========== INSTALL CYGWIN =========="
