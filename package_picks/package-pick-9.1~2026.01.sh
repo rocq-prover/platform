@@ -147,7 +147,7 @@ then
 
   PACKAGES="${PACKAGES} coq-coqeal.2.1.1" # modified
   PACKAGES="${PACKAGES} rocq-libhyps.4.0"
-  #PACKAGES="${PACKAGES} coq-itauto.8.20.0" # error
+  PACKAGES="${PACKAGES} coq-itauto.9.1.0"
   
   # General mathematics (which requires one of the above tools)
   PACKAGES="${PACKAGES} coq-mathcomp-analysis.1.16.0" # modified

@@ -13,13 +13,13 @@ In case you want to use the fast path:
 
 - Download the DMG package from https://github.com/rocq-prover/platform/releases (click on "Assets" at the end of a release section).
 - Open the downloaded DMG package with a double click.
-- Drag and drop the "Rocq-Platform~9.0~2025.08.app" icon on the link to the "Applications" folder.
+- Drag and drop the "Rocq-Platform~9.1~2026.07.app" icon on the link to the "Applications" folder.
 - RocqIDE appears under `/Applications` in Finder and in Launcher.
 - The published installers are always signed by INRIA, but no notarized by Apple yet. This means that on first start of the application, you must right click on the Rocq application in the `Applications` folder and select `open`. Subsequently this is not required - the application can be started directly.
 - In case you want to use the installed `coqc` and other tools from the command line, you have three options:
   - Use the supplied `rocq-shell.command` file. This file is included in the top level folder of the `.dmg` file and can be dragged e.g. to the desktop and started from there. It opens a terminal window in which the environment variables `$PATH` and `$COQLIB` are set. These `.command` files always refer to a specifc version of Rocq, so you can keep multiple of these files for multiple versions of Rocq.
-  - Run `eval $(/Applications/Rocq-Platform~9.0~2025.08.app/Contents/Resources/bin/coq-env.sh)` in your shell. This will set the same environment variables as `rocq-shell.command` in the current shell.
-  - Add the folder `/Applications/Rocq-Platform~9.0~2025.08.app/Contents/Resources/bin` to your `$PATH`, e.g. by running `sudo sh -c "echo '/Applications/Rocq-Platform~9.0~2025.08.app/Contents/Resources/bin' > /etc/paths.d/coq"`. Please note that this method has two disadvantages: first it is difficult to switch between different versions of Rocq and second some tools require additional environment variables, e.g. `COQLIB` or `LD_LIBRARY_PATH` to be set.
+  - Run `eval $(/Applications/Rocq-Platform~9.1~2026.07.app/Contents/Resources/bin/coq-env.sh)` in your shell. This will set the same environment variables as `rocq-shell.command` in the current shell.
+  - Add the folder `/Applications/Rocq-Platform~9.1~2026.07.app/Contents/Resources/bin` to your `$PATH`, e.g. by running `sudo sh -c "echo '/Applications/Rocq-Platform~9.1~2026.07.app/Contents/Resources/bin' > /etc/paths.d/coq"`. Please note that this method has two disadvantages: first it is difficult to switch between different versions of Rocq and second some tools require additional environment variables, e.g. `COQLIB` or `LD_LIBRARY_PATH` to be set.
 - If you want to inspect the installed content, right click the `Rocq_Platform` app in `/Applications` in Finder and select `Show Package Contents`.
 
 **A note to lecturers:** it is easy to create a customized Windows installer from an opam switch - see [Customized Installers](FAQ-customized-installers.md)
@@ -37,15 +37,15 @@ This method is intended for experienced users, who may want to use opam to insta
 - If you have neither Homebrew nor MacPorts installed, read the section [Homebrew and MacPorts](#homebrew-and-macports) below.
 - If you have Homebrew installed, read the section [Homebrew issues and workarounds](#homebrew-issues-and-workarounds) below.
 - Get the Rocq Platform scripts via either of these methods
-  - Most users should download and extract `https://github.com/coq/platform/archive/refs/tags/2025.08.3.zip`.
-  - Users which intend to contribute to Rocq Platform should use `git clone --branch 2025.08.3 https://github.com/rocq-prover/platform.git`.
+  - Most users should download and extract `https://github.com/coq/platform/archive/refs/tags/2026.07.0.zip`.
+  - Users which intend to contribute to Rocq Platform should use `git clone --branch 2026.07.0 https://github.com/rocq-prover/platform.git`.
 - Open a shell, navigate to the download folder and execute `coq_platform_make.sh`.
 - If you are using MacPorts, the system will ask once for sudo permissions to install prerequisites after installing OCaml (5..20 minutes after script start).
 - In case the script aborts e.g. cause of internet issues, just rerun the script.
-- The script creates a new opam switch named e.g. CP.2025.01.0~8.20~2025.01 - the exact name depends on the Rocq version and package pick you selected.
+- The script creates a new opam switch named e.g. RP.2026.07.0~9.1~2026.01 - the exact name depends on the Rocq version and package pick you selected.
   This means the script does not touch your existing opam setup unless you already have a switch of this name.
 - Use the following commands to activate this switch after opening a new shell:
-  - `opam switch CP.2025.08.3~9.0~2025.01` (note: the switch name might vary if you choose a different version of Rocq - please use `opam switch` to see a list of switch names)
+  - `opam switch RP.2026.07.0~9.1~2026.01` (note: the switch name might vary if you choose a different version of Rocq - please use `opam switch` to see a list of switch names)
   - `eval $(opam env)`
   - The second step can be automated by rerunning `opam init`
 - The main opam repositories for Rocq and OCaml developments are already added to the created opam switch, so it should be easy to install additional Coq (or OCaml) packages.
