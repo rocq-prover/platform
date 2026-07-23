@@ -23,8 +23,8 @@ This method is intended for experienced users, who may want to use opam to insta
 
 - In case you install **Rocq Platform for the first time**:
   - Get the Rocq Platform scripts via either of these methods
-    - Most users should download and extract `https://github.com/coq/platform/archive/refs/tags/2025.08.3.zip`.
-    - Users which intend to contribute to Coq Platform should use `git clone --branch 2025.08.3 https://github.com/rocq-prover/platform.git`.
+    - Most users should download and extract `https://github.com/coq/platform/archive/refs/tags/2026.07.0.zip`.
+    - Users which intend to contribute to Coq Platform should use `git clone --branch 2026.07.0 https://github.com/rocq-prover/platform.git`.
       Please note that the scripts are CR/LF sensitive, so if you use a Windows git client (not a Cygwin git) you should set `git config --global core.autocrlf false` - which is anyway a good idea.
   - Open a DOS command window, navigate to the download folder and execute `coq_platform_make_windows.bat`.
   - This will ask for the Cygwin installation path and setup a fresh Cygwin as build host (the created Rocq is MinGW and runs without Cygwin).
@@ -35,26 +35,26 @@ This method is intended for experienced users, who may want to use opam to insta
   - Start a cygwin shell via `C:\<your_coq_platform_Cygwin_path>\Cygwin.bat`
   - Download, clone or pull the Rocq Platform:
     - Download zip and expand:
-      - `wget https://github.com/coq/platform/archive/refs/tags/2025.08.3.zip`
-      - `unzip 2025.08.3.zip`
-      - `mv 2025.08.3 platform-2025.08.3``
-      - `cd platform-2025.08.3`
+      - `wget https://github.com/coq/platform/archive/refs/tags/2026.07.0.zip`
+      - `unzip 2026.07.0.zip`
+      - `mv 2025.08.3 platform-2026.07.0``
+      - `cd platform-2026.07.0`
     - **OR** Git clone:
-      - `git clone --branch 2025.08.3 https://github.com/rocq-prover/platform.git`
+      - `git clone --branch 2026.07.0 https://github.com/rocq-prover/platform.git`
       - `cd platform`
     - **OR** Git update (with existing git Coq Platform repo):
       - `cd platform`
-      - `git fetch & git checkout 2025.08.3`
+      - `git fetch & git checkout 2026.07.0`
   - Run the main Rocq Platform installation script `coq_platform_make.sh`
 - The script will ask a few questions if no parameters are given and then run fully unattended.
 - The build time is between 1..5 hours, depending on CPU speed and RAM size.
 - In case the script aborts e.g. cause of internet issues, just rerun the batch file - it won't install Cygwin again (assuming you specify the same Cygwin destination folder).
 - The script has various options for configuring paths and proxies; see `example_coq_platform_make.bat` for an example command line.
 - The resulting Rocq installation is opam based and best used from the Cygwin prompt (started via `C:\<your_coq_platform_Cygwin_path>\Cygwin.bat`)
-- The script creates a new opam switch named e.g. CP.2025.08.3~8.20~2025.01 - the exact name depends on the Rocq version and package pick you selected you selected.
+- The script creates a new opam switch named e.g. RP.2026.07.0~9.1~2026.01 - the exact name depends on the Rocq version and package pick you selected you selected.
   This means the script does not touch your existing opam setup unless you already have a switch of this name.
 - Use the following commands at the Cygwin prompt to activate this switch after opening a new shell:
-  - `opam switch CP.2025.08.3~9.0~2025.01` (note: the switch name might vary if you choose a different version of Rocq - please use `opam switch` to see a list of switch names)
+  - `opam switch RP.2026.07.0~9.1~2026.01` (note: the switch name might vary if you choose a different version of Rocq - please use `opam switch` to see a list of switch names)
   - `eval $(opam env)`
   - The second step can be automated by rerunning `opam init`
 - The main opam repositories for Rocq and OCaml developments are already added to the created opam switch, so it should be easy to install additional Rocq (or OCaml) packages.
