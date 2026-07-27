@@ -16,16 +16,16 @@ if [ -z "${COQ_PLATFORM_PACKAGE_PICK_FILE:+x}" ]
 then
 cat <<EOH
 ========================= SELECT PACKAGE_PICK VERSION ==========================
-The Coq Platform allows to install the latest release version of Coq, but also
-older or development versions of Coq. Besides the Coq version, you can choose
-a 'package pick', that is a selection of specific versions of Coq libraries,
-plugins and tools. For some versions of Coq several package picks are available.
-Package picks with the same release date for different Coq versions are made
+The Rocq Platform allows to install the latest release version of Rocq, but also
+older or development versions of Coq. Besides the Rocq version, you can choose
+a 'package pick', that is a selection of specific versions of Rocq libraries,
+plugins and tools. For some versions of Rocq several package picks are available.
+Package picks with the same release date for different Rocq versions are made
 as compatible as possible.
-You can install several versions of Coq in parallel, which simplifies porting of
-developments. You can use "opam switch" to switch between Coq versions.
+You can install several versions of Rocq in parallel, which simplifies porting of
+developments. You can use "opam switch" to switch between Rocq versions.
 
-The following Coq versions and package picks are available:
+The following Rocq/Coq versions and package picks are available:
 EOH
 
   packagefile_list="$( (for file in package_picks/package-pick-*.sh; do echo "$(grep "COQ_PLATFORM_VERSION_SORTORDER=" $file) $file"; done) | tr '=' ' ' | sed 's/  */ /g' | sort -n -k 2 | cut -d ' ' -f 3)"

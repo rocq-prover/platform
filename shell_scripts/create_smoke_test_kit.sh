@@ -43,7 +43,7 @@ source "$(dirname "$0")/get_names_from_switch.sh"
 
 echo "Create package list for '${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}'"
 
-packages="$(opam list --installed-roots --short --columns=name | grep "${pattern}" | cat)"
+packages="$(opam list --installed-roots --short --columns=name | { grep "${pattern}" || true; })"
 
 ##### Associate package name with test/example file(s) #####
 
