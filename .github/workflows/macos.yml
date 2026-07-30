@@ -286,29 +286,23 @@ jobs:
           cp -r "/Volumes/${DMG%%.dmg}/${APP_PREFIX}"*.app /Applications/
           hdiutil detach "/Volumes/${DMG%%.dmg}/"
 
-      - name: "Smoke coqc"
+      - name: "Smoke compiler"
         shell: bash
         run: |
           cd /Applications/${APP_PREFIX}*.app/Contents/Resources/bin/
 
-          # Try default coqc first
-          if ./coqc -v 2>/dev/null; then
-              exit 0
+          # Try rocq first (Rocq 9.2+), then coqc (legacy)
+          if [ -f ./rocq ]; then
+            echo "Testing rocq compile --version"
+            ./rocq compile --version
+          elif [ -f ./coqc ]; then
+            echo "Testing coqc -v"
+            ./coqc -v
+          else
+            echo "Neither rocq nor coqc found in $(pwd)"
+            ls -la
+            exit 1
           fi
-
-          echo "coqc -v failed, trying with library path detection for Rocq 9.0+"
-
-          # Try to find library path and use -coqlib
-          for path in ../lib/coq ../lib/rocq ../lib/coq-stdlib; do
-              if [ -d "$path" ] && ([ -f "$path/theories/Init/Prelude.vo" ] || [ -f "$path/Init/Prelude.vo" ]); then
-                  echo "Trying with -coqlib $path"
-                  ./coqc -coqlib "$path" -v && exit 0
-              fi
-          done
-
-          # Last resort: boot mode
-          echo "Trying boot mode..."
-          ./coqc -boot -noinit -v
 
       - name: "Run Macos smoke test kit"
         shell: bash
@@ -316,13 +310,19 @@ jobs:
           ls /Applications/${APP_PREFIX}*.app
           export PATH="$PATH:$(cd /Applications/${APP_PREFIX}*.app/Contents/Resources/bin/; pwd)"
 
-          # Prefer ROCQLIB for Rocq 9+, but keep COQLIB fallback
-          if ROCQLIB_TEMP=$(coqc -where 2>/dev/null); then
+          # Detect compiler and set COQLIB/ROCQLIB
+          if command -v rocq >/dev/null 2>&1; then
+              ROCQLIB_TEMP=$(rocq compile -where 2>/dev/null | tr -d '\r')
               export ROCQLIB="$ROCQLIB_TEMP"
               export COQLIB="$ROCQLIB_TEMP"
               echo "ROCQLIB set to: $ROCQLIB"
+          elif command -v coqc >/dev/null 2>&1; then
+              ROCQLIB_TEMP=$(coqc -where 2>/dev/null | tr -d '\r')
+              export ROCQLIB="$ROCQLIB_TEMP"
+              export COQLIB="$ROCQLIB_TEMP"
+              echo "COQLIB set to: $COQLIB"
           else
-              echo "Warning: coqc -where failed, ROCQLIB/COQLIB not set"
+              echo "Warning: neither rocq nor coqc found, ROCQLIB/COQLIB not set"
               export ROCQLIB=""
               export COQLIB=""
           fi
