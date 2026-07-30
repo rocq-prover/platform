@@ -101,7 +101,28 @@ echo "##### Coq Platform release = ${COQ_PLATFORM_RELEASE} version = ${COQ_PLATF
 
 # Get installed version of coq (otherwise opam source gives the latest)
 
-if [ "$(opam show -f version coq | cut -d. -f1)" -ge 9 ]; then
+if opam show -f version rocq-core >/dev/null 2>&1; then
+  rocq_major=$(opam show -f version rocq-core | cut -d. -f1)
+else
+  rocq_major=0
+fi
+
+if opam show -f version coq >/dev/null 2>&1; then
+  coq_major=$(opam show -f version coq | cut -d. -f1)
+else
+  coq_major=0
+fi
+
+if [ "$rocq_major" -ge 9 ] 2>/dev/null; then
+  echo "Rocq 9.x+ detected, sourcing components individually"
+  for pkg in rocq-core rocq-stdlib coqide-server rocq-runtime; do
+    if opam show -f version "$pkg" >/dev/null 2>&1; then
+      version=$(opam show -f version "$pkg")
+      echo "→ Sourcing ${pkg}.${version}"
+      opam source --dir=${pkg}.${version} ${pkg}.${version}
+    fi
+  done
+elif [ "$coq_major" -ge 9 ] 2>/dev/null; then
   echo "Coq 9.x+ detected, sourcing components individually"
   for pkg in coq-core coq-stdlib coqide-server rocq-runtime; do
     if opam show -f version "$pkg" >/dev/null 2>&1; then
@@ -118,7 +139,11 @@ fi
 
 ##### Get the version of Coq #####
 
-COQ_VERSION=$(coqc --print-version | cut -d ' ' -f 1)
+if command -v rocq >/dev/null 2>&1; then
+  COQ_VERSION=$(rocq compile --print-version | cut -d ' ' -f 1)
+else
+  COQ_VERSION=$(coqc --print-version | cut -d ' ' -f 1)
+fi
 
 # The MacOS version needs to be purely numeric (no +beta)
 # As it looks in current Coq releases beta versions are called .0

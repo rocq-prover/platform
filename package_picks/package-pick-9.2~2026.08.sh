@@ -61,5 +61,5 @@ PACKAGES="${PACKAGES} PIN.rocq-stdlib.9.1.0"
 if  [[ "${COQ_PLATFORM_EXTENT}"  =~ ^[iIfFxX] ]]
 then
 PACKAGES="${PACKAGES} rocqide.9.2.0"
-PACKAGES="${PACKAGES} vsrocq-language-server.2.3.4"
+PACKAGES="${PACKAGES} vsrocq-language-server.2.4.3+1"
 fi
