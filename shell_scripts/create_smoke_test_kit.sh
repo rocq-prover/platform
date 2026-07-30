@@ -230,53 +230,49 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 	# The scripts supports a regexp package name pattern as $1
 	pattern="${1:-.*}"
 
-	# Locate coqc and source env if needed
-	if ! command -v coqc &> /dev/null; then
-	  if [ -f /Applications/PRODUCTNAME.app/Contents/Resources/bin/coqc ]; then
-	    echo "Using coqc from '/Applications/PRODUCTNAME.app/Contents/Resources/bin'"
-	    # Initialize PATH, DYLD_LIBRARY_PATH, etc.
-	    eval $(/Applications/PRODUCTNAME.app/Contents/Resources/bin/coq-env.sh)
-	  elif [ -f /snap/coq-prover/current/coq-platform/bin/coqc ]; then
-	    echo "Using coqc from '/snap/coq-prover/current/coq-platform/bin'"
-	    echo "ATTENTION: coq-hammer requires LD_LIBRARY_PATH to be set to lib/stublibs!"
-	    export PATH='/snap/coq-prover/current/coq-platform/bin':"$PATH"
-	    export LD_LIBRARY_PATH='/snap/coq-prover/current/coq-platform/lib/stublibs':"${LD_LIBRARY_PATH:-}"
-	  else
-	    echo "This script expects that coqc is in the PATH"
-	    echo "or on macOS installed under /Applications/PRODUCTNAME.app/"
-	    echo "or on Linux with Snap installed under /snap/coq-prover/current/"
-	    exit 1
-	  fi
-	else
-	  # coqc is already in PATH; if a coq-env.sh sits next to it (mac app), source it for DYLD/etc.
+	# Detect compiler command: "rocq compile" (Rocq 9.2+) or "coqc" (legacy)
+	COQC=""
+	if command -v rocq &> /dev/null; then
+	  COQC="rocq compile"
+	  echo "Using Rocq compiler: rocq compile"
+	elif command -v coqc &> /dev/null; then
+	  COQC="coqc"
+	  # coqc is in PATH; if a coq-env.sh sits next to it (mac app), source it for DYLD/etc.
 	  COQ_BINDIR="$(dirname "$(command -v coqc)")"
 	  if [ -x "$COQ_BINDIR/coq-env.sh" ]; then
 	    echo "Sourcing environment from '$COQ_BINDIR/coq-env.sh'"
 	    eval "$("$COQ_BINDIR/coq-env.sh")"
 	  fi
+	elif [ -f /Applications/PRODUCTNAME.app/Contents/Resources/bin/coqc ]; then
+	  COQC="coqc"
+	  echo "Using coqc from '/Applications/PRODUCTNAME.app/Contents/Resources/bin'"
+	  eval $(/Applications/PRODUCTNAME.app/Contents/Resources/bin/coq-env.sh)
+	elif [ -f /snap/coq-prover/current/coq-platform/bin/coqc ]; then
+	  COQC="coqc"
+	  echo "Using coqc from '/snap/coq-prover/current/coq-platform/bin'"
+	  echo "ATTENTION: coq-hammer requires LD_LIBRARY_PATH to be set to lib/stublibs!"
+	  export PATH='/snap/coq-prover/current/coq-platform/bin':"$PATH"
+	  export LD_LIBRARY_PATH='/snap/coq-prover/current/coq-platform/lib/stublibs':"${LD_LIBRARY_PATH:-}"
+	else
+	  echo "This script expects that rocq or coqc is in the PATH"
+	  echo "or on macOS installed under /Applications/PRODUCTNAME.app/"
+	  echo "or on Linux with Snap installed under /snap/coq-prover/current/"
+	  exit 1
 	fi
 
-	# Print Coq version
-	echo "Coq Version = $(coqc --version)"
-
-		# Print Coq version
-	echo "Coq Version = $(coqc --version)"
+	# Print version
+	echo "Compiler version = $($COQC --version)"
 
 	# set COQLIB variable
-	COQLIB="$(coqc -where | tr -d '\r')"
+	COQLIB="$($COQC -where | tr -d '\r')"
 
 	echo "=== DEBUG ENV ==="
 	echo "PATH=$PATH"
-	echo "coqc=$(command -v coqc)"
+	echo "COQC=$COQC"
 	echo "COQLIB=$COQLIB"
 	echo "ROCQLIB=${ROCQLIB:-}"
 	echo "COQPATH=${COQPATH:-}"
 	echo "PWD=$(pwd)"
-	echo
-	echo "=== DEBUG SEARCH MATHCOMP ==="
-	find "$COQLIB" -path "*mathcomp/ssreflect*" 2>/dev/null | head -50 || true
-	find "$(dirname "$COQLIB")" -path "*mathcomp/ssreflect*" 2>/dev/null | head -50 || true
-	find "$(dirname "$COQLIB")/../user-contrib" -path "*mathcomp/ssreflect*" 2>/dev/null | head -50 || true
 	echo "============================="
 
 	# cd to smoke test folder
@@ -292,17 +288,9 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 	    echo "====================== Running test file $1 ======================"
 	      here="$(pwd)"
 	      cd "${1%/*}"
-	      echo "coqc ${2:-} ${1##*/}"
+	      echo "$COQC ${2:-} ${1##*/}"
 	      echo "PWD=$(pwd)"
-	      echo "coqc=$(command -v coqc)"
-	      echo "COQLIB=$(coqc -where | tr -d '\r')"
-	      if [[ "$1" =~ mathcomp ]]; then
-	        echo "--- mathcomp debug for $1 ---"
-	        find "$(coqc -where | tr -d '\r')" -path "*mathcomp/ssreflect*" 2>/dev/null | head -50 || true
-	        find "$(dirname "$(coqc -where | tr -d '\r')")" -path "*mathcomp/ssreflect*" 2>/dev/null | head -50 || true
-	        echo "-----------------------------"
-	      fi
-	      coqc ${2:-} "${1##*/}"
+	      $COQC ${2:-} "${1##*/}"
 	      cd "$here"
 	    echo $'\n\n'
 	  fi
@@ -526,6 +514,10 @@ done
 
 ##### Write footer of bash runner script #####
 
+# Always run a minimal compiler version check
+echo '' >> $smoke_script
+echo 'echo "====================== Compiler version check ======================"' >> $smoke_script
+echo '$COQC --version' >> $smoke_script
 echo '' >> $smoke_script
 echo 'cd "$HERE"' >> $smoke_script
 echo 'echo "====================== SMOKE TEST SUCCESS ======================"' >> $smoke_script
