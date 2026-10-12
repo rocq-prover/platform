@@ -233,9 +233,16 @@ NSIS_SCRIPT="Coq.nsi"
 SHELL_BAT="coq-shell.bat"
 SHELL_ICO="coq-shell.ico"
 
-COQ_MAJOR="$(opam show -f version coq | cut -d. -f1 || echo 0)"
+if opam show -f version rocq-core >/dev/null 2>&1; then
+  COQ_MAJOR="$(opam show -f version rocq-core | cut -d. -f1)"
+elif opam show -f version coq >/dev/null 2>&1; then
+  COQ_MAJOR="$(opam show -f version coq | cut -d. -f1)"
+else
+  COQ_MAJOR=0
+fi
+
 if [ "${COQ_MAJOR:-0}" -ge 9 ]; then
-  echo "Coq >= 9 => Rocq branding"
+  echo "Rocq >= 9 => Rocq branding"
   ide_name="rocqide"
   APP_PREFIX="Rocq-Platform"
   NSIS_SCRIPT="Rocq.nsi"
@@ -263,7 +270,11 @@ add_single_file "${MODDIR}/" "${PIXBUF_LOADER_CACHE_RELPATH}" "files_conf-gtk3"
 
 ###### Add system DLLs to some packages #####
 
-add_shared_library_dependencies "coqc" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_coq"
+if command -v rocq >/dev/null 2>&1; then
+  add_shared_library_dependencies "rocq" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_coq"
+else
+  add_shared_library_dependencies "coqc" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_coq"
+fi
 add_shared_library_dependencies "${ide_name}" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_${ide_name}"
 add_shared_library_dependencies "gappa" "/usr/${COQ_ARCH}-w64-mingw32/sys-root/" "files_gappa"
 
@@ -357,8 +368,25 @@ cp ../windows/*.ns* .
 # Extract some data from sources
 mkdir source
 
-COQ_MAJOR="$(opam show -f version coq | cut -d. -f1 || echo 0)"
-if [ "${COQ_MAJOR:-0}" -ge 9 ]; then
+if opam show -f version rocq-core >/dev/null 2>&1; then
+  COQ_MAJOR2="$(opam show -f version rocq-core | cut -d. -f1)"
+elif opam show -f version coq >/dev/null 2>&1; then
+  COQ_MAJOR2="$(opam show -f version coq | cut -d. -f1)"
+else
+  COQ_MAJOR2=0
+fi
+
+if opam list --installed --silent rocq-core 2>/dev/null; then
+  echo "Rocq detected — sourcing split packages"
+  for pkg in rocq-core rocq-stdlib coqide-server rocq-runtime "${ide_name}" coq-compcert coq-vst coq-vst-32; do
+    if opam list --installed --silent "${pkg}" 2>/dev/null; then
+      packagefull=$(opam list --installed --short --columns=name,version "${pkg}" | sed 's/ /./')
+      echo "→ opam source ${packagefull}"
+      opam source --dir="source/${pkg}" "${packagefull}"
+    fi
+  done
+  LICENSE_SRC="source/rocq-core/LICENSE"
+elif [ "${COQ_MAJOR2:-0}" -ge 9 ]; then
   echo "Coq >= 9 detected — sourcing split packages"
   for pkg in coq-core coq-stdlib coqide-server "${ide_name}" coq-compcert coq-vst coq-vst-32; do
     if opam list --installed --silent "${pkg}"; then

@@ -28,7 +28,7 @@ set -o pipefail
 
 ###### The scripts supports a regexp package name pattern as $1 #####
 
-pattern="${1:-^coq-}"
+pattern="${1:-^(coq-|rocq-)}"
 
 ###### Clear and create smoke test folder #####
 
@@ -39,11 +39,21 @@ mkdir smoke-test-kit
 
 source "$(dirname "$0")/get_names_from_switch.sh"
 
+###### Detect Rocq vs Coq branding #####
+
+SMOKE_APP_PREFIX="Coq-Platform"
+if opam show -f version rocq-core >/dev/null 2>&1; then
+  _COQ_MAJOR="$(opam show -f version rocq-core | cut -d. -f1)"
+  if [ "${_COQ_MAJOR:-0}" -ge 9 ]; then
+    SMOKE_APP_PREFIX="Rocq-Platform"
+  fi
+fi
+
 ###### Get filtered list of explicitly installed packages #####
 
 echo "Create package list for '${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}'"
 
-packages="$(opam list --installed-roots --short --columns=name | grep "${pattern}" | cat)"
+packages="$(opam list --installed-roots --short --columns=name | { grep -E "${pattern}" || true; })"
 
 ##### Associate package name with test/example file(s) #####
 
@@ -59,9 +69,11 @@ declare -A PATCH_CMDS
 declare -A TEST_CMDS
 
 TEST_FILES[coq-aac-tactics]='theories/Tutorial.v'
+TEST_FILES[rocq-aac-tactics]='theories/Tutorial.v'
 TEST_FILES[coq-bedrock2]='bedrock2/src/bedrock2Examples/ipow.v'
 TEST_FILES[coq-bedrock2-compiler]='compiler/src/compiler/Pipeline.v'
 TEST_FILES[coq-bignums]='tests/success/bigQ.v tests/success/NumberScopes.v'
+TEST_FILES[rocq-bignums]='tests/success/bigQ.v tests/success/NumberScopes.v'
 TEST_FILES[coq-compcert-32]='lib/Coqlib.v'
 COQ_OPTION[coq-compcert-32]='-Q $COQLIB/../coq-variant/compcert32/compcert compcert'
 TEST_FILES[coq-compcert]='lib/Coqlib.v'
@@ -69,6 +81,8 @@ TEST_FILES[coq-coqeal]='refinements/examples/irred.v'
 TEST_FILES[coq-coqprime-generator]=''
 TEST_FILES[coq-coqprime]='src/Coqprime/examples/russell1.v'
 PATCH_CMDS[coq-coqprime]='/^Require Import PocklingtonRefl.$/ {print "From Coqprime "$0; next}'
+TEST_FILES[rocq-coqprime]='src/Coqprime/examples/russell1.v'
+PATCH_CMDS[rocq-coqprime]='/^Require Import PocklingtonRefl.$/ {print "From Coqprime "$0; next}'
 TEST_FILES[coq-coquelicot]='examples/BacS2013.v'
 PATCH_CMDS[coq-coquelicot]='/^Require Import .*Rcomplements.*.$/ {print "From Coquelicot "$0; next}'
 TEST_FILES[coq-coqutil]='src/coqutil/Map/SortedListWord.v'
@@ -76,10 +90,12 @@ TEST_FILES[coq-corn]=''
 TEST_FILES[coq-deriving]='tests/tree.v'
 TEST_FILES[coq-dpdgraph]='tests/Test.v'
 TEST_FILES[coq-elpi]='examples/tutorial_coq_elpi_command.v examples/tutorial_elpi_lang.v'
+TEST_FILES[rocq-elpi]='examples/tutorial_coq_elpi_command.v examples/tutorial_elpi_lang.v'
 TEST_FILES[coq-elpi~8.12]='theories/examples/example_reflexive_tactic.v'
 TEST_FILES[coq-elpi~8.13~2021.02]='examples/tutorial_coq_elpi.v examples/tutorial_elpi_lang.v'
 TEST_FILES[coq-elpi~dev]='examples/tutorial_coq_elpi.v examples/tutorial_elpi_lang.v'
 TEST_FILES[coq-equations]='examples/Fin.v examples/STLC.v'
+TEST_FILES[rocq-equations]='examples/Fin.v examples/STLC.v'
 TEST_FILES[coq-ext-lib]='examples/MonadReasoning.v examples/Printing.v'
 TEST_FILES[coq-extructures]='../../test_files/coq-extructures/tutorial.v'
 TEST_FILES[coq-extructures~8.18~mc2]='tests/tutorial.v'
@@ -104,6 +120,7 @@ else
 	TEST_FILES[coq-hammer]='../../test_files/coq-hammer/test_z3.v'
 fi
 TEST_FILES[coq-hierarchy-builder]='examples/demo2/classical.v examples/demo2/stage10.v examples/demo2/stage11.v'
+TEST_FILES[rocq-hierarchy-builder]='examples/demo2/classical.v examples/demo2/stage10.v examples/demo2/stage11.v'
 TEST_FILES[coq-hierarchy-builder~8.12]='demo2/classical.v demo2/stage10.v demo2/stage11.v'
 PATCH_CMDS[coq-hierarchy-builder~8.12]='/^From HB.demo2 / {sub("From HB.demo2 ", "", $0); print $0; next}'
 TEST_FILES[coq-hierarchy-builder~8.13~2021.02]='demo2/classical.v demo2/stage10.v demo2/stage11.v'
@@ -118,36 +135,51 @@ TEST_FILES[coq-interval-flocq3]='testsuite/example-20071016.v testsuite/example-
 PATCH_CMDS[coq-interval-flocq3]='/Interval/ {sub("Interval", "IntervalFlocq3", $0); print $0; next}'
 TEST_FILES[coq-iris-heap-lang]='tests/heapprop.v'
 TEST_FILES[coq-iris]='tests/heapprop.v'
+TEST_FILES[rocq-iris-heap-lang]='tests/heapprop.v'
+TEST_FILES[rocq-iris]='tests/heapprop.v'
 TEST_FILES[coq-itauto]='test-suite/no_test_lia.v' # test-suite/arith.v  has issues with Int63.v
 TEST_FILES[coq-libhyps]='Demo/demo.v'
+TEST_FILES[rocq-libhyps]='tests/demo.v'
+PATCH_CMDS[rocq-libhyps]='/^Require Import LibHyps.LibHyps\.$/ {print "From LibHyps.LibHyps Require Import LibHyps."; next}'
+COQ_OPTION[rocq-libhyps]='-async-proofs-cache force -w -undo-batch-mode'
 TEST_FILES[coq-math-classes]=''
 TEST_FILES[coq-mathcomp-algebra-tactics]='examples/field_examples.v examples/ring_examples.v'
 PATCH_CMDS[coq-mathcomp-algebra-tactics]='/From mathcomp/ {sub("[(][*]", "", $0); sub("[*][)]", "", $0); print $0; next}'
 TEST_FILES[coq-mathcomp-algebra]='mathcomp/algebra/finalg.v'
+TEST_FILES[rocq-mathcomp-algebra]='mathcomp/algebra/finalg.v'
 # Overrides pour Rocq 9.0.1 pick (chemins sans préfixe "mathcomp/")
 TEST_FILES[coq-mathcomp-algebra~9.0~2025.08]='mathcomp/algebra/finalg.v'
 TEST_FILES[coq-mathcomp-algebra~9.1~2026.01]='mathcomp/algebra/finalg.v'
 TEST_FILES[coq-mathcomp-analysis]=''
 TEST_FILES[coq-mathcomp-bigenough]='bigenough.v'
+TEST_FILES[rocq-mathcomp-bigenough]='bigenough.v'
 TEST_FILES[coq-mathcomp-character]='mathcomp/character/all_character.v'
+TEST_FILES[rocq-mathcomp-character]='mathcomp/character/all_character.v'
 TEST_FILES[coq-mathcomp-character~9.0~2025.08]='character/all_character.v'
 TEST_FILES[coq-mathcomp-character~9.1~2026.01]='character/all_character.v'
 TEST_FILES[coq-mathcomp-field]='mathcomp/field/finfield.v'
+TEST_FILES[rocq-mathcomp-field]='mathcomp/field/finfield.v'
 TEST_FILES[coq-mathcomp-field~9.0~2025.08]='field/finfield.v'
 TEST_FILES[coq-mathcomp-field~9.1~2026.01]='field/finfield.v'
 TEST_FILES[coq-mathcomp-fingroup]='mathcomp/fingroup/quotient.v'
+TEST_FILES[rocq-mathcomp-fingroup]='mathcomp/fingroup/quotient.v'
 TEST_FILES[coq-mathcomp-fingroup~9.0~2025.08]='fingroup/quotient.v'
 TEST_FILES[coq-mathcomp-fingroup~9.1~2026.01]='fingroup/quotient.v'
 TEST_FILES[coq-mathcomp-finmap]='finmap.v'
+TEST_FILES[rocq-mathcomp-finmap]='finmap.v'
 PATCH_CMDS[coq-mathcomp-finmap]='/^From mathcomp Require/ {sub("mathcomp", "mathcomp.ssreflect", $0); print $0; next}'
 TEST_FILES[coq-mathcomp-multinomials]=''
+TEST_FILES[rocq-mathcomp-multinomials]=''
 TEST_FILES[coq-mathcomp-real-closed]='theories/complex.v'
+TEST_FILES[rocq-mathcomp-real-closed]='theories/complex.v'
 TEST_FILES[coq-mathcomp-solvable]='mathcomp/solvable/abelian.v'
 TEST_FILES[coq-mathcomp-solvable~9.0~2025.08]='solvable/abelian.v'
 TEST_FILES[coq-mathcomp-solvable~9.1~2026.01]='solvable/abelian.v'
+TEST_FILES[rocq-mathcomp-solvable]='solvable/abelian.v'
 TEST_FILES[coq-mathcomp-ssreflect]='mathcomp/ssreflect/ssrbool.v'
 TEST_FILES[coq-mathcomp-ssreflect~9.0~2025.08]='ssreflect/ssrbool.v'
 TEST_FILES[coq-mathcomp-ssreflect~9.1~2026.01]='ssreflect/ssrbool.v'
+TEST_FILES[rocq-mathcomp-ssreflect]='ssreflect/ssrbool.v'
 TEST_FILES[coq-mathcomp-word]='../../test_files/coq-mathcomp-word/test_upto_8_16.v'
 TEST_FILES[coq-mathcomp-word~8.16~2023.08]='../../test_files/coq-mathcomp-word/test.v'
 TEST_FILES[coq-mathcomp-word~8.17~2023.08]='../../test_files/coq-mathcomp-word/test.v'
@@ -160,6 +192,7 @@ TEST_FILES[coq-mathcomp-word~9.1~2026.01]='../../test_files/coq-mathcomp-word/te
 TEST_FILES[coq-mathcomp-zify]='examples/divmod.v examples/boolean.v'
 PATCH_CMDS[coq-mathcomp-zify]='/^From mathcomp Require Import ssreflect/ {sub("mathcomp", "mathcomp.ssreflect", $0); print $0; next}'
 PATCH_CMDS[coq-mathcomp-zify~9.1~2026.01]='/^From mathcomp Require Import ssreflect/ {print "From mathcomp.ssreflect Require Import all_ssreflect."; next}'
+TEST_FILES[rocq-mathcomp-zify~9.2~2026.08]='examples/divmod.v examples/boolean.v'
 TEST_FILES[coq-menhirlib]='coq-menhirlib/src/Alphabet.v'
 TEST_FILES[coq-metacoq]='examples/metacoq_tour_prelude.v examples/metacoq_tour.v'
 PATCH_CMDS[coq-metacoq]='/From MetaCoq.Examples/ {sub("From MetaCoq.Examples", "", $0); print $0; next}'
@@ -177,12 +210,15 @@ TEST_FILES[coq-relation-algebra~8.15~2022.04]='compiler_opts.v imp.v'
 TEST_FILES[coq-relation-algebra~8.15~2022.09]='compiler_opts.v imp.v'
 TEST_FILES[coq-relation-algebra]='examples/compiler_opts.v examples/imp.v'
 PATCH_CMDS[coq-relation-algebra]='/^Require Import kat .*$/ {print "From RelationAlgebra "$0; next}'
+TEST_FILES[rocq-relation-algebra]='examples/compiler_opts.v examples/imp.v'
+PATCH_CMDS[rocq-relation-algebra]='/^Require Import kat .*$/ {print "From RelationAlgebra "$0; next}'
 TEST_FILES[coq-rewriter]='src/Rewriter/Demo.v '
 TEST_FILES[coq-riscv]='src/riscv/Examples/MulTrapHandler.v'
 TEST_FILES[coq-riscv~8.19~2024.10]='src/riscv/Examples/Fib.v'
 TEST_FILES[coq-riscv~8.20~2025.01]='src/riscv/Examples/Fib.v'
 TEST_FILES[coq-riscv~9.0~2025.08]='src/riscv/Examples/Fib.v'
 TEST_FILES[coq-riscv~9.1~2026.01]='src/riscv/Examples/Fib.v'
+TEST_FILES[coq-riscv~9.2~2026.08]='src/riscv/Examples/Fib.v'
 TEST_FILES[coq-rupicola]='src/Rupicola/Examples/Uppercase.v'
 TEST_FILES[coq-serapi]='../../test_files/coq-serapi/serapi_example'
 TEST_CMDS[coq-serapi]="sertop < serapi_example"
@@ -203,6 +239,10 @@ PATCH_CMDS[coq-vst]='/^Require Import VST.progs64.reverse.$/ {print "Require Imp
 TEST_FILES[coq-vst~8.12]='progs/reverse.v progs/verif_reverse2.v'
 PATCH_CMDS[coq-vst~8.12]='/^Require Import VST.progs.reverse.$/ {print "Require Import reverse. "; next}'
 
+TEST_FILES[rocq-metarocq]=''
+TEST_FILES[rocq-stdlib]=''
+TEST_FILES[rocq-stdpp]=''
+
 ##### Hacks for files #####
 
 function patch_file() {
@@ -218,7 +258,7 @@ function patch_file() {
 
 smoke_script=smoke-test-kit/run-smoke-test.sh
 
-cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}/g" > $smoke_script
+cat <<-'EOH' | sed -e "s/PRODUCTNAME/${SMOKE_APP_PREFIX}${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}/g" > $smoke_script
 	#!/usr/bin/env bash
 	# This script runs a small "smoke-test" for all Coq Platform components
 
@@ -230,53 +270,49 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 	# The scripts supports a regexp package name pattern as $1
 	pattern="${1:-.*}"
 
-	# Locate coqc and source env if needed
-	if ! command -v coqc &> /dev/null; then
-	  if [ -f /Applications/PRODUCTNAME.app/Contents/Resources/bin/coqc ]; then
-	    echo "Using coqc from '/Applications/PRODUCTNAME.app/Contents/Resources/bin'"
-	    # Initialize PATH, DYLD_LIBRARY_PATH, etc.
-	    eval $(/Applications/PRODUCTNAME.app/Contents/Resources/bin/coq-env.sh)
-	  elif [ -f /snap/coq-prover/current/coq-platform/bin/coqc ]; then
-	    echo "Using coqc from '/snap/coq-prover/current/coq-platform/bin'"
-	    echo "ATTENTION: coq-hammer requires LD_LIBRARY_PATH to be set to lib/stublibs!"
-	    export PATH='/snap/coq-prover/current/coq-platform/bin':"$PATH"
-	    export LD_LIBRARY_PATH='/snap/coq-prover/current/coq-platform/lib/stublibs':"${LD_LIBRARY_PATH:-}"
-	  else
-	    echo "This script expects that coqc is in the PATH"
-	    echo "or on macOS installed under /Applications/PRODUCTNAME.app/"
-	    echo "or on Linux with Snap installed under /snap/coq-prover/current/"
-	    exit 1
-	  fi
-	else
-	  # coqc is already in PATH; if a coq-env.sh sits next to it (mac app), source it for DYLD/etc.
+	# Detect compiler command: "rocq compile" (Rocq 9.2+) or "coqc" (legacy)
+	COQC=""
+	if command -v rocq &> /dev/null; then
+	  COQC="rocq compile"
+	  echo "Using Rocq compiler: rocq compile"
+	elif command -v coqc &> /dev/null; then
+	  COQC="coqc"
+	  # coqc is in PATH; if a coq-env.sh sits next to it (mac app), source it for DYLD/etc.
 	  COQ_BINDIR="$(dirname "$(command -v coqc)")"
 	  if [ -x "$COQ_BINDIR/coq-env.sh" ]; then
 	    echo "Sourcing environment from '$COQ_BINDIR/coq-env.sh'"
 	    eval "$("$COQ_BINDIR/coq-env.sh")"
 	  fi
+	elif [ -f /Applications/PRODUCTNAME.app/Contents/Resources/bin/coqc ]; then
+	  COQC="coqc"
+	  echo "Using coqc from '/Applications/PRODUCTNAME.app/Contents/Resources/bin'"
+	  eval $(/Applications/PRODUCTNAME.app/Contents/Resources/bin/coq-env.sh)
+	elif [ -f /snap/coq-prover/current/coq-platform/bin/coqc ]; then
+	  COQC="coqc"
+	  echo "Using coqc from '/snap/coq-prover/current/coq-platform/bin'"
+	  echo "ATTENTION: coq-hammer requires LD_LIBRARY_PATH to be set to lib/stublibs!"
+	  export PATH='/snap/coq-prover/current/coq-platform/bin':"$PATH"
+	  export LD_LIBRARY_PATH='/snap/coq-prover/current/coq-platform/lib/stublibs':"${LD_LIBRARY_PATH:-}"
+	else
+	  echo "This script expects that rocq or coqc is in the PATH"
+	  echo "or on macOS installed under /Applications/PRODUCTNAME.app/"
+	  echo "or on Linux with Snap installed under /snap/coq-prover/current/"
+	  exit 1
 	fi
 
-	# Print Coq version
-	echo "Coq Version = $(coqc --version)"
-
-		# Print Coq version
-	echo "Coq Version = $(coqc --version)"
+	# Print version
+	echo "Compiler version = $($COQC --version)"
 
 	# set COQLIB variable
-	COQLIB="$(coqc -where | tr -d '\r')"
+	COQLIB="$($COQC -where | tr -d '\r')"
 
 	echo "=== DEBUG ENV ==="
 	echo "PATH=$PATH"
-	echo "coqc=$(command -v coqc)"
+	echo "COQC=$COQC"
 	echo "COQLIB=$COQLIB"
 	echo "ROCQLIB=${ROCQLIB:-}"
 	echo "COQPATH=${COQPATH:-}"
 	echo "PWD=$(pwd)"
-	echo
-	echo "=== DEBUG SEARCH MATHCOMP ==="
-	find "$COQLIB" -path "*mathcomp/ssreflect*" 2>/dev/null | head -50 || true
-	find "$(dirname "$COQLIB")" -path "*mathcomp/ssreflect*" 2>/dev/null | head -50 || true
-	find "$(dirname "$COQLIB")/../user-contrib" -path "*mathcomp/ssreflect*" 2>/dev/null | head -50 || true
 	echo "============================="
 
 	# cd to smoke test folder
@@ -292,17 +328,9 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 	    echo "====================== Running test file $1 ======================"
 	      here="$(pwd)"
 	      cd "${1%/*}"
-	      echo "coqc ${2:-} ${1##*/}"
+	      echo "$COQC ${2:-} ${1##*/}"
 	      echo "PWD=$(pwd)"
-	      echo "coqc=$(command -v coqc)"
-	      echo "COQLIB=$(coqc -where | tr -d '\r')"
-	      if [[ "$1" =~ mathcomp ]]; then
-	        echo "--- mathcomp debug for $1 ---"
-	        find "$(coqc -where | tr -d '\r')" -path "*mathcomp/ssreflect*" 2>/dev/null | head -50 || true
-	        find "$(dirname "$(coqc -where | tr -d '\r')")" -path "*mathcomp/ssreflect*" 2>/dev/null | head -50 || true
-	        echo "-----------------------------"
-	      fi
-	      coqc ${2:-} "${1##*/}"
+	      $COQC ${2:-} "${1##*/}"
 	      cd "$here"
 	    echo $'\n\n'
 	  fi
@@ -333,36 +361,62 @@ cat <<-'EOH' | sed -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POS
 
 smoke_batch=smoke-test-kit/run-smoke-test.bat
 
-cat <<-'EOH' | sed -e 's/$/\r/' -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}/g" > $smoke_batch
+cat <<-'EOH' | sed -e 's/$/\r/' -e "s/PRODUCTNAME/${SMOKE_APP_PREFIX}${COQ_PLATFORM_PACKAGE_PICK_POSTFIX}/g" > $smoke_batch
 	@ECHO OFF
-	REM This script runs a small "smoke-test" for all Coq Platform components
-	
-	REM Check if coqc is in the path
-	WHERE coqc
-	IF ERRORLEVEL 1 (
-	    REM Check if coqc is in the default install location
-	    IF NOT EXIST "C:\PRODUCTNAME\bin\coqc.exe" (
-	        IF NOT EXIST "C:\bin\PRODUCTNAME\bin\coqc.exe" (
-	            ECHO "This script expects that coqc is in the PATH"
-	            ECHO "or in the default install location C:\PRODUCTNAME"
-	            ECHO "or in C:\bin\PRODUCTNAME"
-	            EXIT /B 1
-	        ) ELSE (
-	            ECHO "Using coqc from C:\bin\PRODUCTNAME\bin"
-	            SET "PATH=C:\bin\PRODUCTNAME\bin;C:\bin\PRODUCTNAME\lib\stublibs;%PATH%"
-	        )
-	    ) ELSE (
-	        ECHO "Using coqc from C:\PRODUCTNAME\bin"
-	        SET "PATH=C:\PRODUCTNAME\bin;C:\PRODUCTNAME\lib\stublibs;%PATH%"
-	    )
+	REM This script runs a small "smoke-test" for all Rocq/Coq Platform components
+
+	REM Detect compiler: try "rocq" first, then "coqc"
+	SET "COQC="
+	WHERE rocq >NUL 2>&1
+	IF NOT ERRORLEVEL 1 (
+	    SET "COQC=rocq compile"
+	    GOTO :compiler_found
 	)
-	
-	REM Print Coq version
-	echo "Coq Version"
-	coqc --version
+	WHERE coqc >NUL 2>&1
+	IF NOT ERRORLEVEL 1 (
+	    SET "COQC=coqc"
+	    GOTO :compiler_found
+	)
+
+	REM Neither in PATH; check default install locations
+	IF EXIST "C:\PRODUCTNAME\bin\rocq.exe" (
+	    ECHO "Using rocq from C:\PRODUCTNAME\bin"
+	    SET "PATH=C:\PRODUCTNAME\bin;C:\PRODUCTNAME\lib\stublibs;%PATH%"
+	    SET "COQC=rocq compile"
+	    GOTO :compiler_found
+	)
+	IF EXIST "C:\PRODUCTNAME\bin\coqc.exe" (
+	    ECHO "Using coqc from C:\PRODUCTNAME\bin"
+	    SET "PATH=C:\PRODUCTNAME\bin;C:\PRODUCTNAME\lib\stublibs;%PATH%"
+	    SET "COQC=coqc"
+	    GOTO :compiler_found
+	)
+	IF EXIST "C:\bin\PRODUCTNAME\bin\rocq.exe" (
+	    ECHO "Using rocq from C:\bin\PRODUCTNAME\bin"
+	    SET "PATH=C:\bin\PRODUCTNAME\bin;C:\bin\PRODUCTNAME\lib\stublibs;%PATH%"
+	    SET "COQC=rocq compile"
+	    GOTO :compiler_found
+	)
+	IF EXIST "C:\bin\PRODUCTNAME\bin\coqc.exe" (
+	    ECHO "Using coqc from C:\bin\PRODUCTNAME\bin"
+	    SET "PATH=C:\bin\PRODUCTNAME\bin;C:\bin\PRODUCTNAME\lib\stublibs;%PATH%"
+	    SET "COQC=coqc"
+	    GOTO :compiler_found
+	)
+
+	ECHO "This script expects that rocq or coqc is in the PATH"
+	ECHO "or in the default install location C:\PRODUCTNAME"
+	ECHO "or in C:\bin\PRODUCTNAME"
+	EXIT /B 1
+
+	:compiler_found
+
+	REM Print compiler version
+	echo "Compiler Version"
+	%COQC% --version
 
 	REM set COQLIB variable
-	FOR /F "tokens=* USEBACKQ" %%F IN (`coqc -where`) DO SET COQLIB=%%F
+	FOR /F "tokens=* USEBACKQ" %%F IN (`%COQC% -where`) DO SET COQLIB=%%F
 	
 	REM cd to smoke test folder
 	SET "HERE=%CD%"
@@ -372,17 +426,17 @@ cat <<-'EOH' | sed -e 's/$/\r/' -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PAC
 	
 	REM Run one test
 	REM $1: relative path of file to run
-	REM $2: coqc options
+	REM $2: compiler options
 	
 	:run_test
 	  ECHO "====================== Running test file %1 ======================"
 	  SET "HERESUB=%CD%"
 	  CD "%~dp1"
-	  ECHO "coqc %~2 %~nx1"
-	  coqc %~2 %~nx1
+	  ECHO "%COQC% %~2 %~nx1"
+	  %COQC% %~2 %~nx1
 	  IF ERRORLEVEL 1 (
 	    CD "%HERESUB%"
-	    ECHO "Compilation with coqc failed"
+	    ECHO "Compilation failed"
 	    EXIT /B 1
 	  )
 	  CD "%HERESUB%"
@@ -408,8 +462,9 @@ cat <<-'EOH' | sed -e 's/$/\r/' -e "s/PRODUCTNAME/Coq-Platform${COQ_PLATFORM_PAC
 
 	:run_all_tests
 	
-	REM Run coqc for all smoke test files
+	REM Run compiler for all smoke test files
 	EOH
+
 
 ##### Create a _CoqProject file with options given as command line arguments
 
@@ -526,6 +581,10 @@ done
 
 ##### Write footer of bash runner script #####
 
+# Always run a minimal compiler version check
+echo '' >> $smoke_script
+echo 'echo "====================== Compiler version check ======================"' >> $smoke_script
+echo '$COQC --version' >> $smoke_script
 echo '' >> $smoke_script
 echo 'cd "$HERE"' >> $smoke_script
 echo 'echo "====================== SMOKE TEST SUCCESS ======================"' >> $smoke_script

@@ -1,5 +1,4 @@
-
-# Coq Platform 2026.02.0 providing Rocq 9.1 (released January 2026) with the preview package pick from Mars 2026
+# Coq Platform 2026.07.0 providing Rocq 9.1 (released January 2026) with the preview package pick from Mars 2026
 
 The [Coq proof assistant](https://coq.inria.fr) provides a formal language
 to write mathematical definitions, executable algorithms, and theorems, together
@@ -9,7 +8,7 @@ The [Coq Platform](https://github.com/coq/platform) is a distribution of the Coq
 interactive prover together with a selection of Coq libraries and plugins.
 
 The Coq Platform supports to install several versions of Coq (also in parallel).
-This README file is for **Coq Platform 2026.02.0 with Coq 9.1+rc1**.
+This README file is for **Coq Platform 2026.07.0 with Coq 9.1+rc1**.
 The README files for other versions are linked in the main [README](https://github.com/coq/platform/blob/main/README.md).
 
 This version of Rocq Platform 2026.01 includes Rocq 9.1 from January 2026.This is a **preview release** of the Rocq Platform for packages maintainers
@@ -22,8 +21,6 @@ The sections below provide a short description of each level and the list of
 packages included in each level. Packaged versions of the Coq Platform usually
 contain the **extended** set with all optional packages.
 
-
-
 **Note on non-free licenses:** The Coq Platform contains software with
 **non-free licenses which do not allow commercial use without purchasing a license**,
 notably the **coq-compcert** package. Please study the package licenses given
@@ -34,7 +31,7 @@ plan to use these packages.
 The license information given below is obtained from opam.
 The Coq Platform team does no double check this information.
 
-**Note on multiple licenses:** 
+**Note on multiple licenses:**
 In case several licenses are given below, it is not clearly specified what this means.
 It could mean that parts of the software use one license while other parts use another license.
 It could also mean that you can choose between the given licenses.
@@ -46,7 +43,7 @@ Please clarify the details with the homepage of the package.
 
 <br>
 
-## **Coq Platform 2026.02.0 with Coq 9.1+rc1 "base level"**
+## **Coq Platform 2026.07.0 with Coq 9.1+rc1 "base level"**
 
 The **base level** is mostly intended as a basis for custom installations using
 opam and contains the following package(s):
@@ -113,7 +110,7 @@ opam and contains the following package(s):
 
 <br>
 
-## **Coq Platform 2026.02.0 with Coq 9.1+rc1 "IDE level"**
+## **Coq Platform 2026.07.0 with Coq 9.1+rc1 "IDE level"**
 
 The **IDE level** adds an interactive development environment to the **base level**.
 
@@ -156,7 +153,7 @@ The **IDE level** contains the following package(s):
 
 <br>
 
-## **Coq Platform 2026.02.0 with Coq 9.1+rc1 "full level"**
+## **Coq Platform 2026.07.0 with Coq 9.1+rc1 "full level"**
 
 The **full level** adds many commonly used coq libraries, plug-ins and
 developments.
@@ -934,7 +931,7 @@ The **full level** contains the following packages:
 
 <br>
 
-## **Coq Platform 2026.02.0 with Coq 9.1+rc1 "optional packages"**
+## **Coq Platform 2026.07.0 with Coq 9.1+rc1 "optional packages"**
 
 The **optional** packages have the same maturity and maintenance level as the
 packages in the full level, but either take a rather long time to build or have
@@ -994,7 +991,7 @@ The following packages are **optional**:
 
 <br>
 
-## **Coq Platform 2026.02.0 with Coq 9.1+rc1 "extended level"**
+## **Coq Platform 2026.07.0 with Coq 9.1+rc1 "extended level"**
 
 The **extended level** contains packages which are in a beta stage or otherwise
 don't yet have the level of maturity or support required for inclusion in the
@@ -1687,4 +1684,3 @@ Please refer to the linked opam package and/or your system package manager for d
     <dt><b>description</b></dt><dd></dd>
   </dl>
 </details>
-
