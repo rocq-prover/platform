@@ -52,6 +52,8 @@ PACKAGES="${PACKAGES} PIN.ocamlfind.1.9.8+relocatable" # TODO port patch to 1.9.
 PACKAGES="${PACKAGES} PIN.dune.3.21.0" # 3.17.2 has issues on Windows: cairo doesn't find cairo.h
 PACKAGES="${PACKAGES} PIN.dune-configurator.3.21.0"
 # The Coq compiler coqc and the Coq standard library
+PACKAGES="${PACKAGES} PIN.rocq-runtime.9.1.0"
+PACKAGES="${PACKAGES} PIN.rocq-core.9.1.0"
 PACKAGES="${PACKAGES} PIN.coq.9.1.0"
 PACKAGES="${PACKAGES} PIN.rocq-stdlib.9.0.0" # modified after discuted with Théo to bump to 9.1.0
 # Tester avec 9.0.0, avoir une version qui marche et ensuite bump et voir le nombre de paquets qui sont cassés.
@@ -112,7 +114,7 @@ then
   PACKAGES="${PACKAGES} coq-corn.9.0.0"
 
   # Homotopy Type Theory (HoTT)
-  #PACKAGES="${PACKAGES} coq-hott.9.0" # error compilation
+  PACKAGES="${PACKAGES} coq-hott.9.1" # error compilation
 
   # Univalent Mathematics (UniMath)
   # Note: coq-unimath requires too much memory for 32 bit architectures
@@ -133,8 +135,8 @@ then
   PACKAGES="${PACKAGES} coq-menhirlib.20250903 menhir.20250903" # modified
   PACKAGES="${PACKAGES} rocq-equations.1.3.1+9.1" # modified
   PACKAGES="${PACKAGES} rocq-aac-tactics.9.0.0"
-  PACKAGES="${PACKAGES} coq-unicoq.1.6+9.1" # modified
-  PACKAGES="${PACKAGES} coq-mtac2.1.4+9.1" # modified linked with unicoq
+  #PACKAGES="${PACKAGES} coq-unicoq.1.6+8.20" # error
+  #PACKAGES="${PACKAGES} coq-mtac2.1.4+9.0" # error with unicoq
   PACKAGES="${PACKAGES} coq-quickchick.2.1.1"
   PACKAGES="${PACKAGES} coq-hammer-tactics.1.3.2+9.1" # modified
   if [[ "$OSTYPE" != cygwin ]]
