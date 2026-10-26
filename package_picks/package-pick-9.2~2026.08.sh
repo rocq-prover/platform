@@ -105,7 +105,7 @@ then
 
   # Disabled transitively because Coquelicot does not currently support
   # MathComp ssreflect 2.6.0.
-  #PACKAGES="${PACKAGES} coq-interval.4.11.4" # error compilation 
+  PACKAGES="${PACKAGES} coq-interval.4.11.5" # update to 4.11.5 
 
   # coq-gappa 1.7.1 explicitly requires coq < 9.2~.
   # Nix can build this source with Rocq 9.2, but the published OPAM metadata
@@ -123,7 +123,7 @@ then
   #PACKAGES="${PACKAGES} coq-corn.9.0.0"
 
   # Homotopy Type Theory (HoTT)
-  #PACKAGES="${PACKAGES} coq-hott.9.0" # not compatible with Rocq 9.2
+  #PACKAGES="${PACKAGES} coq-hott.9.1" # not compatible with Rocq 9.2
 
   # Univalent Mathematics (UniMath)
   if [ "${BITSIZE}" == "64" ]
@@ -183,7 +183,7 @@ then
   # Incompatible with MathComp ssreflect 2.6.0.
   #PACKAGES="${PACKAGES} coq-mathcomp-algebra-tactics.1.2.7"
 
-  #PACKAGES="${PACKAGES} rocq-relation-algebra.1.9.0"
+  PACKAGES="${PACKAGES} rocq-relation-algebra.1.9.1"
 
   # Formal languages, compilers and code verification
 
@@ -196,24 +196,22 @@ then
   #PACKAGES="${PACKAGES} coq-ott.0.34"
   PACKAGES="${PACKAGES} ott.0.34"
 
-  # Incompatible with MathComp 2.6 / Rocq 9.2.
-  #PACKAGES="${PACKAGES} coq-mathcomp-word.3.4"
+  PACKAGES="${PACKAGES} coq-mathcomp-word.3.5"   # Update for Rocq 9.2
 
   # CompCert 3.17 explicitly requires coq >= 8.15 & < 9.2~.
-  # No published final Rocq 9.2-compatible CompCert release.
-  #case "$COQ_PLATFORM_COMPCERT" in
-  #  [yY]) PACKAGES="${PACKAGES} coq-compcert.3.17" ;;
-  #  [nN]) true ;;
-  #  *) echo "Illegal value for COQ_PLATFORM_COMPCERT - aborting"; false ;;
-  #esac
+  case "$COQ_PLATFORM_COMPCERT" in
+    [yY]) PACKAGES="${PACKAGES} coq-compcert.3.18" ;;
+    [nN]) true ;;
+    *) echo "Illegal value for COQ_PLATFORM_COMPCERT - aborting"; false ;;
+  esac
 
   # VST 2.16 pulls coq-vst-zlist 2.13, which requires coq < 9.2~.
   # The new coq.9.2.0 compatibility meta-package therefore does not help here.
-  #case "$COQ_PLATFORM_VST" in
-  #  [yY]) PACKAGES="${PACKAGES} coq-vst.2.16" ;;
-  #  [nN]) true ;;
-  #  *) echo "Illegal value for COQ_PLATFORM_VST - aborting"; false ;;
-  #esac
+  case "$COQ_PLATFORM_VST" in
+    [yY]) PACKAGES="${PACKAGES} coq-vst.2.17" ;;
+    [nN]) true ;;
+    *) echo "Illegal value for COQ_PLATFORM_VST - aborting"; false ;;
+  esac
 
   # DpdGraph 1.0+9.1 requires coq >= 9.1 & < 9.2~.
   #PACKAGES="${PACKAGES} coq-dpdgraph.1.0+9.1"
@@ -226,10 +224,7 @@ then
 
   # Proof automation / generation / helpers
 
-  # coq-deriving 0.2.3 requires:
-  #   coq (< 9.2~ | >= dev)
-  # Therefore final coq.9.2.0 is explicitly excluded.
-  #PACKAGES="${PACKAGES} coq-deriving.0.2.3"
+  PACKAGES="${PACKAGES} coq-deriving.0.2.3"
 
   if [ "${BITSIZE}" == "64" ]
   then
@@ -243,7 +238,7 @@ then
   #   coq-mathcomp-ssreflect < 2.6~
   # and depends on coq-deriving.
   # It is therefore incompatible with this pick on several independent bounds.
-  #PACKAGES="${PACKAGES} coq-extructures.0.5.0"
+  PACKAGES="${PACKAGES} coq-extructures.0.6.0"
 
   # Gallina extensions
   #PACKAGES="${PACKAGES} coq-reduction-effects.0.1.6" # error compilation
