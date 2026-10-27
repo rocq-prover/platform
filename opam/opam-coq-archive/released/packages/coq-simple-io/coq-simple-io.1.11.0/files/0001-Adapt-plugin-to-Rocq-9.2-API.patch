@@ -1,0 +1,17 @@
+--- a/plugin/iOLib.ml
++++ b/plugin/iOLib.ml
+@@ -302,7 +302,7 @@
+ (** [define env evd c] introduces a fresh constant name for the term [c]. *)
+ let define env evd c =
+   let (evd,_) = Typing.type_of env evd c in
+-  let univs = Evd.univ_entry ~poly:true evd in
++  let univs = Evd.univ_entry ~poly:(PolyFlags.of_univ_poly true) evd in
+   let fn = fresh_name "quickchick" in
+   (* TODO: Maxime - which of the new internal flags should be used here? The names aren't as clear :) *)
+   let _ : Constant.t = declare_constant ~name:fn ~kind:Decls.(IsDefinition Definition)
+@@ -329,4 +329,4 @@
+ let string_of_constr_expr c =
+   let env = Global.env () in
+   let evd = Evd.from_env env in
+-  Pp.string_of_ppcmds (Ppconstr.pr_constr_expr env evd c)
++  Pp.string_of_ppcmds (Ppconstr.pr_constr_expr ~flags:(Ppconstr.current_flags ()) env evd c)

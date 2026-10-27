@@ -118,7 +118,10 @@ then
   # Constructive mathematics
   PACKAGES="${PACKAGES} coq-math-classes.9.2.0" # updated for Rocq 9.2
 
-  # CoRN 9.0.0 explicitly requires coq >= 8.18 & < 9.1~.
+  # CoRN 9.0.0 requires coq < 9.2~ (relaxed to < 9.3~ in the local opam file),
+  # but does not compile with Rocq 9.2: proof scripts break in at least
+  # util/SetoidPermutation.v, logic/CornBasics.v, stdlib_omissions/List.v,
+  # stdlib_omissions/Q.v and model/structures/QnnInf.v.
   # No published Rocq 9.2-compatible release currently available.
   #PACKAGES="${PACKAGES} coq-corn.9.0.0"
 
@@ -137,11 +140,11 @@ then
 
   # Code extraction
 
-  # coq-simple-io 1.11.0 explicitly requires:
-  #   coq >= 8.12~ & < 9.2~
-  # Therefore coq.9.2.0 does NOT solve this package.
-  # A local ~flex / updated OPAM package is required.
-  #PACKAGES="${PACKAGES} coq-simple-io.1.11.0"
+  # Local opam modification required: published coq-simple-io 1.11.0 has a
+  # Coq upper bound (< 9.2~) which excludes coq.9.2.0 (relaxed to < 9.3~), and
+  # its OCaml plugin needs a patch for the Rocq 9.2 API (PolyFlags.t, Ppconstr
+  # ~flags). See opam-coq-archive/released/packages/coq-simple-io.
+  PACKAGES="${PACKAGES} coq-simple-io.1.11.0"
 
   # Proof automation / generation / helpers
 
@@ -156,11 +159,9 @@ then
   #PACKAGES="${PACKAGES} coq-unicoq.1.6+9.1"
   #PACKAGES="${PACKAGES} coq-mtac2.1.4+9.1"
 
-  # QuickChick 2.2.0 itself only requires coq >= 8.15~ and can therefore
-  # use coq.9.2.0. However, it depends on coq-simple-io >= 1.6.0, whose
-  # latest release (1.11.0) excludes coq 9.2.
-  # Re-enable when coq-simple-io is fixed/~flexed.
-  #PACKAGES="${PACKAGES} coq-quickchick.2.2.0"
+  # QuickChick 2.2.0 only requires coq >= 8.15~ and depends on
+  # coq-simple-io >= 1.6.0 (patched locally above).
+  PACKAGES="${PACKAGES} coq-quickchick.2.2.0"
 
   PACKAGES="${PACKAGES} coq-hammer-tactics.1.3.3+9.2" # updated for Rocq 9.2
 
@@ -193,7 +194,9 @@ then
   PACKAGES="${PACKAGES} rocq-iris.4.5.0"
   PACKAGES="${PACKAGES} rocq-iris-heap-lang.4.5.0"
 
-  #PACKAGES="${PACKAGES} coq-ott.0.34"
+  # Local opam modification required: coq-ott 0.34 has a Coq upper bound
+  # (< 9.2~) which excludes coq.9.2.0 (relaxed to < 9.3~).
+  PACKAGES="${PACKAGES} coq-ott.0.34"
   PACKAGES="${PACKAGES} ott.0.34"
 
   PACKAGES="${PACKAGES} coq-mathcomp-word.3.5"   # Update for Rocq 9.2
@@ -241,7 +244,9 @@ then
   PACKAGES="${PACKAGES} coq-extructures.0.6.0"
 
   # Gallina extensions
-  #PACKAGES="${PACKAGES} coq-reduction-effects.0.1.6" # error compilation
+  # Local opam modification required: the plugin needs a patch for the Rocq 9.2
+  # API (Typeops.type_of_constant_in now takes a UVars.Instance.t).
+  PACKAGES="${PACKAGES} coq-reduction-effects.0.1.6"
   PACKAGES="${PACKAGES} coq-record-update.0.3.6"
 
   # Fiat Crypto, Bedrock2, Rupicola and dependencies

@@ -5,6 +5,9 @@ homepage: "https://github.com/Lysxia/rocq-simple-io"
 bug-reports: "https://github.com/Lysxia/rocq-simple-io/issues"
 license: "MIT"
 dev-repo: "git+https://github.com/Lysxia/rocq-simple-io.git"
+patches: [
+  "0001-Adapt-plugin-to-Rocq-9.2-API.patch"
+]
 build: [
   ["dune" "subst"] {dev}
   [ "dune" "build" "-p" name "-j" jobs "@install" ]
@@ -13,7 +16,7 @@ depends: [
   "dune" {>= "3.7"}
   "ocaml" {>= "4.08.0"}
   "ocamlfind"
-  "coq" {>= "8.12~" & < "9.2~"}
+  "coq" {>= "8.12~" & < "9.3~"}
   "coq-ext-lib" {>= "0.10.0"}
   "ocamlbuild" {with-test & >= "0.9.0"}
   "cppo" {build & >= "1.6.8"}
@@ -37,3 +40,7 @@ url {
   src: "https://github.com/Lysxia/rocq-simple-io/archive/1.11.0.tar.gz"
   checksum: "sha512=146b98b2d60dc0a692bffc68efbbad8d9585dfebcf169d4fdf4e81fcf1e55ecd633690cd6c18df903b6e5da57be55f2fe51374ff9aa4c43d278c441b68a68179"
 }
+extra-files: [
+  "0001-Adapt-plugin-to-Rocq-9.2-API.patch"
+  "sha512=25b96c90263de3e956d86385ac597c45b30feab8cab18a0d31bf2043fd10d2981b35ebdc4844a7ed861d3e4966ae387a35fa999e508908990c3b11339cb21c6e"
+]
