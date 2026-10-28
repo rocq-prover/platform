@@ -12,7 +12,7 @@ depends: [
   "cppo" {>= "1.6.8"}
 ]
 patches: [
-  "0001-Adapt-plugin-to-Rocq-9.2-API.patch"
+  "0001-Adapt-plugin-to-Rocq-9.2-API.patch" {coq:version >= "9.2~"}
 ]
 build: [make "-j%{jobs}%"]
 run-test: [make "-j%{jobs}%" "test"]

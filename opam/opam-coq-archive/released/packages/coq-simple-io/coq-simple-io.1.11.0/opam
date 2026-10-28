@@ -6,7 +6,7 @@ bug-reports: "https://github.com/Lysxia/rocq-simple-io/issues"
 license: "MIT"
 dev-repo: "git+https://github.com/Lysxia/rocq-simple-io.git"
 patches: [
-  "0001-Adapt-plugin-to-Rocq-9.2-API.patch"
+  "0001-Adapt-plugin-to-Rocq-9.2-API.patch" {coq:version >= "9.2~"}
 ]
 build: [
   ["dune" "subst"] {dev}

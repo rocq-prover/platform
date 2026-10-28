@@ -258,7 +258,9 @@ then
         # upper bound. The new coq.9.2.0 compatibility meta-package should
         # therefore allow OPAM to resolve them against Rocq 9.2.
         PACKAGES="${PACKAGES} coq-coqutil.0.0.7"
-        #PACKAGES="${PACKAGES} coq-rewriter.0.0.20" # error compilation
+        # Local opam modification required: LiftLetsMap.v (perf test) is removed
+        # from the build, it overflows the stack with the default ulimit.
+        PACKAGES="${PACKAGES} coq-rewriter.0.0.21"
         PACKAGES="${PACKAGES} coq-riscv.0.0.6"
         PACKAGES="${PACKAGES} coq-bedrock2.0.0.9"
         PACKAGES="${PACKAGES} coq-bedrock2-compiler.0.0.9"
