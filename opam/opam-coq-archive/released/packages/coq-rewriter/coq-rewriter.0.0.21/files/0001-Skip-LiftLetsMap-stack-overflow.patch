@@ -1,0 +1,10 @@
+--- a/_CoqProject.in
++++ b/_CoqProject.in
+@@ -29,7 +29,6 @@
+ src/Rewriter/Rewriter/Wf.v
+ src/Rewriter/Rewriter/Examples/PrefixSums.v
+ src/Rewriter/Rewriter/Examples/PerfTesting/Harness.v
+-src/Rewriter/Rewriter/Examples/PerfTesting/LiftLetsMap.v
+ src/Rewriter/Rewriter/Examples/PerfTesting/ListRectInstances.v
+ src/Rewriter/Rewriter/Examples/PerfTesting/Plus0Tree.v
+ src/Rewriter/Rewriter/Examples/PerfTesting/Sample.v

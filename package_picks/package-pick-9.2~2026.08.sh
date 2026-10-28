@@ -105,7 +105,7 @@ then
 
   # Disabled transitively because Coquelicot does not currently support
   # MathComp ssreflect 2.6.0.
-  #PACKAGES="${PACKAGES} coq-interval.4.11.4" # error compilation 
+  PACKAGES="${PACKAGES} coq-interval.4.11.5" # update to 4.11.5 
 
   # coq-gappa 1.7.1 explicitly requires coq < 9.2~.
   # Nix can build this source with Rocq 9.2, but the published OPAM metadata
@@ -118,12 +118,15 @@ then
   # Constructive mathematics
   PACKAGES="${PACKAGES} coq-math-classes.9.2.0" # updated for Rocq 9.2
 
-  # CoRN 9.0.0 explicitly requires coq >= 8.18 & < 9.1~.
+  # CoRN 9.0.0 requires coq < 9.2~ (relaxed to < 9.3~ in the local opam file),
+  # but does not compile with Rocq 9.2: proof scripts break in at least
+  # util/SetoidPermutation.v, logic/CornBasics.v, stdlib_omissions/List.v,
+  # stdlib_omissions/Q.v and model/structures/QnnInf.v.
   # No published Rocq 9.2-compatible release currently available.
   #PACKAGES="${PACKAGES} coq-corn.9.0.0"
 
   # Homotopy Type Theory (HoTT)
-  #PACKAGES="${PACKAGES} coq-hott.9.0" # not compatible with Rocq 9.2
+  #PACKAGES="${PACKAGES} coq-hott.9.1" # not compatible with Rocq 9.2
 
   # Univalent Mathematics (UniMath)
   if [ "${BITSIZE}" == "64" ]
@@ -137,11 +140,11 @@ then
 
   # Code extraction
 
-  # coq-simple-io 1.11.0 explicitly requires:
-  #   coq >= 8.12~ & < 9.2~
-  # Therefore coq.9.2.0 does NOT solve this package.
-  # A local ~flex / updated OPAM package is required.
-  #PACKAGES="${PACKAGES} coq-simple-io.1.11.0"
+  # Local opam modification required: published coq-simple-io 1.11.0 has a
+  # Coq upper bound (< 9.2~) which excludes coq.9.2.0 (relaxed to < 9.3~), and
+  # its OCaml plugin needs a patch for the Rocq 9.2 API (PolyFlags.t, Ppconstr
+  # ~flags). See opam-coq-archive/released/packages/coq-simple-io.
+  PACKAGES="${PACKAGES} coq-simple-io.1.11.0"
 
   # Proof automation / generation / helpers
 
@@ -156,11 +159,9 @@ then
   #PACKAGES="${PACKAGES} coq-unicoq.1.6+9.1"
   #PACKAGES="${PACKAGES} coq-mtac2.1.4+9.1"
 
-  # QuickChick 2.2.0 itself only requires coq >= 8.15~ and can therefore
-  # use coq.9.2.0. However, it depends on coq-simple-io >= 1.6.0, whose
-  # latest release (1.11.0) excludes coq 9.2.
-  # Re-enable when coq-simple-io is fixed/~flexed.
-  #PACKAGES="${PACKAGES} coq-quickchick.2.2.0"
+  # QuickChick 2.2.0 only requires coq >= 8.15~ and depends on
+  # coq-simple-io >= 1.6.0 (patched locally above).
+  PACKAGES="${PACKAGES} coq-quickchick.2.2.0"
 
   PACKAGES="${PACKAGES} coq-hammer-tactics.1.3.3+9.2" # updated for Rocq 9.2
 
@@ -183,7 +184,7 @@ then
   # Incompatible with MathComp ssreflect 2.6.0.
   #PACKAGES="${PACKAGES} coq-mathcomp-algebra-tactics.1.2.7"
 
-  #PACKAGES="${PACKAGES} rocq-relation-algebra.1.9.0"
+  PACKAGES="${PACKAGES} rocq-relation-algebra.1.9.1"
 
   # Formal languages, compilers and code verification
 
@@ -193,27 +194,27 @@ then
   PACKAGES="${PACKAGES} rocq-iris.4.5.0"
   PACKAGES="${PACKAGES} rocq-iris-heap-lang.4.5.0"
 
-  #PACKAGES="${PACKAGES} coq-ott.0.34"
+  # Local opam modification required: coq-ott 0.34 has a Coq upper bound
+  # (< 9.2~) which excludes coq.9.2.0 (relaxed to < 9.3~).
+  PACKAGES="${PACKAGES} coq-ott.0.34"
   PACKAGES="${PACKAGES} ott.0.34"
 
-  # Incompatible with MathComp 2.6 / Rocq 9.2.
-  #PACKAGES="${PACKAGES} coq-mathcomp-word.3.4"
+  PACKAGES="${PACKAGES} coq-mathcomp-word.3.5"   # Update for Rocq 9.2
 
   # CompCert 3.17 explicitly requires coq >= 8.15 & < 9.2~.
-  # No published final Rocq 9.2-compatible CompCert release.
-  #case "$COQ_PLATFORM_COMPCERT" in
-  #  [yY]) PACKAGES="${PACKAGES} coq-compcert.3.17" ;;
-  #  [nN]) true ;;
-  #  *) echo "Illegal value for COQ_PLATFORM_COMPCERT - aborting"; false ;;
-  #esac
+  case "$COQ_PLATFORM_COMPCERT" in
+    [yY]) PACKAGES="${PACKAGES} coq-compcert.3.18" ;;
+    [nN]) true ;;
+    *) echo "Illegal value for COQ_PLATFORM_COMPCERT - aborting"; false ;;
+  esac
 
   # VST 2.16 pulls coq-vst-zlist 2.13, which requires coq < 9.2~.
   # The new coq.9.2.0 compatibility meta-package therefore does not help here.
-  #case "$COQ_PLATFORM_VST" in
-  #  [yY]) PACKAGES="${PACKAGES} coq-vst.2.16" ;;
-  #  [nN]) true ;;
-  #  *) echo "Illegal value for COQ_PLATFORM_VST - aborting"; false ;;
-  #esac
+  case "$COQ_PLATFORM_VST" in
+    [yY]) PACKAGES="${PACKAGES} coq-vst.2.17" ;;
+    [nN]) true ;;
+    *) echo "Illegal value for COQ_PLATFORM_VST - aborting"; false ;;
+  esac
 
   # DpdGraph 1.0+9.1 requires coq >= 9.1 & < 9.2~.
   #PACKAGES="${PACKAGES} coq-dpdgraph.1.0+9.1"
@@ -226,10 +227,7 @@ then
 
   # Proof automation / generation / helpers
 
-  # coq-deriving 0.2.3 requires:
-  #   coq (< 9.2~ | >= dev)
-  # Therefore final coq.9.2.0 is explicitly excluded.
-  #PACKAGES="${PACKAGES} coq-deriving.0.2.3"
+  PACKAGES="${PACKAGES} coq-deriving.0.2.3"
 
   if [ "${BITSIZE}" == "64" ]
   then
@@ -243,10 +241,12 @@ then
   #   coq-mathcomp-ssreflect < 2.6~
   # and depends on coq-deriving.
   # It is therefore incompatible with this pick on several independent bounds.
-  #PACKAGES="${PACKAGES} coq-extructures.0.5.0"
+  PACKAGES="${PACKAGES} coq-extructures.0.6.0"
 
   # Gallina extensions
-  #PACKAGES="${PACKAGES} coq-reduction-effects.0.1.6" # error compilation
+  # Local opam modification required: the plugin needs a patch for the Rocq 9.2
+  # API (Typeops.type_of_constant_in now takes a UVars.Instance.t).
+  PACKAGES="${PACKAGES} coq-reduction-effects.0.1.6"
   PACKAGES="${PACKAGES} coq-record-update.0.3.6"
 
   # Fiat Crypto, Bedrock2, Rupicola and dependencies
@@ -258,7 +258,9 @@ then
         # upper bound. The new coq.9.2.0 compatibility meta-package should
         # therefore allow OPAM to resolve them against Rocq 9.2.
         PACKAGES="${PACKAGES} coq-coqutil.0.0.7"
-        #PACKAGES="${PACKAGES} coq-rewriter.0.0.20" # error compilation
+        # Local opam modification required: LiftLetsMap.v (perf test) is removed
+        # from the build, it overflows the stack with the default ulimit.
+        PACKAGES="${PACKAGES} coq-rewriter.0.0.21"
         PACKAGES="${PACKAGES} coq-riscv.0.0.6"
         PACKAGES="${PACKAGES} coq-bedrock2.0.0.9"
         PACKAGES="${PACKAGES} coq-bedrock2-compiler.0.0.9"

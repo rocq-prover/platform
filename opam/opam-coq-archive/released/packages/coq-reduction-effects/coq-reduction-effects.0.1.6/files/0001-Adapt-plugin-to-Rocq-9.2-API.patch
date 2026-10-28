@@ -1,0 +1,11 @@
+--- a/redeffect.mlg.cppo
++++ b/redeffect.mlg.cppo
+@@ -47,7 +47,7 @@
+     let env = Global.env () in
+     let sigma = Evd.from_env env in
+     let sigma, c = Evd.fresh_constant_instance env sigma cst in
+-    let t = Typeops.type_of_constant_in env c in
++    let t = Typeops.type_of_constant_in env (fst c, EConstr.EInstance.kind sigma (snd c)) in
+     check_ID_type env sigma (EConstr.of_constr t);
+     cst
+   | _ -> CErrors.user_err (Pp.strbrk "Printing function should be a constant.")

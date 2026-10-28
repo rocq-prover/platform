@@ -1,0 +1,51 @@
+opam-version: "2.0"
+maintainer: "unixjunkie@sdf.org"
+homepage: "https://www.python.org/downloads/release/python-3148/"
+authors: "Python Software Foundation"
+license: "PSF-2.0"
+bug-reports: "https://github.com/ocaml/opam-repository/issues"
+build: ["sh" "-c" "python3 --version"]
+# ^ Call python3 via sh to work around an issue on Cygwin
+# The python3 Cygwin package provides at the moment a
+# python3.12.exe executable and a python3 symlink. When using the
+# build instructions ["python3" "--version"], opam actually invokes
+# a python3.exe executable instead, which is a Python installer
+# instead of the expected interpreter.
+depexts: [
+  ["python3"] {os-family = "debian" | os-family = "ubuntu"}
+  ["python3"] {os-distribution = "nixos"}
+  ["python3"] {os-distribution = "alpine"}
+  ["python3"] {os-distribution = "centos"}
+  ["python3"] {os-family = "fedora"}
+  ["python3"] {os-distribution = "ol"}
+  ["python"] {os-distribution = "arch"}
+  ["python3"] {os-family = "suse" | os-family = "opensuse"}
+  ["dev-lang/python:3.14"] {os-distribution = "gentoo"}
+  ["python3"] {os = "openbsd"}
+  ["lang/python314"] {os = "netbsd"}
+  ["python3"] {os = "freebsd"}
+  ["python314"] {os-distribution = "macports" & os = "macos"}
+    # ^ this will not result in a python3 command but only a python3.14 command
+  # Rocq Platform local modification: the upstream entry
+  #   ["python3"] {os-distribution = "homebrew" & os = "macos"}
+  # is removed. On Homebrew "python3" is only an alias of the versioned formula
+  # (e.g. "python@3.15"). Most likely opam compares the system package names
+  # with the installed formulas without resolving aliases: it reports "python3"
+  # as missing although it is installed, asks to install it, and the CI build
+  # aborts since nobody answers (seen on macOS CI from 2026-10-28, opam 2.6.1).
+  # conf-python-3.9.0.0 used the real formula name "python@3.9" and was not
+  # affected.
+  # Python 3 is still checked by the build command below ("python3 --version").
+  # See opam/ReadMe.md, section "Local modifications of opam files".
+  ["system:python3"] {os-distribution = "cygwinports"}
+  ["python3"] {os-distribution = "cygwin"}
+  ["python"] {os-distribution = "msys2"}
+]
+synopsis: "Virtual package relying on Python-3 installation"
+description: """
+This package can only install if a Python-3 interpreter is available
+on the system.
+If a minor version needs to be specified for your operating system, then
+python-3.14 will be used.
+"""
+flags: conf
