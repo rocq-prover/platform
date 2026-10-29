@@ -6,17 +6,20 @@ name: Ubuntu_dev
 
 ###############################################################################
 # Schedule:
-# - daily
+# - manual only. The daily schedule is disabled since the 'dev' pick fails with
+#   "Package coqide has no version dev" (seen on every nightly run in 2026-10).
+#   Re-add the `schedule:` trigger (cron "0 0 * * *") once the dev pick is fixed.
 ###############################################################################
 on:
-  schedule:
-    - cron: "0 0 * * *"
   workflow_dispatch:
     inputs:
       platform:
         description: 'Arguments for the platform script:'
         required: true
         default: '-extent=x -parallel=p -jobs=2 -large=i -compcert=y -unimath=n -set-switch=y'
+
+permissions:
+  contents: read
 
 ###############################################################################
 # Platform script options shared among all jobs
@@ -53,7 +56,7 @@ jobs:
       - name: Install bubblewrap and build-essential
         run: |
           sudo apt-get update
-          sudo apt-get install bubblewrap build-essential
+          sudo apt-get install -y bubblewrap build-essential
 
       - name: Run common platform script
         shell: bash
