@@ -13,9 +13,15 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "**.md"
+      - "maintainer_doc/**"
   pull_request:
     branches:
       - "**"
+    paths-ignore:
+      - "**.md"
+      - "maintainer_doc/**"
     types:
       - opened
       - synchronize
@@ -31,11 +37,26 @@ on:
         default: "-extent=x -parallel=p -jobs=2 -large=i -compcert=y -unimath=n -set-switch=y"
 
 ###############################################################################
+# Least privilege: the jobs only need to read the repository.
+# A new push to a pull request cancels the previous run of that PR
+# (other events, e.g. schedule or push on main, are never cancelled).
+###############################################################################
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+###############################################################################
 # Platform script options shared among all jobs
 ###############################################################################
 env:
   PLATFORM: -extent=x -parallel=p -jobs=2 -large=i -compcert=y -unimath=n -set-switch=y
   COQREGTESTING: y
+  # Upstream servers (gitlab.mpi-sws.org, ...) answer HTTP 429 when all matrix jobs
+  # download the same sources at once. opam default is 3 tries.
+  OPAMRETRIES: 10
 
 ###############################################################################
 # Ubuntu
@@ -77,35 +98,6 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v4
 
-      - name: Initial disk usage
-        run: |
-          echo "=== Initial df -h ==="
-          df -h
-          echo
-          echo "=== Initial df -i (inodes) ==="
-          df -i
-
-      - name: Disk usage diagnostics (before build)
-        run: |
-          echo "=== df -h ==="
-          df -h
-
-          echo "=== df -i (inodes) ==="
-          df -i
-
-          echo "=== du -sh top-level directories ==="
-          for d in /home/runner/* /usr/* /opt/*; do
-            if [ -d "$d" ]; then
-              du -sh "$d" || true
-            fi
-          done
-
-          echo "=== Directory structure (3 levels deep) for big folders ==="
-          for d in /home/runner /usr /opt; do
-            echo "--- $d ---"
-            find "$d" -maxdepth 3 -type d | head -n 200
-            echo
-          done
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
         with:
@@ -116,27 +108,10 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
-      - name: Disk usage diagnostics (after clean-up)
-        run: |
-          echo "=== df -h ==="
-          df -h
 
-          echo "=== df -i (inodes) ==="
-          df -i
+      - name: Disk usage after clean-up
+        run: df -h
 
-          echo "=== du -sh top-level directories ==="
-          for d in /home/runner/* /usr/* /opt/*; do
-            if [ -d "$d" ]; then
-              du -sh "$d" || true
-            fi
-          done
-
-          echo "=== Directory structure (3 levels deep) for big folders ==="
-          for d in /home/runner /usr /opt; do
-            echo "--- $d ---"
-            find "$d" -maxdepth 3 -type d | head -n 200
-            echo
-          done
       - name: Set PLATFORM
         if: ${{ github.event.inputs.platform != '' }}
         run: echo "PLATFORM=${{ github.event.inputs.platform }}" >> $GITHUB_ENV
@@ -144,7 +119,7 @@ jobs:
       - name: Install bubblewrap and build-essential
         run: |
           sudo apt-get update
-          sudo apt-get install bubblewrap build-essential
+          sudo apt-get install -y bubblewrap build-essential
           echo "=== Disk after apt install ==="
           df -h
 
@@ -162,22 +137,22 @@ jobs:
           echo "=== Top 15 biggest directories in ~ ==="
           du -xhd1 ~ 2>/dev/null | sort -hr | head -n 15 || true
 
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: false
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: false
-          docker-images: true
-          swap-storage: true
-
       - name: Disk usage before platform script
         run: |
           echo "=== Disk before coq_platform_make.sh ==="
           df -h
           df -i
+
+      - name: Restore opam download cache
+        # Only the downloaded source archives are cached (not the switch).
+        # opam init keeps an existing ~/.opam/download-cache, so the platform
+        # script can be left unchanged.
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.opam/download-cache
+          key: opam-dl-${{ matrix.variant }}-${{ github.run_id }}
+          restore-keys: |
+            opam-dl-${{ matrix.variant }}-
 
       - name: Run common platform script
         shell: bash
@@ -185,6 +160,14 @@ jobs:
           ARGS="${PLATFORM:-$PLATFORM_ARGS}"
           echo "Using ARGS=$ARGS"
           ./coq_platform_make.sh -packages=${{matrix.variant}} $ARGS -dumplogs
+
+      - name: Save opam download cache
+        # always(): a build that fails halfway keeps what it already downloaded
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.opam/download-cache
+          key: opam-dl-${{ matrix.variant }}-${{ github.run_id }}
 
       - name: Disk usage after platform script
         if: always()

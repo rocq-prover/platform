@@ -13,9 +13,15 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "**.md"
+      - "maintainer_doc/**"
   pull_request:
     branches:
       - "**"
+    paths-ignore:
+      - "**.md"
+      - "maintainer_doc/**"
   schedule:
     - cron: "0 0 * * *"
   workflow_dispatch:
@@ -24,6 +30,18 @@ on:
         description: "Arguments for the platform script:"
         required: true
         default: "-extent=x -parallel=p -jobs=2 -large=e -compcert=y -set-switch=y"
+
+###############################################################################
+# Least privilege: the jobs only need to read the repository.
+# A new push to a pull request cancels the previous run of that PR
+# (other events, e.g. schedule or push on main, are never cancelled).
+###############################################################################
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 ###############################################################################
 # Platform script options shared among all jobs
