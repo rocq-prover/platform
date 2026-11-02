@@ -1,0 +1,29 @@
+--- a/src/cdcl.ml
++++ b/src/cdcl.ml
+@@ -301,7 +301,7 @@
+     match EConstr.eq_constr_universes_proj env sigma x y with
+     | Some csts -> (
+       let csts = UnivProblem.Set.force csts in
+-      match Evd.add_universe_constraints sigma csts with
++      match Evd.add_constraints sigma csts with
+       | evd -> Some sigma
+       | exception UGraph.UniverseInconsistency _ -> None )
+     | None -> None
+@@ -1059,7 +1059,7 @@
+       let _, pv, _, _, _ =
+         Proofview.apply
+           ~name:(Names.Id.of_string "unsat_core")
+-          ~poly:false env
++          ~poly:(PolyFlags.of_univ_poly false) env
+           (Tacticals.tclTHENLIST
+              [ dirty_intros cids
+              ; Tacticals.tclCOMPLETE tac ])
+@@ -1272,7 +1272,7 @@
+   let (e,pv) = Proofview.init sigma [(env,gl)] in
+   let env,_,_,_,_ =  Proofview.apply
+                     ~name:(Names.Id.of_string "dirty_clear")
+-                    ~poly:false env
++                    ~poly:(PolyFlags.of_univ_poly false) env
+                     (Proofview.tclTHEN (Tactics.keep []) get_env)   pv in
+   env
+ 
