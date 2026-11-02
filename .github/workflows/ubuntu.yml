@@ -88,7 +88,11 @@ jobs:
   Ubuntu_platform:
     name: Ubuntu ${{ matrix.variant }}
     needs: define_matrix
-    runs-on: ubuntu-latest
+    # Pinned: ubuntu-latest moved to 26.04 on 2026-11-01, whose newer compiler
+    # breaks old OCaml (8.12-8.16: ocaml 4.10-4.13, "too many arguments to
+    # function") and z3.4.13.0-3 ("static_matrix has no member named get").
+    # Move back to ubuntu-latest once those builds are fixed on 26.04.
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
