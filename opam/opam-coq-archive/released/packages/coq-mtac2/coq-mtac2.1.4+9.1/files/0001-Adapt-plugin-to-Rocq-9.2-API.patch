@@ -1,0 +1,72 @@
+--- a/src/run.ml
++++ b/src/run.ml
+@@ -959,11 +959,11 @@
+ let run_declare_def env sigma kind name opaque ty bod =
+   let open Decls in
+   let vernac_definition_hook poly = function
+-    | Coercion -> Some (ComCoercion.add_coercion_hook ~reversible:false)
++    | Coercion -> Some (ComCoercion.coercion_hook ~reversible:false)
+     | CanonicalStructure ->
+         if opaque then raise CanonicalStructureMayNotBeOpaque else
+           Some (Declare.Hook.(make (fun { S.dref; _ } -> Canonical.declare_canonical_structure dref)))
+-    | SubClass -> Some (ComCoercion.add_subclass_hook ~poly ~reversible:false)
++    | SubClass -> Some (ComCoercion.subclass_hook ~poly ~reversible:false)
+     (* | Instance -> Lemmas.mk_hook (fun local gr -> *)
+     (*   let local = match local with | Global -> false | Local -> true | _ -> raise DischargeLocality in *)
+     (*   let () = Typeclasses.declare_instance None local gr *)
+@@ -998,7 +998,7 @@
+   let sigma' = Evd.restrict_universe_context sigma univs in
+   let uctx = Evd.evar_universe_context sigma' in
+ 
+-  let ctx = Evd.univ_entry ~poly:false sigma' in
++  let ctx = Evd.univ_entry ~poly:(PolyFlags.of_univ_poly false) sigma' in
+   let kind_pos = get_constructor_pos sigma kind in
+   let kind = kinds.(kind_pos) in
+   let name = CoqString.from_coq (env, sigma) name in
+@@ -1006,7 +1006,7 @@
+   let ce = Declare.definition_entry ~opaque ~types:ty ~univs:ctx bod in
+   let kn = Declare.declare_constant ~name:id ~kind:(Decls.IsDefinition kind) (Declare.DefinitionEntry ce) in
+   let dref = GlobRef.ConstRef kn in
+-  let () = Declare.Hook.call ?hook:(vernac_definition_hook false kind)
++  let () = Declare.Hook.call ?hook:(vernac_definition_hook (PolyFlags.of_univ_poly false) kind)
+              { Declare.Hook.S.uctx; obls=[]; scope=Locality.(Global ImportDefaultBehavior); dref }  in
+   let c = UnivGen.constr_of_monomorphic_global (Global.env ()) dref in
+   let env = Global.env () in
+@@ -1243,7 +1243,7 @@
+      mind_entry_lc} :: acc
+   ) [] (zip (inds, constrs)) in
+   let mind_entry_inds = List.rev mind_entry_inds in
+-  let univs, ubinders = Evd.univ_entry ~poly:false sigma in
++  let univs, ubinders = Evd.univ_entry ~poly:(PolyFlags.of_univ_poly false) sigma in
+   let uctx = match univs with
+     | UState.Monomorphic_entry ctx ->
+         let () = Global.push_context_set ctx in
+@@ -2002,7 +2002,7 @@
+         let args_map = List.fold_left (fun m (k, v)-> Id.Map.add k v m) Id.Map.empty args in
+         let ist = { (default_ist ()) with lfun = args_map } in
+         let name, poly = Id.of_string "mtac2", false in
+-        match Proof.refine_by_tactic ~name ~poly env sigma concl (Tacinterp.eval_tactic_ist ist to_call) with
++        match Subproof.refine_by_tactic ~name ~poly:(PolyFlags.of_univ_poly poly) env sigma concl (Tacinterp.eval_tactic_ist ist to_call) with
+         | (c, sigma) ->
+             let new_undef = Evar.Set.diff (Evar.Map.domain (Evd.undefined_map sigma)) undef in
+             let new_undef = Evar.Set.elements new_undef in
+@@ -2117,7 +2117,7 @@
+             let c_proj, _, c_rval = destProj sigma c_head in
+             let c_constant = (Projection.constant c_proj) in
+             if isConstant sigma env c_constant t_head then
+-              let n_params = Structures.Structure.projection_nparams c_constant in
++              let n_params = Structures.Structure.projection_nparams env c_constant in
+               let _t_params, t_args = List.chop n_params t_args in
+               (t_head, c_rval :: c_args), (t_head, t_args)
+             else
+--- a/src/metaCoqInterp.ml
++++ b/src/metaCoqInterp.ml
+@@ -251,7 +251,7 @@
+   | MetaCoqInstr.MetaCoq_constr c -> MetaCoqRun.run_tac c
+ 
+ let exec ~pstate f =
+-  fst @@ Declare.Proof.by (f ()) pstate
++  fst @@ Declare.Proof.by (Global.env ()) (f ()) pstate
+ 
+ (** Interpreter of a constr :
+     - Interpretes the constr

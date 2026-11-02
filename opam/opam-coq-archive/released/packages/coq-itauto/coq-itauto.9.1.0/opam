@@ -1,0 +1,54 @@
+opam-version: "2.0"
+maintainer: "frederic.besson@inria.fr"
+homepage: "https://gitlab.inria.fr/fbesson/itauto"
+dev-repo: "git+https://gitlab.inria.fr/fbesson/itauto.git"
+authors: ["Frédéric Besson"]
+bug-reports: ["frederic.besson@inria.fr" "https://gitlab.inria.fr/fbesson/itauto/-/issues"]
+license: "MIT"
+synopsis: "Reflexive SAT solver with Nelson-Oppen support, parameterised by a leaf tactic inside Coq"
+description: """
+itauto is a reflexive intuitionistic SAT solver parameterised by a theory module.
+When run inside Coq, the theory module wraps an arbitrary Coq tactic, e.g., the lia
+solver for linear arithmetic or the congruence solver for uninterpreted function symbols
+and constructors. Using a black-box Nelson-Oppen scheme for combination of theories,
+itauto also provides an SMT-like tactic for propositional reasoning modulo the solvers for
+both arithmetic and function symbols.
+"""
+
+patches: [
+  "0001-Adapt-plugin-to-Rocq-9.2-API.patch" {coq:version >= "9.2~"}
+]
+build: [
+  [make "-j%{jobs}%"]
+ ]
+install: [make "install"]
+depends: [
+  "ocaml" {>= "4.9~"}
+  "coq" {>= "9.1" & < "9.3~"}
+  "dune" {>= "2.9"}
+]
+depopts: [ "ocamlformat" {build} ]
+
+tags: [
+  "category:Miscellaneous/Coq Extensions"
+  "category:Computer Science/Decision Procedures and Certified Algorithms/Decision procedures"
+  "keyword:integers"
+  "keyword:SAT"
+  "keyword:SMT"
+  "keyword:Nelson-Oppen"
+  "keyword:automation"
+  "logpath:Cdcl"
+  "date:2024-06-17"
+]
+
+url {
+  src: "https://gitlab.inria.fr/fbesson/itauto/-/archive/9.1.0/itauto-9.1.0.tar.gz"
+  checksum: [
+    "md5=714fc8f827f59f4e50a9ffaeaba9af28"
+    "sha512=a07143a2f94d5b004072cbc6925ca3026ace1517d3902a932e8b67acb9203848547850bdcd67801d32f486dbb2b6fd20092c32c2e10753cd9da0bd2813159007"
+  ]
+}
+extra-files: [
+  "0001-Adapt-plugin-to-Rocq-9.2-API.patch"
+  "sha512=2044b454d57e17a08dbc37c4e587e64c476d261c036c19875a312c9ab105108068e8cd7dfe9234f60d6d2a4e759f64a488b456f68042f5029265c0076905cf7d"
+]

@@ -103,13 +103,8 @@ then
   # Numerical mathematics
   PACKAGES="${PACKAGES} coq-flocq.4.2.2"
 
-  # Disabled transitively because Coquelicot does not currently support
-  # MathComp ssreflect 2.6.0.
   PACKAGES="${PACKAGES} coq-interval.4.11.5" # update to 4.11.5 
 
-  # coq-gappa 1.7.1 explicitly requires coq < 9.2~.
-  # Nix can build this source with Rocq 9.2, but the published OPAM metadata
-  # does not allow coq.9.2.0. Requires an opam fix/~flex before enabling.
   PACKAGES="${PACKAGES} coq-gappa.1.11.0"
 
   # Standalone Gappa is not affected by the Rocq version constraint.
@@ -155,9 +150,13 @@ then
   PACKAGES="${PACKAGES} rocq-equations.1.3.2+9.2" # Rocq 9.2 release
   PACKAGES="${PACKAGES} rocq-aac-tactics.9.0.0"
 
-  # No Rocq 9.2 compatible release currently available.
-  #PACKAGES="${PACKAGES} coq-unicoq.1.6+9.1"
-  #PACKAGES="${PACKAGES} coq-mtac2.1.4+9.1"
+  # No Rocq 9.2 release published. Local opam modifications:
+  # - coq-unicoq 1.6+9.1: Coq upper bound relaxed (< 9.2.0~ -> < 9.3~), the
+  #   sources compile unchanged with Rocq 9.2.
+  # - coq-mtac2 1.4+9.1: source patch for the Rocq 9.2 OCaml API (applied only
+  #   for coq >= 9.2). See opam-coq-archive/released/packages/coq-mtac2.
+  PACKAGES="${PACKAGES} coq-unicoq.1.6+9.1"
+  PACKAGES="${PACKAGES} coq-mtac2.1.4+9.1" # linked with unicoq
 
   # QuickChick 2.2.0 only requires coq >= 8.15~ and depends on
   # coq-simple-io >= 1.6.0 (patched locally above).
@@ -176,7 +175,10 @@ then
   PACKAGES="${PACKAGES} coq-coqeal.2.1.2"
   PACKAGES="${PACKAGES} rocq-libhyps.4.0"
 
-  #PACKAGES="${PACKAGES} coq-itauto.9.1.0" # requires coq < 9.2~
+  # Local opam modification required: coq-itauto 9.1.0 has a Coq upper bound
+  # (< 9.2~, relaxed to < 9.3~) and a source patch for the Rocq 9.2 OCaml API
+  # (applied only for coq >= 9.2). See opam-coq-archive/released/packages/coq-itauto.
+  PACKAGES="${PACKAGES} coq-itauto.9.1.0"
 
   # General mathematics
   PACKAGES="${PACKAGES} coq-mathcomp-analysis.1.16.0"
@@ -201,23 +203,23 @@ then
 
   PACKAGES="${PACKAGES} coq-mathcomp-word.3.5"   # Update for Rocq 9.2
 
-  # CompCert 3.17 explicitly requires coq >= 8.15 & < 9.2~.
+  # CompCert 3.18 requires coq < 9.3~ (3.17 required coq < 9.2~).
   case "$COQ_PLATFORM_COMPCERT" in
     [yY]) PACKAGES="${PACKAGES} coq-compcert.3.18" ;;
     [nN]) true ;;
     *) echo "Illegal value for COQ_PLATFORM_COMPCERT - aborting"; false ;;
   esac
 
-  # VST 2.16 pulls coq-vst-zlist 2.13, which requires coq < 9.2~.
-  # The new coq.9.2.0 compatibility meta-package therefore does not help here.
+  # VST 2.17 requires CompCert 3.18 and coq-vst-zlist 2.13 (coq < 9.4~).
   case "$COQ_PLATFORM_VST" in
     [yY]) PACKAGES="${PACKAGES} coq-vst.2.17" ;;
     [nN]) true ;;
     *) echo "Illegal value for COQ_PLATFORM_VST - aborting"; false ;;
   esac
 
-  # DpdGraph 1.0+9.1 requires coq >= 9.1 & < 9.2~.
-  #PACKAGES="${PACKAGES} coq-dpdgraph.1.0+9.1"
+  # Local opam modification required: DpdGraph 1.0+9.1 requires
+  # coq >= 9.1 & < 9.2~ (relaxed to < 9.3~). The sources compile unchanged.
+  PACKAGES="${PACKAGES} coq-dpdgraph.1.0+9.1"
 fi
 
 ########## EXTENDED ROcq PLATFORM PACKAGES ##########

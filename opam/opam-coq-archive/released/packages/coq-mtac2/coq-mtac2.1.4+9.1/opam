@@ -11,6 +11,9 @@ authors: [
 ]
 license: "MIT"
 synopsis: "Typed tactic language for Coq"
+patches: [
+  "0001-Adapt-plugin-to-Rocq-9.2-API.patch" {coq:version >= "9.2~"}
+]
 build: [
   ["./configure.sh"]
   [make "-j%{jobs}%"]
@@ -28,3 +31,7 @@ url {
     "sha512=d11f2e0ba99dde1f1d6be0657a80fb15032e70841bcb5e14e595970f3d501eb71a5295baaefde8768eb1f4475688443f94d3081c4f57d6ff051281b0ddff44e9"
   ]
 }
+extra-files: [
+  "0001-Adapt-plugin-to-Rocq-9.2-API.patch"
+  "sha512=ccea7f0ce1a0d32ca2ef69e6a58be9ef4a4bcba59b3fed3ec88b89c0acc9f99c2920e35ab62d595abbe72c5f715f4dfa15d28c2d19ec31c89cfb61fe32ceb4ae"
+]
