@@ -103,7 +103,11 @@ jobs:
           brew cleanup
           # See https://github.com/orgs/Homebrew/discussions/4612#discussioncomment-6351357
           brew config
-          brew untap homebrew/core homebrew/cask
+          # Runner images since 20261104 no longer tap homebrew/core and homebrew/cask
+          # (brew uses the JSON API), and `brew untap` fails on a missing tap.
+          for tap in homebrew/core homebrew/cask; do
+            if brew tap | grep -qx "$tap"; then brew untap "$tap"; fi
+          done
           brew config
           brew update
           # Note: brew upgrade does fail regularly, but brew is anyway in a better state afterwards
