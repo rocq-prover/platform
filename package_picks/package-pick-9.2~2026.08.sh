@@ -20,10 +20,10 @@ COQ_PLATFORM_PACKAGE_PICK_POSTFIX="~9.2~2026.08"
 COQ_PLATFORM_COQ_BRANCH="v9.2"
 COQ_PLATFORM_COQ_TAG="9.2.0"
 
-COQ_PLATFORM_USE_DEV_REPOSITORY="Y"
+COQ_PLATFORM_USE_DEV_REPOSITORY="N"
 
 COQ_PLATFORM_VERSION_DESCRIPTION="This version of Rocq Platform 2026.08 includes Rocq 9.2, released in March 2026. "
-COQ_PLATFORM_VERSION_DESCRIPTION+='This is a **preview release** of the Rocq Platform for package maintainers.'
+COQ_PLATFORM_VERSION_DESCRIPTION+='This is the **latest release version** of the Rocq Platform and recommended for general application. '
 
 COQ_PLATFORM_OCAML_VERSION="4.14.2"
 
