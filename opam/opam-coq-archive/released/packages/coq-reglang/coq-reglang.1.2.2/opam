@@ -1,0 +1,49 @@
+opam-version: "2.0"
+synopsis:
+  "Representations of regular languages (i.e., regexps, various types of automata, and WS1S) with equivalence proofs, in Coq and MathComp"
+description: """\
+This library provides definitions and verified translations between
+different representations of regular languages: various forms of
+automata (deterministic, nondeterministic, one-way, two-way),
+regular expressions, and the logic WS1S. It also contains various
+decidability results and closure properties of regular languages."""
+maintainer: "palmskog@gmail.com"
+authors: ["Christian Doczkal" "Jan-Oliver Kaiser" "Gert Smolka"]
+license: "CECILL-B"
+tags: [
+  "category:Computer Science/Formal Languages Theory and Automata"
+  "keyword:regular languages"
+  "keyword:regular expressions"
+  "keyword:finite automata"
+  "keyword:two-way automata"
+  "keyword:monadic second-order logic"
+  "logpath:RegLang"
+  "date:2024-01-19"
+]
+homepage: "https://github.com/coq-community/reglang"
+doc: "https://coq-community.github.io/reglang/"
+bug-reports: "https://github.com/coq-community/reglang/issues"
+# Rocq Platform: bounds relaxed (upstream: coq < 9.2~, coq-mathcomp-ssreflect < 2.6~).
+# The patch is upstream PR coq-community/reglang#79 (unreleased), needed since
+# MathComp 2.6 no longer sets SsrOldRewriteGoalsOrder globally.
+patches: [
+  "0001-Adapt-to-MathComp-2.6.patch" {coq-mathcomp-ssreflect:version >= "2.6~"}
+]
+depends: [
+  "coq" {>= "8.16" & < "9.3~"}
+  "coq-mathcomp-ssreflect" {>= "2.0" & < "2.7~"}
+  "coq-hierarchy-builder" {>= "1.4.0"}
+]
+build: [make "-j%{jobs}%"]
+install: [make "install"]
+dev-repo: "git+https://github.com/coq-community/reglang.git"
+url {
+  src:
+    "https://github.com/coq-community/reglang/releases/download/v1.2.2/reglang-1.2.2.tar.gz"
+  checksum:
+    "sha512=d30ceffa9e087b8bf84a578a3b85732a1ac84d70b316b3f9666b6ef93b4884d020d5a2efba054295cf47e8c3da3249bd07d5721c82f809a96ad75bcc1804a756"
+}
+extra-files: [
+  "0001-Adapt-to-MathComp-2.6.patch"
+  "sha512=029bede430f1090e2170d8c316d0ebeb1eb2e8ccd6dae1f177005a51043249b5feabaaefbc1b6b23048fdaa15c16414f8284613a7887c7fd4326a744ca48499e"
+]

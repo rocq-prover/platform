@@ -113,12 +113,7 @@ then
   # Constructive mathematics
   PACKAGES="${PACKAGES} coq-math-classes.9.2.0" # updated for Rocq 9.2
 
-  # CoRN 9.0.0 requires coq < 9.2~ (relaxed to < 9.3~ in the local opam file),
-  # but does not compile with Rocq 9.2: proof scripts break in at least
-  # util/SetoidPermutation.v, logic/CornBasics.v, stdlib_omissions/List.v,
-  # stdlib_omissions/Q.v and model/structures/QnnInf.v.
-  # No published Rocq 9.2-compatible release currently available.
-  #PACKAGES="${PACKAGES} coq-corn.9.0.0"
+  PACKAGES="${PACKAGES} coq-corn.9.2.0" # Rocq 9.2 release (9.0.0 does not compile with Rocq 9.2)
 
   # Homotopy Type Theory (HoTT)
   #PACKAGES="${PACKAGES} coq-hott.9.1" # not compatible with Rocq 9.2
@@ -183,15 +178,19 @@ then
   # General mathematics
   PACKAGES="${PACKAGES} coq-mathcomp-analysis.1.16.0"
 
-  # Incompatible with MathComp ssreflect 2.6.0.
-  #PACKAGES="${PACKAGES} coq-mathcomp-algebra-tactics.1.2.7"
+  # coq-mathcomp-algebra-tactics is no longer needed: its tactics (ring, field,
+  # lra, nra, psatz) are part of MathComp 2.6.0 (rocq-mathcomp-algebra), and the
+  # standalone project is deprecated upstream.
 
   PACKAGES="${PACKAGES} rocq-relation-algebra.1.9.1"
 
   # Formal languages, compilers and code verification
 
-  # Requires MathComp ssreflect < 2.6~.
-  #PACKAGES="${PACKAGES} coq-reglang.1.2.2"
+  # Local opam modification required: coq-reglang 1.2.2 requires coq < 9.2~ and
+  # MathComp ssreflect < 2.6~ (relaxed to < 9.3~ and < 2.7~), plus the unreleased
+  # upstream fix coq-community/reglang#79 (applied only for MathComp >= 2.6).
+  # See opam-coq-archive/released/packages/coq-reglang.
+  PACKAGES="${PACKAGES} coq-reglang.1.2.2"
 
   PACKAGES="${PACKAGES} rocq-iris.4.5.0"
   PACKAGES="${PACKAGES} rocq-iris-heap-lang.4.5.0"
@@ -238,11 +237,8 @@ then
 
   # General mathematics
 
-  # coq-extructures 0.5.0 requires both:
-  #   coq < 9.1~
-  #   coq-mathcomp-ssreflect < 2.6~
-  # and depends on coq-deriving.
-  # It is therefore incompatible with this pick on several independent bounds.
+  # coq-extructures 0.6.0 supports coq 9.0 - 9.2 and MathComp ssreflect 2.5 - 2.6
+  # (0.5.0 required coq < 9.1~ and MathComp ssreflect < 2.6~).
   PACKAGES="${PACKAGES} coq-extructures.0.6.0"
 
   # Gallina extensions
