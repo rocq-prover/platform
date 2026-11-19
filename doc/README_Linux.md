@@ -8,23 +8,27 @@ This method is intended for experienced users, who may want to use opam to insta
 
 - Install buildtools
   - Debian, Ubuntu: `sudo apt install build-essential`
-  - CentOS, RHEL, Fedora: `sudo dnf groupinstall "Development Tools"`
+  - CentOS, RHEL, Fedora (dnf4): `sudo dnf groupinstall "Development Tools"`
+  - Fedora 41 and later (dnf5): `sudo dnf install @development-tools`
   - OpenSuse: `sudo zypper in -t pattern devel_C_C++`
 - For CentOS and possibly RHEL some additional steps are required, see [CentOS](#centos) below.
 - Get the Rocq Platform scripts via either of these methods
-  - Most users should download and extract `https://github.com/coq/platform/archive/refs/tags/2026.07.0.zip`.
-  - Users which intend to contribute to Rocq Platform should use `git clone --branch 2026.07.0 https://github.com/rocq-prover/platform.git`.
+  - Most users should download and extract `https://github.com/rocq-prover/platform/archive/refs/tags/2026.08.0.zip`.
+  - Users which intend to contribute to Rocq Platform should use `git clone --branch 2026.08.0 https://github.com/rocq-prover/platform.git`.
 - Open a shell, navigate to the download folder and execute `coq_platform_make.sh`.
 - The system will ask for sudo permissions to install prerequisites _several times_ so the script is not fully unattended but all installations of dependencies are done directly after the initialization of the opam switch.
 - In case the script aborts e.g. cause of internet issues, just rerun the script.
-- The script creates a new opam switch named e.g. RP.2026.07.0~9.1~2026.01 - the exact name depends on the Rocq version and package pick you selected.
+- The script creates a new opam switch named e.g. RP.2026.08.0~9.2~2026.08 - the exact name depends on the Rocq version and package pick you selected.
   This means the script does not touch your existing opam setup unless you already have a switch of this name.
 - Use the following commands to activate this switch after opening a new shell:
-  - `opam switch RP.2026.07.0~9.1~2026.01` (note: the switch name might vary if you choose a different version of Rocq - please use `opam switch` to see a list of switch names)
+  - `opam switch RP.2026.08.0~9.2~2026.08` (note: the switch name might vary if you choose a different version of Rocq - please use `opam switch` to see a list of switch names)
   - `eval $(opam env)`
   - The second step can be automated by rerunning `opam init`
 - The main opam repositories for Rocq and OCaml developments are already added to the created opam switch, so it should be easy to install additional Rocq (or OCaml) packages.
 - RocqIDE can be started from the shell prompt with `rocqide`.
+- RocqIDE requires the GTK3 and GtkSourceView 3 development libraries. The script normally installs them via opam, but if the RocqIDE build fails because they are missing (e.g. on Linux Mint), install them manually and rerun the script:
+  - Debian, Ubuntu, Linux Mint: `sudo apt install libgtk-3-dev libgtksourceview-3.0-dev`
+  - Fedora: `sudo dnf install gtk3-devel gtksourceview3-devel`
 - The full installation might require up to 5 GB of disk space.
 - The setup script creates a folder `$HOME/rocq-platform` where it stores a few files but this will likely be removed in future releases.
 

@@ -1,3 +1,9 @@
+# ATTENTION RELEASE IN PROGRESS
+
+**We are currently preparing a release, which has the effect that some links already refer to the new tag, even though this does not exist as yet.**
+
+**In case you experience dead links, please replace `2026.08.0` with `2026.07.0`.**
+
 # Overview
 
 The [Rocq proof assistant](https://rocq-prover.org/) provides a formal language
@@ -35,8 +41,9 @@ The table below contains links to the README files for the supported versions
 of Rocq and libraries. Each README file contains a list of included packages with
 detailed information for each package.
 
-- [Rocq 9.1.0 (released Aug 2025) with the first package pick from Aug 2025](doc/README~9.1.0~2026.01.md)
-- [Rocq 9.0.1 (released Aug 2025) with the first package pick from Aug 2025](doc/README~9.0.1~2025.08.md)
+- [Rocq 9.2 (released March 2026) with the first package pick from August 2026](doc/README~9.2~2026.08.md)
+- [Rocq 9.1 (released February 2026) with the preview package pick from March 2026](doc/README~9.1~2026.01.md)
+- [Rocq 9.0.1 (released March 2025) with the preview package pick from July 2025](doc/README~9.0.1~2025.08.md)
 - [Coq 8.20.1 (released Jan 2025) with the first package pick from Jan 2025](doc/README~8.20~2025.01.md)
 - [Coq 8.19.2 (released Jun 2024) with the first package pick from Oct 2024](doc/README~8.19~2024.10.md)
 - [Coq 8.18.0 (released Sep 2023) with the first package pick from Nov 2023](doc/README~8.18~2023.11.md)
@@ -83,6 +90,14 @@ The Rocq Platform team does no double check this information.
 </details>
 
 <details><summary><font size="+1">Release notes / changelog</font></summary>
+
+## Changes in 2026.08.0
+
+- added new pick `9.2~2026.08` with Rocq 9.2.0 and MathComp 2.6.0
+  - `coq-mathcomp-algebra-tactics` is no longer part of the pick: its tactics (`ring`, `field`, `lra`, `nra`, `psatz`) are now included in MathComp 2.6
+  - some packages without a Rocq 9.2 compatible release are provided with patched opam files (relaxed version bounds and/or source patches), see `opam/opam-coq-archive/released`
+- the macOS DMG installer is provided for Apple silicon (ARM) only - on Intel Macs please install from sources
+- Windows installers are provided for 64 bit only (32 bit builds have been dropped)
 
 ## Changes in 2025.08.0
 
@@ -302,35 +317,37 @@ You can list the available switches with:
 ```
 ~$ opam switch
 #  switch                        compiler                                              description
-   CP.2025.08.0~8.12             ocaml-base-compiler.4.10.2                            Coq 8.12.2 (released Dec 2020) with the first package pick from Dec 2020
-   CP.2025.08.0~8.13~2021.02     ocaml-base-compiler.4.10.2                            Coq 8.13.2 (released Apr 2021) with the first package pick from Feb 2021
-   CP.2025.08.0~8.13~2021.09     ocaml-base-compiler.4.10.2                            Coq 8.13.2 (released Apr 2021) with an extended package pick from Sep 2021
-   CP.2025.08.0~8.13~2022.01     ocaml-base-compiler.4.10.2                            Coq 8.13.2 (released Apr 2021) with an updated package pick from Jan 2022
-   CP.2025.08.0~8.14~2022.01     ocaml-option-flambda.1,ocaml-variants.4.12.1+options  Coq 8.14.1 (released Nov 2021) with the first package pick from Jan 2022
-   CP.2025.08.0~8.14~2022.04     ocaml-option-flambda.1,ocaml-variants.4.12.1+options  Coq 8.14.1 (released Nov 2021) with an updated package pick from Apr 2022
-   CP.2025.08.0~8.15~2022.04     ocaml-option-flambda.1,ocaml-variants.4.13.1+options  Coq 8.15.2 (released Jun 2022) with the first package pick from Apr 2022
-   CP.2025.08.0~8.15~2022.09     ocaml-option-flambda.1,ocaml-variants.4.13.1+options  Coq 8.15.2 (released Jun 2022) with an updated package pick from Sep 2022
-   CP.2025.08.0~8.16~2022.09     ocaml-option-flambda.1,ocaml-variants.4.13.1+options  Coq 8.16.1 (released Nov 2022) with the first package pick from Sep 2022
-   CP.2025.08.0~8.16~2023.08     ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.16.1 (released Nov 2022) with an updated package pick from from Aug 2023
-   CP.2025.08.0~8.17~2023.08     ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.17.1 (released Jun 2023) with the first package pick from Aug 2023
-   CP.2025.08.0~8.18~2023.11     ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.18.0 (released Sep 2023) with the first package pick from Nov 2023
-   CP.2025.08.0~8.18~mc2         ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.18.0 (released Sep 2023) with a package pick based on mathcomp 2.1
-   CP.2025.08.0~8.19~2024.10     ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Coq 8.19.2 (released Jun 2024) with the first package pick from Oct 2024
-→  CP.2025.08.0~8.20~2025.01     ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Coq 8.20.1 (released Jan 2025) with the first package pick from Jan 2025
-→  CP.2025.08.0~9.0~2025.08      ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Coq 9.0.1  (released Aug 2025) with the first package pick from Aug 2025
-   CP.2025.08.0~dev              ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Coq dev (latest master of all packages)
+   RP.2026.08.0~8.12             ocaml-base-compiler.4.10.2                            Coq 8.12.2 (released Dec 2020) with the first package pick from Dec 2020
+   RP.2026.08.0~8.13~2021.02     ocaml-base-compiler.4.10.2                            Coq 8.13.2 (released Apr 2021) with the first package pick from Feb 2021
+   RP.2026.08.0~8.13~2021.09     ocaml-base-compiler.4.10.2                            Coq 8.13.2 (released Apr 2021) with an extended package pick from Sep 2021
+   RP.2026.08.0~8.13~2022.01     ocaml-base-compiler.4.10.2                            Coq 8.13.2 (released Apr 2021) with an updated package pick from Jan 2022
+   RP.2026.08.0~8.14~2022.01     ocaml-option-flambda.1,ocaml-variants.4.12.1+options  Coq 8.14.1 (released Nov 2021) with the first package pick from Jan 2022
+   RP.2026.08.0~8.14~2022.04     ocaml-option-flambda.1,ocaml-variants.4.12.1+options  Coq 8.14.1 (released Nov 2021) with an updated package pick from Apr 2022
+   RP.2026.08.0~8.15~2022.04     ocaml-option-flambda.1,ocaml-variants.4.13.1+options  Coq 8.15.2 (released Jun 2022) with the first package pick from Apr 2022
+   RP.2026.08.0~8.15~2022.09     ocaml-option-flambda.1,ocaml-variants.4.13.1+options  Coq 8.15.2 (released Jun 2022) with an updated package pick from Sep 2022
+   RP.2026.08.0~8.16~2022.09     ocaml-option-flambda.1,ocaml-variants.4.13.1+options  Coq 8.16.1 (released Nov 2022) with the first package pick from Sep 2022
+   RP.2026.08.0~8.16~2023.08     ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.16.1 (released Nov 2022) with an updated package pick from from Aug 2023
+   RP.2026.08.0~8.17~2023.08     ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.17.1 (released Jun 2023) with the first package pick from Aug 2023
+   RP.2026.08.0~8.18~2023.11     ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.18.0 (released Sep 2023) with the first package pick from Nov 2023
+   RP.2026.08.0~8.18~mc2         ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.18.0 (released Sep 2023) with a package pick based on mathcomp 2.1
+   RP.2026.08.0~8.19~2024.10     ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Coq 8.19.2 (released Jun 2024) with the first package pick from Oct 2024
+   RP.2026.08.0~8.20~2025.01     ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Coq 8.20.1 (released Jan 2025) with the first package pick from Jan 2025
+   RP.2026.08.0~9.0~2025.08      ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Rocq 9.0.1 (released March 2025) with the preview package pick from July 2025
+   RP.2026.08.0~9.1~2026.01      ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Rocq 9.1 (released February 2026) with the preview package pick from March 2026
+→  RP.2026.08.0~9.2~2026.08      ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Rocq 9.2 (released March 2026) with the first package pick from August 2026
+   RP.2026.08.0~dev              ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Coq dev (latest master of all packages)
 ```
 
 You can select the opam switch for **all shells** with e.g.:
 
 ```
-~$ opam switch CP.2025.08.0~9.0~2025.08
+~$ opam switch RP.2026.08.0~9.2~2026.08
 ```
 
 You can select the opam switch for **just the current shell** with e.g.:
 
 ```
-eval $(opam config env --set-switch --switch CP.2025.08.0~9.0~2025.08)
+eval $(opam config env --set-switch --switch RP.2026.08.0~9.2~2026.08)
 ```
 
 So you can easily open two separate shell windows, select different opam switches and start e.g. two CoqIDE instances to step through the same file with two different versions of Coq.
@@ -372,26 +389,28 @@ Please clarify the license at [CompCert License](https://github.com/AbsInt/CompC
   ```
   ~$ opam switch
   #   switch                    compiler                                              description
-  CP.2025.08.0~8.12             ocaml-base-compiler.4.10.2                            Coq 8.12.2 (released Dec 2020) with the first package pick from Dec 2020
-  CP.2025.08.0~8.13~2021.02     ocaml-base-compiler.4.10.2                            Coq 8.13.2 (released Apr 2021) with the first package pick from Feb 2021
-  CP.2025.08.0~8.13~2021.09     ocaml-base-compiler.4.10.2                            Coq 8.13.2 (released Apr 2021) with an extended package pick from Sep 2021
-  CP.2025.08.0~8.13~2022.01     ocaml-base-compiler.4.10.2                            Coq 8.13.2 (released Apr 2021) with an updated package pick from Jan 2022
-  CP.2025.08.0~8.14~2022.01     ocaml-option-flambda.1,ocaml-variants.4.12.1+options  Coq 8.14.1 (released Nov 2021) with the first package pick from Jan 2022
-  CP.2025.08.0~8.14~2022.04     ocaml-option-flambda.1,ocaml-variants.4.12.1+options  Coq 8.14.1 (released Nov 2021) with an updated package pick from Apr 2022
-  CP.2025.08.0~8.15~2022.04     ocaml-option-flambda.1,ocaml-variants.4.13.1+options  Coq 8.15.2 (released Jun 2022) with the first package pick from Apr 2022
-  CP.2025.08.0~8.15~2022.09     ocaml-option-flambda.1,ocaml-variants.4.13.1+options  Coq 8.15.2 (released Jun 2022) with an updated package pick from Sep 2022
-  CP.2025.08.0~8.16~2022.09     ocaml-option-flambda.1,ocaml-variants.4.13.1+options  Coq 8.16.1 (released Nov 2022) with the first package pick from Sep 2022
-  CP.2025.08.0~8.16~2023.08     ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.16.1 (released Nov 2022) with an updated package pick from from Aug 2023
-  CP.2025.08.0~8.17~2023.08     ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.17.1 (released Jun 2023) with the first package pick from Aug 2023
-  CP.2025.08.0~8.18~2023.11     ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.18.0 (released Sep 2023) with the first package pick from Nov 2023
-  CP.2025.08.0~8.18~mc2         ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.18.0 (released Sep 2023) with a package pick based on mathcomp 2.1
-  CP.2025.08.0~8.19~2024.10     ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Coq 8.19.2 (released Jun 2024) with the first package pick from Oct 2024
-  CP.2025.08.0~9.0~2025.08      ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Coq 9.0.1  (released Aug 2025) with the first package pick from Aug 2025
-  CP.2025.08.0~dev              ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq dev (latest master of all packages)
+  RP.2026.08.0~8.12             ocaml-base-compiler.4.10.2                            Coq 8.12.2 (released Dec 2020) with the first package pick from Dec 2020
+  RP.2026.08.0~8.13~2021.02     ocaml-base-compiler.4.10.2                            Coq 8.13.2 (released Apr 2021) with the first package pick from Feb 2021
+  RP.2026.08.0~8.13~2021.09     ocaml-base-compiler.4.10.2                            Coq 8.13.2 (released Apr 2021) with an extended package pick from Sep 2021
+  RP.2026.08.0~8.13~2022.01     ocaml-base-compiler.4.10.2                            Coq 8.13.2 (released Apr 2021) with an updated package pick from Jan 2022
+  RP.2026.08.0~8.14~2022.01     ocaml-option-flambda.1,ocaml-variants.4.12.1+options  Coq 8.14.1 (released Nov 2021) with the first package pick from Jan 2022
+  RP.2026.08.0~8.14~2022.04     ocaml-option-flambda.1,ocaml-variants.4.12.1+options  Coq 8.14.1 (released Nov 2021) with an updated package pick from Apr 2022
+  RP.2026.08.0~8.15~2022.04     ocaml-option-flambda.1,ocaml-variants.4.13.1+options  Coq 8.15.2 (released Jun 2022) with the first package pick from Apr 2022
+  RP.2026.08.0~8.15~2022.09     ocaml-option-flambda.1,ocaml-variants.4.13.1+options  Coq 8.15.2 (released Jun 2022) with an updated package pick from Sep 2022
+  RP.2026.08.0~8.16~2022.09     ocaml-option-flambda.1,ocaml-variants.4.13.1+options  Coq 8.16.1 (released Nov 2022) with the first package pick from Sep 2022
+  RP.2026.08.0~8.16~2023.08     ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.16.1 (released Nov 2022) with an updated package pick from from Aug 2023
+  RP.2026.08.0~8.17~2023.08     ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.17.1 (released Jun 2023) with the first package pick from Aug 2023
+  RP.2026.08.0~8.18~2023.11     ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.18.0 (released Sep 2023) with the first package pick from Nov 2023
+  RP.2026.08.0~8.18~mc2         ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq 8.18.0 (released Sep 2023) with a package pick based on mathcomp 2.1
+  RP.2026.08.0~8.19~2024.10     ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Coq 8.19.2 (released Jun 2024) with the first package pick from Oct 2024
+  RP.2026.08.0~9.0~2025.08      ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Rocq 9.0.1 (released March 2025) with the preview package pick from July 2025
+  RP.2026.08.0~9.1~2026.01      ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Rocq 9.1 (released February 2026) with the preview package pick from March 2026
+  RP.2026.08.0~9.2~2026.08      ocaml-option-flambda.1,ocaml-variants.4.14.2+options  Rocq 9.2 (released March 2026) with the first package pick from August 2026
+  RP.2026.08.0~dev              ocaml-option-flambda.1,ocaml-variants.4.14.1+options  Coq dev (latest master of all packages)
   ```
 - Choose the switch you want to change with this command (example):
   ```
-  opam switch CP.2025.08.0~9.0~2025.08
+  opam switch RP.2026.08.0~9.2~2026.08
   eval $(opam env)
   ```
 - You can find packages with `opam list --all | grep "some keyword"`.
