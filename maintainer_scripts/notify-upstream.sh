@@ -44,7 +44,7 @@ EXT_FINAL=""
 DATE_FINAL=""
 # Rocq Platform release code and dates
 VERSION_PLATFORM="2026.08"
-DATE_PLATFORM_BETA="Nov 20th, 2026"
+DATE_PLATFORM_BETA="Nov 19th, 2026"
 DATE_PLATFORM_NOTIFY="Dec 3rd, 2026" # When people notify if they are a problem
 DATE_PLATFORM_EXPECTED="Dec 14th, 2026" # When the install is finished
 DATE_PLATFORM_LATEST="Dec 18th, 2026" # The last date to make a fix

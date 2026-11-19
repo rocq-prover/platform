@@ -26,7 +26,7 @@ This method is intended for experienced users, who may want to use opam to insta
   - The second step can be automated by rerunning `opam init`
 - The main opam repositories for Rocq and OCaml developments are already added to the created opam switch, so it should be easy to install additional Rocq (or OCaml) packages.
 - RocqIDE can be started from the shell prompt with `rocqide`.
-- RocqIDE requires the GTK3 and GtkSourceView 3 development libraries. The script normally installs them via opam, but if the RocqIDE build fails because they are missing (e.g. on Linux Mint), install them manually and rerun the script:
+- RocqIDE requires the GTK3 and GtkSourceView 3 development libraries. The script normally installs them via opam, but if the RocqIDE build fails because they are missing (e.g. when the automatic installation with `sudo` was skipped or failed), install them manually and rerun the script:
   - Debian, Ubuntu, Linux Mint: `sudo apt install libgtk-3-dev libgtksourceview-3.0-dev`
   - Fedora: `sudo dnf install gtk3-devel gtksourceview3-devel`
 - The full installation might require up to 5 GB of disk space.
