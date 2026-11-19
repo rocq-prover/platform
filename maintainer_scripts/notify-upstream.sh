@@ -38,19 +38,19 @@ PACKAGE_FILTER_RE="${2:-.}"
 
 # Extension and release date of the Rocq release
 EXT_RELEASE=".0"
-DATE_RELEASE="March 12th, 2025"
+DATE_RELEASE="March 27th, 2026"
 # Extension and release date of the Rocq release, in case the above is a beta
 EXT_FINAL=""
 DATE_FINAL=""
 # Rocq Platform release code and dates
-VERSION_PLATFORM="2025.09"
-DATE_PLATFORM_BETA="Aug 28th, 2025"
-DATE_PLATFORM_NOTIFY="Sep 26th, 2025" # When people notify if they are a problem
-DATE_PLATFORM_EXPECTED="Oct 24th, 2025" # When the install is finished
-DATE_PLATFORM_LATEST="Nov 21st, 2025" # The last date to make a fix
+VERSION_PLATFORM="2026.08"
+DATE_PLATFORM_BETA="Nov 20th, 2026"
+DATE_PLATFORM_NOTIFY="Dec 3rd, 2026" # When people notify if they are a problem
+DATE_PLATFORM_EXPECTED="Dec 14th, 2026" # When the install is finished
+DATE_PLATFORM_LATEST="Dec 18th, 2026" # The last date to make a fix
 PLATFORM_MAIN_BRANCH="https://github.com/rocq-prover/platform/tree/main"
 
-CC="CC: https://github.com/rocq-prover/platform/issues/481"
+CC="CC: https://github.com/rocq-prover/platform/issues/546"
 #CC="\n@coqbot column:...."
 
 COQ_PLATFORM_UNIMATH=Y
