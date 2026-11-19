@@ -11,7 +11,7 @@
 ###################### CONTROL VARIABLES #####################
 
 # The two lines below are used by the package selection script
-COQ_PLATFORM_VERSION_TITLE="Rocq 9.1 (released January 2026) with the preview package pick from Mars 2026"
+COQ_PLATFORM_VERSION_TITLE="Rocq 9.1 (released February 2026) with the preview package pick from March 2026"
 COQ_PLATFORM_VERSION_SORTORDER="2"
 
 # The package list name is the final part of the opam switch name.
@@ -28,7 +28,7 @@ COQ_PLATFORM_COQ_TAG="9.1+rc1"
 COQ_PLATFORM_USE_DEV_REPOSITORY="Y"
 
 # This extended descriptions is used for readme files
-COQ_PLATFORM_VERSION_DESCRIPTION="This version of Rocq Platform 2026.01 includes Rocq 9.1 from January 2026."
+COQ_PLATFORM_VERSION_DESCRIPTION="This version of Rocq Platform 2026.01 includes Rocq 9.1 from February 2026."
 COQ_PLATFORM_VERSION_DESCRIPTION+='This is a **preview release** of the Rocq Platform for packages maintainers'
 
 # The OCaml version to use for this pick (just the version number - options are elaborated in a platform dependent way)
