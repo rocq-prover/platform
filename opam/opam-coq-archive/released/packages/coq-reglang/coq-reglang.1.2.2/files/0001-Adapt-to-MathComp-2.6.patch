@@ -1,0 +1,132 @@
+diff --git a/theories/dfa.v b/theories/dfa.v
+index ca0acfb..02d8e02 100644
+--- a/theories/dfa.v
++++ b/theories/dfa.v
+@@ -3,6 +3,7 @@
+ From Coq Require Import Setoid.
+ From mathcomp Require Import all_ssreflect.
+ From RegLang Require Import misc languages.
++Set SsrOldRewriteGoalsOrder.  (* change Set to Unset when porting the file, then remove the line when requiring MathComp >= 2.6 *)
+ 
+ Set Default Proof Using "Type".
+ 
+diff --git a/theories/languages.v b/theories/languages.v
+index 48449af..b53a62a 100644
+--- a/theories/languages.v
++++ b/theories/languages.v
+@@ -3,6 +3,7 @@
+ From HB Require Import structures.
+ From mathcomp Require Import all_ssreflect.
+ From RegLang Require Import misc.
++Set SsrOldRewriteGoalsOrder.  (* change Set to Unset when porting the file, then remove the line when requiring MathComp >= 2.6 *)
+ 
+ Set Default Proof Using "Type".
+ 
+diff --git a/theories/minimization.v b/theories/minimization.v
+index 435fced..4e84f71 100644
+--- a/theories/minimization.v
++++ b/theories/minimization.v
+@@ -4,6 +4,7 @@ From HB Require Import structures.
+ From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq choice.
+ From mathcomp Require Import fintype path fingraph finfun finset generic_quotient.
+ From RegLang Require Import misc languages dfa.
++Set SsrOldRewriteGoalsOrder.  (* change Set to Unset when porting the file, then remove the line when requiring MathComp >= 2.6 *)
+ 
+ Set Default Proof Using "Type".
+ 
+diff --git a/theories/misc.v b/theories/misc.v
+index 40fa458..3ea2464 100644
+--- a/theories/misc.v
++++ b/theories/misc.v
+@@ -1,6 +1,7 @@
+ (* Authors: Christian Doczkal and Jan-Oliver Kaiser *)
+ (* Distributed under the terms of CeCILL-B. *)
+ From mathcomp Require Import all_ssreflect.
++Set SsrOldRewriteGoalsOrder.  (* change Set to Unset when porting the file, then remove the line when requiring MathComp >= 2.6 *)
+ 
+ Set Default Proof Using "Type".
+ 
+diff --git a/theories/myhill_nerode.v b/theories/myhill_nerode.v
+index 11679a6..2662be0 100644
+--- a/theories/myhill_nerode.v
++++ b/theories/myhill_nerode.v
+@@ -2,6 +2,7 @@
+ (* Distributed under the terms of CeCILL-B. *)
+ From mathcomp Require Import all_ssreflect.
+ From RegLang Require Import misc languages dfa minimization regexp.
++Set SsrOldRewriteGoalsOrder.  (* change Set to Unset when porting the file, then remove the line when requiring MathComp >= 2.6 *)
+ 
+ Set Default Proof Using "Type".
+ 
+diff --git a/theories/nfa.v b/theories/nfa.v
+index 1a813fd..38d9198 100644
+--- a/theories/nfa.v
++++ b/theories/nfa.v
+@@ -2,6 +2,7 @@
+ (* Distributed under the terms of CeCILL-B. *)
+ From mathcomp Require Import all_ssreflect.
+ From RegLang Require Import misc languages dfa.
++Set SsrOldRewriteGoalsOrder.  (* change Set to Unset when porting the file, then remove the line when requiring MathComp >= 2.6 *)
+ 
+ Set Default Proof Using "Type".
+ 
+diff --git a/theories/regexp.v b/theories/regexp.v
+index 45014e2..6c0fb24 100644
+--- a/theories/regexp.v
++++ b/theories/regexp.v
+@@ -3,6 +3,7 @@
+ From HB Require Import structures.
+ From mathcomp Require Import all_ssreflect.
+ From RegLang Require Import setoid_leq misc languages dfa nfa.
++Set SsrOldRewriteGoalsOrder.  (* change Set to Unset when porting the file, then remove the line when requiring MathComp >= 2.6 *)
+ 
+ Set Default Proof Using "Type".
+ 
+diff --git a/theories/shepherdson.v b/theories/shepherdson.v
+index f260a14..2363b4a 100644
+--- a/theories/shepherdson.v
++++ b/theories/shepherdson.v
+@@ -3,6 +3,7 @@
+ From Coq Require Import Lia.
+ From mathcomp Require Import all_ssreflect.
+ From RegLang Require Import misc setoid_leq languages dfa myhill_nerode two_way.
++Set SsrOldRewriteGoalsOrder.  (* change Set to Unset when porting the file, then remove the line when requiring MathComp >= 2.6 *)
+ 
+ Set Default Proof Using "Type".
+ 
+diff --git a/theories/two_way.v b/theories/two_way.v
+index c21e067..d2b2cf6 100644
+--- a/theories/two_way.v
++++ b/theories/two_way.v
+@@ -2,6 +2,7 @@
+ (* Distributed under the terms of CeCILL-B. *)
+ From mathcomp Require Import all_ssreflect.
+ From RegLang Require Import misc languages dfa regexp myhill_nerode.
++Set SsrOldRewriteGoalsOrder.  (* change Set to Unset when porting the file, then remove the line when requiring MathComp >= 2.6 *)
+ 
+ Set Default Proof Using "Type".
+ 
+diff --git a/theories/vardi.v b/theories/vardi.v
+index a5c0c28..8a6f4a7 100644
+--- a/theories/vardi.v
++++ b/theories/vardi.v
+@@ -2,6 +2,7 @@
+ (* Distributed under the terms of CeCILL-B. *)
+ From mathcomp Require Import all_ssreflect.
+ From RegLang Require Import misc languages nfa two_way.
++Set SsrOldRewriteGoalsOrder.  (* change Set to Unset when porting the file, then remove the line when requiring MathComp >= 2.6 *)
+ 
+ Set Default Proof Using "Type".
+ 
+diff --git a/theories/wmso.v b/theories/wmso.v
+index f3b97d0..3959915 100644
+--- a/theories/wmso.v
++++ b/theories/wmso.v
+@@ -2,6 +2,7 @@
+ (* Distributed under the terms of CeCILL-B. *)
+ From mathcomp Require Import all_ssreflect.
+ From RegLang Require Import misc languages dfa nfa regexp.
++Set SsrOldRewriteGoalsOrder.  (* change Set to Unset when porting the file, then remove the line when requiring MathComp >= 2.6 *)
+ 
+ Set Default Proof Using "Type".
+ 
