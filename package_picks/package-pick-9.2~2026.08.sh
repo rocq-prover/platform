@@ -11,7 +11,7 @@
 ###################### CONTROL VARIABLES #####################
 
 # The two lines below are used by the package selection script
-COQ_PLATFORM_VERSION_TITLE="Rocq 9.2 (released March 2026) with the preview package pick from August 2026"
+COQ_PLATFORM_VERSION_TITLE="Rocq 9.2 (released March 2026) with the first package pick from August 2026"
 COQ_PLATFORM_VERSION_SORTORDER="1"
 
 COQ_PLATFORM_PACKAGE_PICK_POSTFIX="~9.2~2026.08"
@@ -95,9 +95,7 @@ then
 
   # Number theory
 
-  # Local opam modification required: published package has a Coq upper bound
-  # which does not include the final Rocq/Coq compatibility package 9.2.0.
-  PACKAGES="${PACKAGES} rocq-coqprime.1.8.0"
+  PACKAGES="${PACKAGES} rocq-coqprime.1.9.0"
   PACKAGES="${PACKAGES} coq-coqprime-generator.1.1.2"
 
   # Numerical mathematics
