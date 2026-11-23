@@ -51,7 +51,7 @@ PACKAGES="${PACKAGES} PIN.dune-configurator.3.21.0"
 # coq.9.2.0 is the compatibility meta-package added for Rocq 9.2.
 # It allows packages still depending on "coq" to resolve against Rocq 9.2.
 PACKAGES="${PACKAGES} PIN.coq.9.2.0"
-PACKAGES="${PACKAGES} PIN.rocq-stdlib.9.1.0"
+PACKAGES="${PACKAGES} PIN.rocq-stdlib.9.2.0"
 
 ########## IDE PACKAGES ##########
 
