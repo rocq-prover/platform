@@ -1,0 +1,55 @@
+opam-version: "2.0"
+synopsis: "CoqEAL - The Coq Effective Algebra Library"
+description: """\
+This Coq library contains a subset of the work that was developed in the context
+of the ForMath EU FP7 project (2009-2013). It has two parts:
+- theory, which contains developments in algebra including normal forms of matrices,
+  and optimized algorithms on MathComp data structures.
+- refinements, which is a framework to ease change of data representations during a proof."""
+maintainer: "Cyril Cohen <cyril.cohen@inria.fr>"
+authors: [
+  "Guillaume Cano"
+  "Cyril Cohen"
+  "Maxime Dénès"
+  "Érik Martin-Dorel"
+  "Anders Mörtberg"
+  "Damien Rouhling"
+  "Pierre Roux"
+  "Vincent Siles"
+]
+license: "MIT"
+tags: [
+  "category:Computer Science/Decision Procedures and Certified Algorithms/Correctness proofs of algorithms"
+  "keyword:effective algebra"
+  "keyword:elementary divisor rings"
+  "keyword:Smith normal form"
+  "keyword:mathematical components"
+  "keyword:Bareiss"
+  "keyword:Karatsuba multiplication"
+  "keyword:refinements"
+  "logpath:CoqEAL"
+]
+homepage: "https://github.com/coq-community/coqeal"
+bug-reports: "https://github.com/coq-community/coqeal/issues"
+# Rocq Platform: accept rocq-elpi as an alternative to the coq-elpi
+# compatibility package, which upstream no longer publishes since rocq-elpi 3.6.0
+# (upstream: "coq-elpi" {>= "2.5.0"}).
+depends: [
+  "coq-core" {(>= "9.0" & < "9.4~") | (= "dev")}
+  "coq-bignums"
+  ("coq-elpi" {>= "2.5.0"} | "rocq-elpi" {>= "2.5.0"})
+  "coq-hierarchy-builder" {>= "1.9.0"}
+  "coq-mathcomp-ssreflect" {>= "2.5" & < "2.7~"}
+  "coq-mathcomp-algebra"
+  "coq-mathcomp-multinomials" {>= "2.4"}
+  "coq-mathcomp-real-closed" {>= "2.0.3"}
+]
+build: [make "-j%{jobs}%"]
+install: [make "install"]
+dev-repo: "git+https://github.com/coq-community/coqeal.git"
+url {
+  src:
+    "https://github.com/coq-community/coqeal/archive/refs/tags/2.1.2.tar.gz"
+  checksum:
+    "sha512=25ddb07c349379b1ac01ff8483ad75bee4016ebd38783aeb4feb8ff9801485ec6fb190b0c8803c9b9486c060917660592f768c3b83a0d4dc51907745ccb7172a"
+}
