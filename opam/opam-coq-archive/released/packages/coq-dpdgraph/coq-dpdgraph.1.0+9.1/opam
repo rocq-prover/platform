@@ -12,8 +12,11 @@ Coq plugin that extracts the dependencies between Coq objects,
 and produces files with dependency information. Includes tools
 to visualize dependency graphs and find unused definitions."""
 
+# Rocq Platform: build sequentially. Make_coq.local builds dpd2dot and dpdusage
+# in parallel from the same common .ml files, so both ocamlopt runs write the
+# same .cmx files ("Corrupted compilation unit description" on macOS CI).
 build: [
-  [make "-j%{jobs}%" "WARN_ERR="]
+  [make "WARN_ERR="]
 ]
 install: [make "install" "BINDIR=%{bin}%"]
 depends: [

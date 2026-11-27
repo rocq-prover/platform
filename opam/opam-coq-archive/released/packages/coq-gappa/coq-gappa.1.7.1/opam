@@ -18,10 +18,14 @@ build: [
   ["sh" "-c"
     "sed -i 's/^src\\/Gappa_tactic.vo: src\\/Gappa_tactic.v /src\\/Gappa_tactic.vo: src\\/Gappa_tactic.v src\\/Gappa_library.vo /' Remakefile"
   ] {os = "win32"}
-  ["./remake" "src/gappatac.cmxs" "src/gappatac.cmo"]
   ["sh" "-c"
     "sed -i '/src\\/Gappa_tactic.vo:/,/^[[:space:]]*@COQC@/ { /| .*remake -r/d; }' Remakefile"
   ] {os = "win32"}
+  # Rocq Platform: build the OCaml plugin sequentially after the last edit of
+  # Remakefile. src/gappatac.ml depends on Remakefile, so building it earlier
+  # lets "remake -j" rebuild .cmo and .cmxs in parallel; both write gappatac.cmi
+  # ("Permission denied" on Windows).
+  ["./remake" "src/gappatac.cmxs" "src/gappatac.cmo"]
   ["./remake" "-j%{jobs}%"]
   ["sh" "-c"
     "mkdir -p '%{lib}%/coq-gappa' && \
